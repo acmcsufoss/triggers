@@ -26,7 +26,7 @@ public class Register extends ListenerAdapter {
     /**
      * Guild Commands List
      * <p>
-     *     All commands intended ONLY for guild usage are placed in guildCommandData
+     *     All commands intended ONLY for guild usage are returned in a List
      * </p>
      * @return List containing bot commands
      */
