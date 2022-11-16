@@ -12,11 +12,16 @@
 
 ### Running (IntelliJ)
 
+1. Create a "resources" directory in src
 1. Go to Project Structure -> Artifacts
-1. ...
-1. ...
-1. ...
-1. Run jar
+1. Create a new JAR from modules with dependencies
+   - Select Bot.java as the main class
+   - Select the newly created "resources" as the directory for META-INF/MANIFEST.MF
+1. Build artifacts 
+1. Copy your .env file into the directory of your new .jar
+1. Start your new bot
+   - Open terminal, change directories to `out/artifacts/crying_counter_jar`
+   - Run the .jar through `java -jar crying-counter.jar`
 
 ## Contributing
 
