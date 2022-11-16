@@ -23,6 +23,13 @@ public class Register extends ListenerAdapter {
         event.getGuild().updateCommands().addCommands(guildCommands()).queue();
     }
 
+    /**
+     * Guild Commands List
+     * <p>
+     *     All commands intended ONLY for guild usage are placed in guildCommandData
+     * </p>
+     * @return List containing bot commands
+     */
     List<CommandData> guildCommands() {
 
         // List holding all guild commands
