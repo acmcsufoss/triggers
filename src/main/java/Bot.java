@@ -21,7 +21,6 @@ public class Bot {
         // JDA Builder
         JDA jda = JDABuilder.createDefault(token)
                 .setStatus(OnlineStatus.ONLINE)
-                .enableCache(CacheFlag.VOICE_STATE)
                 .enableIntents(GatewayIntent.MESSAGE_CONTENT, GatewayIntent.GUILD_MEMBERS)
                 .setMemberCachePolicy(MemberCachePolicy.ALL)
 
