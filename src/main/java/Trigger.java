@@ -11,7 +11,7 @@ public class Trigger extends ListenerAdapter {
         switch (event.getSubcommandName()) {
             case "new" -> {
 
-                // Takes option ID matching "word"
+                // Takes string result of option ID matching "word"
                 String trigger_phrase = event.getOption("word").getAsString().toLowerCase();
 
                 event.reply("trigger set: \"" + trigger_phrase + "\"").setEphemeral(true).queue();
