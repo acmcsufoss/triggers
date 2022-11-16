@@ -12,7 +12,7 @@
 
 ### Running (IntelliJ)
 
-1. Create a `resources` directory in `src`
+1. Create a `resources` directory in `src/main`
 1. Go to Project Structure -> Artifacts
 1. Create a new JAR from modules with dependencies
    - Select `Bot.java` as the main class
