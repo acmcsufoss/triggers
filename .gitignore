@@ -130,3 +130,7 @@ dmypy.json
 
 # IntelliJ project settings
 .idea/
+
+# Java resources/artifacts
+out/
+src/main/resources
