@@ -10,6 +10,7 @@ public class Bot {
 
     public static void main(String[] args) throws InterruptedException {
 
+        // Loads .env file and stores all values into system properties
         Dotenv dotenv = Dotenv.configure()
                 .systemProperties()
                 .load();
