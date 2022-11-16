@@ -30,7 +30,7 @@ public class Register extends ListenerAdapter {
      * </p>
      * @return List containing bot commands
      */
-    List<CommandData> guildCommands() {
+    private List<CommandData> guildCommands() {
 
         // List holding all guild commands
         List<CommandData> guildCommandData = new ArrayList<>();
