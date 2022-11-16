@@ -14,9 +14,11 @@ public class Trigger extends ListenerAdapter {
                 // Takes option ID matching "word"
                 String trigger_phrase = event.getOption("word").getAsString().toLowerCase();
 
+                event.reply("trigger set: \"" + trigger_phrase + "\"").setEphemeral(true).queue();
                 break;
             }
-            case "replace" -> {
+            case "reset" -> {
+                event.reply("trigger reset").setEphemeral(true).queue();
                 break;
             }
         }
