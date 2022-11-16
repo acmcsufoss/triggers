@@ -1,21 +1,22 @@
 # Crying Counter
 
-> A Discord.py bot to reply to specific phrases (e.g. "im crying")
+> A JDA bot to reply to specific phrases (e.g. "im crying")
 
 ## Development
 
 ### Setup
 
 1. Clone the repository
-1. Create a virtual environment
-1. Install the requirements
-1. Create a `.env` file with the following variables:
+1. Create a `.env` file in the main directory with the following variables:
     - `DISCORD_TOKEN`: The token of the bot
 
-### Running
+### Running (IntelliJ)
 
-1. Activate the virtual environment
-1. Run `python3 main.py`
+1. Go to Project Structure -> Artifacts
+1. ...
+1. ...
+1. ...
+1. Run jar
 
 ## Contributing
 
@@ -25,4 +26,4 @@
 
 ---
 
-Created with 💖 by **[acmcsuf.com](https://acmcsuf.com) Bot Committee**
+Created with 💖 by **[acmcsuf.com](https://acmcsuf.com) src.java.Bot Committee**
