@@ -4,7 +4,7 @@ import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.OnlineStatus;
 import net.dv8tion.jda.api.requests.GatewayIntent;
 import net.dv8tion.jda.api.utils.MemberCachePolicy;
-import net.dv8tion.jda.api.utils.cache.CacheFlag;
+import org.slf4j.LoggerFactory;
 
 public class Bot {
 
@@ -30,6 +30,6 @@ public class Bot {
                 .build()
                 .awaitReady();
 
-        System.out.println("Active bot: " + jda.getSelfUser().getName() + "#" + jda.getSelfUser().getDiscriminator());
+        LoggerFactory.getLogger(Bot.class).info(jda.getSelfUser().getName() + "#" + jda.getSelfUser().getDiscriminator());
     }
 }
