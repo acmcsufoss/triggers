@@ -69,7 +69,7 @@ public class Trigger extends ListenerAdapter {
                 Member member = event.getGuild().retrieveMemberById(id).complete();
 
                 // Skip if message is self-triggered or member is missing view permissions
-                    if (event.getMember() == member || !member.hasPermission(event.getGuildChannel(), Permission.VIEW_CHANNEL)) continue;
+                if (event.getMember() == member || !member.hasPermission(event.getGuildChannel(), Permission.VIEW_CHANNEL)) continue;
 
                 // Embed
                 EmbedBuilder builder = new EmbedBuilder()
