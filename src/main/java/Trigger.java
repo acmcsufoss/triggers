@@ -11,7 +11,6 @@ import net.dv8tion.jda.api.utils.TimeFormat;
 
 import java.awt.*;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -56,7 +55,6 @@ public class Trigger extends ListenerAdapter {
         // Only listen to guild messages from live users
         if (!event.isFromGuild() || event.getMember().getUser().isBot()) return;
 
-        Collection<String> values = triggerMap.values();
         String message_content = event.getMessage().getContentRaw().toLowerCase();
 
         // Loop through HashMap keySet
@@ -83,13 +81,14 @@ public class Trigger extends ListenerAdapter {
 
                 // Add messages to list and reverse messages in order of least -> most recent
                 for (Message message : history.getRetrievedHistory()) {
-
-                    messages.add("**[" +  TimeFormat.TIME_LONG.atTimestamp(message.getTimeCreated().toEpochSecond()*1000) + "] " + message.getAuthor().getName() + "#" + message.getAuthor().getDiscriminator() + ":** " + message.getContentRaw() + "\n");
+                    String member_name = message.getAuthor().getName() + "#" + message.getAuthor().getDiscriminator();
+                    messages.add("**[" +  TimeFormat.TIME_LONG.atTimestamp(message.getTimeCreated().toEpochSecond()*1000) + "] " + member_name + ":** " + message.getContentRaw() + "\n");
                 }
                 Collections.reverse(messages);
 
                 // Add trigger message
-                builder.addField("", "**[" + TimeFormat.TIME_LONG.now() + "] " + event.getMessage().getAuthor().getName() + "#" + event.getMessage().getAuthor().getDiscriminator() + ":** " + event.getMessage().getContentRaw(), false);
+                String trigger_member = event.getMessage().getAuthor().getName() + "#" + event.getMessage().getAuthor().getDiscriminator();
+                builder.addField("", "**[" + TimeFormat.TIME_LONG.now() + "] " + trigger_member + ":** " + event.getMessage().getContentRaw(), false);
 
                 // Finish embed
                 builder.setDescription(String.join("", messages));
