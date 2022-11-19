@@ -53,15 +53,6 @@ public class Trigger extends ListenerAdapter {
     }
 
     @Override
-    public void onGuildMemberRemove(GuildMemberRemoveEvent event) {
-
-        // Remove leaving member from trigger map
-        if (triggerMap.containsKey(event.getMember().getId())) {
-            triggerMap.remove(event.getMember().getId());
-        }
-    }
-
-    @Override
     public void onMessageReceived(MessageReceivedEvent event) {
 
         // Only listen to guild messages from live users
