@@ -75,7 +75,7 @@ public class Trigger extends ListenerAdapter {
 
                     // Handle failure if the member does not exist (or another issue appeared)
                     (error) -> {
-                        LoggerFactory.getLogger(Trigger.class).info(error.toString());
+                        LoggerFactory.getLogger(Trigger.class).error(error.toString());
                     }
                 );
                 Member member = event.getGuild().getMemberById(id);
