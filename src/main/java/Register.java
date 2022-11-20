@@ -1,3 +1,4 @@
+import net.dv8tion.jda.api.events.GenericEvent;
 import net.dv8tion.jda.api.events.guild.GuildJoinEvent;
 import net.dv8tion.jda.api.events.guild.GuildReadyEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
@@ -5,6 +6,7 @@ import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.interactions.commands.build.CommandData;
 import net.dv8tion.jda.api.interactions.commands.build.Commands;
 import net.dv8tion.jda.api.interactions.commands.build.SubcommandData;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,15 +14,24 @@ import java.util.List;
 public class Register extends ListenerAdapter {
 
     @Override
-    public void onGuildReady(GuildReadyEvent event) {
+    public void onGenericEvent(@NotNull GenericEvent event) {
 
         // Register commands (#updateCommands will CLEAR all commands, don't do this more than once per startup)
-        event.getGuild().updateCommands().addCommands(guildCommands()).queue();
+        updateCommands(event);
     }
 
-    @Override
-    public void onGuildJoin(GuildJoinEvent event) {
-        event.getGuild().updateCommands().addCommands(guildCommands()).queue();
+    /**
+     * Updates bot commands in guild
+     * @param event GuildReadyEvent or GuildJoinEvent
+     */
+    private void updateCommands(GenericEvent event) {
+
+        if (event instanceof GuildReadyEvent guildReadyEvent) {
+            guildReadyEvent.getGuild().updateCommands().addCommands(guildCommands()).queue((null), (null));
+        }
+        else if (event instanceof GuildJoinEvent guildJoinEvent) {
+            guildJoinEvent.getGuild().updateCommands().addCommands(guildCommands()).queue((null), (null));
+        }
     }
 
     /**
