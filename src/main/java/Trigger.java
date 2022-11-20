@@ -4,6 +4,7 @@ import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.MessageHistory;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
+import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.dv8tion.jda.api.interactions.components.buttons.Button;
@@ -18,6 +19,8 @@ import java.util.List;
 public class Trigger extends ListenerAdapter {
 
     HashMap<String, TreeSet<String>> triggerMap = new HashMap<>();
+    int min = 0;
+    int max = 5;
 
     @Override
     public void onSlashCommandInteraction(SlashCommandInteractionEvent event) {
@@ -35,7 +38,7 @@ public class Trigger extends ListenerAdapter {
 
                 EmbedBuilder builder = new EmbedBuilder()
                         .setColor(Color.green)
-                        .setDescription("Trigger #"+ triggerMap.get(event.getMember().getId()).size() + " added: \"" + trigger_phrase + "\"");
+                        .setDescription("Trigger added: \"" + trigger_phrase + "\"");
 
                 event.replyEmbeds(builder.build()).setEphemeral(true).queue();
             }
@@ -59,7 +62,26 @@ public class Trigger extends ListenerAdapter {
 
                     event.replyEmbeds(builder.build()).setEphemeral(true).queue();
                 }
+            }
+            case "list" -> {
 
+                // If no triggers are found
+                if (!triggerMap.containsKey(event.getMember().getId()) || triggerMap.get(event.getMember().getId()).isEmpty() || triggerMap.get(event.getMember().getId()) == null) {
+                    EmbedBuilder builder = new EmbedBuilder()
+                            .setColor(Color.red)
+                            .setDescription("No triggers found");
+
+                    event.replyEmbeds(builder.build()).setEphemeral(true).queue();
+                }
+                else {
+                    List<String> list = new ArrayList<>(triggerMap.get(event.getMember().getId()));
+                    EmbedBuilder builder = triggerList(0, 5, list);
+
+                    event.replyEmbeds(builder.build()).setActionRow(
+                            Button.secondary("previous", "Previous").asDisabled(),
+                            Button.secondary("next", "Next")
+                    ).setEphemeral(true).queue();
+                }
             }
         }
     }
@@ -127,11 +149,104 @@ public class Trigger extends ListenerAdapter {
         }
     }
 
+    @Override
+    public void onButtonInteraction(ButtonInteractionEvent event) {
+
+        List<String> list = new ArrayList<>(triggerMap.get(event.getMember().getId()));
+
+        switch (event.getComponentId()) {
+
+            case "previous" -> {
+
+                // If not on first page
+                if (min != 0) {
+
+                    min -= 5;
+                    max -= 5;
+
+                    EmbedBuilder builder = triggerList(min, max, list);
+
+                    // If new previous page is first page
+                    if (min == 0) {
+                        event.editMessageEmbeds(builder.build()).setActionRow(
+                                Button.secondary("previous", "Previous").asDisabled(),
+                                Button.secondary("next", "Next").asEnabled()
+                        ).queue();
+                    }
+                    else {
+                        event.editMessageEmbeds(builder.build()).setActionRow(
+                                Button.secondary("previous", "Previous").asEnabled(),
+                                Button.secondary("next", "Next").asEnabled()
+                        ).queue();
+                    }
+                }
+                // If on first page
+                else {
+
+                    EmbedBuilder builder = triggerList(min, max, list);
+
+                    // If there is a next page
+                    if (list.size() <= 5) {
+
+                        event.editMessageEmbeds(builder.build()).setActionRow(
+                                Button.secondary("previous", "Previous").asDisabled(),
+                                Button.secondary("next", "Next").asEnabled()
+                        ).queue();
+                    }
+                    else {
+
+                        event.editMessageEmbeds(builder.build()).setActionRow(
+                                Button.secondary("previous", "Previous").asDisabled(),
+                                Button.secondary("next", "Next").asDisabled()
+                        ).queue();
+                    }
+                }
+            }
+
+            case "next" -> {
+
+                min += 5;
+                max += 5;
+
+                EmbedBuilder builder = triggerList(min, max, list);
+
+                if (max >= list.size()) {
+                    event.editMessageEmbeds(builder.build()).setActionRow(
+                            Button.secondary("previous", "Previous").asEnabled(),
+                            Button.secondary("next", "Next").asDisabled()
+                    ).queue();
+                }
+                else {
+                    event.editMessageEmbeds(builder.build()).setActionRow(
+                            Button.secondary("previous", "Previous").asEnabled(),
+                            Button.secondary("next", "Next").asEnabled()
+                    ).queue();
+                }
+
+            }
+        }
+    }
+
     boolean inTreeSet(String str, TreeSet<String> treeSet) {
         for (String string : treeSet) {
             if (str.contains(string)) return true;
         }
         return false;
     }
+
+    EmbedBuilder triggerList(int range1, int range2, List<String> list) {
+
+        EmbedBuilder builder = new EmbedBuilder()
+                .setColor(Color.green)
+                .setTitle("Trigger List")
+                .setFooter("Size: #" + list.size());
+
+        for (int i = range1; i < list.size() && i < range2; ++i) {
+            builder.addField("Trigger #" + (i+1),  list.get(i), false);
+        }
+
+        return builder;
+    }
+
 
 }
