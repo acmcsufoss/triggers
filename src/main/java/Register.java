@@ -1,3 +1,4 @@
+import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.events.GenericEvent;
 import net.dv8tion.jda.api.events.guild.GuildJoinEvent;
 import net.dv8tion.jda.api.events.guild.GuildReadyEvent;
@@ -26,12 +27,16 @@ public class Register extends ListenerAdapter {
      */
     private void updateCommands(GenericEvent event) {
 
+        Guild guild = null;
+
         if (event instanceof GuildReadyEvent guildReadyEvent) {
-            guildReadyEvent.getGuild().updateCommands().addCommands(guildCommands()).queue((null), (null));
+            guild = guildReadyEvent.getGuild();
         }
         else if (event instanceof GuildJoinEvent guildJoinEvent) {
-            guildJoinEvent.getGuild().updateCommands().addCommands(guildCommands()).queue((null), (null));
+            guild = guildJoinEvent.getGuild();
         }
+
+        guild.updateCommands().addCommands(guildCommands()).queue((null), (null));
     }
 
     /**
