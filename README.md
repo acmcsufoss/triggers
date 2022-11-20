@@ -2,33 +2,47 @@
 
 > A JDA bot to reply to specific phrases (e.g. "im crying")
 
-## Development
+## Table of Contents
 
-### Setup
+   - <a href='#setup'>Setup</a>
+   - <a href='#running'>Running (IntelliJ)</a>
+   - <a href='#commands'>Commands</a>
+   - <a href='#contributing'>Contributing</a>
+
+<h3 id='setup'>Setup</h3>
 
 1. Clone the repository
 1. Create a `.env` file in the main directory with the following variables:
     - `DISCORD_TOKEN`: The token of the bot
 
-### Running (IntelliJ)
+<h3 id='running'>Running (IntelliJ)</h3>
 
 1. Create a `resources` directory in `src/main`
-1. Go to Project Structure -> Artifacts
-1. Create a new JAR from modules with dependencies
-   - Select `Bot.java` as the main class
-   - Select the newly created `resources` as the directory for `META-INF/MANIFEST.MF`
-1. Build artifacts 
-1. Copy your `.env` file into `out/artifacts/crying_counter_jar`
-1. Start your new bot
-   - Open terminal, change directories to `out/artifacts/crying_counter_jar`
-   - Run the .jar through `java -jar crying-counter.jar`
+2. Go to Project Structure -> Artifacts
+3. Create a new JAR from modules with dependencies
+    - Select `Bot.java` as the main class
+    - Select the newly created `resources` as the directory for `META-INF/MANIFEST.MF`
+4. Build artifacts
+5. Copy your `.env` file into `out/artifacts/crying_counter_jar`
+6. Start your new bot
+    - Open terminal, change directories to `out/artifacts/crying_counter_jar`
+    - Run the .jar through `java -jar crying-counter.jar`
 
-## Contributing
+<h3 id='commands'>Commands</h3>
+
+| Command           | Description                |
+|-------------------|----------------------------|
+| `/trigger new`    | Adds new trigger           |
+| `/trigger reset`  | Resets all stored triggers |
+| `/trigger list`   | Lists all stored triggers  |
+| `/trigger delete` | Deletes specified trigger  |
+
+<h3 id='contributing'>Contributing</h3>
 
 1. Create a new branch
-1. Make your changes
-1. Create a pull request
+2. Make your changes
+3. Create a pull request
 
 ---
 
-Created with 💖 by **[acmcsuf.com](https://acmcsuf.com) src.java.Bot Committee**
+Created with 💖 by **[acmcsuf.com](https://acmcsuf.com) Bot Committee**
