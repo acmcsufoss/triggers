@@ -3,11 +3,14 @@ import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.MessageHistory;
+import net.dv8tion.jda.api.events.guild.member.GuildMemberRemoveEvent;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.dv8tion.jda.api.interactions.components.buttons.Button;
+import net.dv8tion.jda.api.requests.RestAction;
 import net.dv8tion.jda.api.utils.TimeFormat;
+import org.slf4j.LoggerFactory;
 
 import java.awt.*;
 import java.util.*;
@@ -68,7 +71,15 @@ public class Trigger extends ListenerAdapter {
             if (inTreeSet(message_content, triggerMap.get(id))) {
 
                 // Retrieve triggered member
-                Member member = event.getGuild().retrieveMemberById(id).complete();
+                RestAction<Member> action = event.getGuild().retrieveMemberById(id);
+                action.queue((null),
+
+                    // Handle failure if the member does not exist (or another issue appeared)
+                    (error) -> {
+                        LoggerFactory.getLogger(Trigger.class).info(error.toString());
+                    }
+                );
+                Member member = event.getGuild().getMemberById(id);
 
                 // Skip if message is self-triggered or member is missing view permissions
                 if (event.getMember() == member || !member.hasPermission(event.getGuildChannel(), Permission.VIEW_CHANNEL)) continue;
