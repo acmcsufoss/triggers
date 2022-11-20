@@ -23,6 +23,7 @@ public class Register extends ListenerAdapter {
 
     /**
      * Updates bot commands in guild
+     *
      * @param event GuildReadyEvent or GuildJoinEvent
      */
     private void updateCommands(GenericEvent event) {
@@ -31,8 +32,7 @@ public class Register extends ListenerAdapter {
 
         if (event instanceof GuildReadyEvent guildReadyEvent) {
             guild = guildReadyEvent.getGuild();
-        }
-        else if (event instanceof GuildJoinEvent guildJoinEvent) {
+        } else if (event instanceof GuildJoinEvent guildJoinEvent) {
             guild = guildJoinEvent.getGuild();
         }
 
@@ -42,8 +42,9 @@ public class Register extends ListenerAdapter {
     /**
      * Guild Commands List
      * <p>
-     *     All commands intended ONLY for guild usage are returned in a List
+     * All commands intended ONLY for guild usage are returned in a List
      * </p>
+     *
      * @return List containing bot commands
      */
     private List<CommandData> guildCommands() {

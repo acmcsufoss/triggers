@@ -25,7 +25,7 @@ public class Bot {
                 .setMemberCachePolicy(MemberCachePolicy.ALL)
 
                 // Event listeners (new instances of other classes extending ListenerAdapter)
-                .addEventListeners(new Register(),new Trigger())
+                .addEventListeners(new Register(), new Trigger())
 
                 .build()
                 .awaitReady();
