@@ -239,6 +239,12 @@ public class Trigger extends ListenerAdapter {
         }
     }
 
+    /**
+     * Checks if Tree Set contains String
+     * @param str String
+     * @param treeSet Containing Tree Set
+     * @return True if set contains String
+     */
     boolean inTreeSet(String str, TreeSet<String> treeSet) {
         for (String string : treeSet) {
             if (str.contains(string)) return true;
@@ -246,6 +252,13 @@ public class Trigger extends ListenerAdapter {
         return false;
     }
 
+    /**
+     * Template Embed for /trigger list
+     * @param range1 Beginning list index
+     * @param range2 Ending list index
+     * @param list List of member triggers
+     * @return
+     */
     EmbedBuilder triggerList(int range1, int range2, List<String> list) {
 
         EmbedBuilder builder = new EmbedBuilder()
