@@ -41,8 +41,7 @@ public class Trigger extends ListenerAdapter {
                             .setDescription("Duplicate trigger!");
 
                     event.replyEmbeds(builder.build()).queue();
-                }
-                else {
+                } else {
 
                     // Store trigger
                     triggerMap.computeIfAbsent(event.getMember().getId(), k -> new TreeSet<>()).add(trigger_phrase);
@@ -84,8 +83,7 @@ public class Trigger extends ListenerAdapter {
                             .setDescription("No triggers found");
 
                     event.replyEmbeds(builder.build()).setEphemeral(true).queue();
-                }
-                else {
+                } else {
                     List<String> list = new ArrayList<>(triggerMap.get(event.getMember().getId()));
                     EmbedBuilder builder = triggerList(0, 5, list);
 
@@ -116,15 +114,16 @@ public class Trigger extends ListenerAdapter {
                 RestAction<Member> action = event.getGuild().retrieveMemberById(id);
                 action.queue((null),
 
-                    // Handle failure if the member does not exist (or another issue appeared)
-                    (error) -> {
-                        LoggerFactory.getLogger(Trigger.class).error(error.toString());
-                    }
+                        // Handle failure if the member does not exist (or another issue appeared)
+                        (error) -> {
+                            LoggerFactory.getLogger(Trigger.class).error(error.toString());
+                        }
                 );
                 Member member = event.getGuild().getMemberById(id);
 
                 // Skip if message is self-triggered or member is missing view permissions
-                if (event.getMember() == member || !member.hasPermission(event.getGuildChannel(), Permission.VIEW_CHANNEL)) continue;
+                if (event.getMember() == member || !member.hasPermission(event.getGuildChannel(), Permission.VIEW_CHANNEL))
+                    continue;
 
                 // Embed
                 EmbedBuilder builder = new EmbedBuilder()
@@ -139,7 +138,7 @@ public class Trigger extends ListenerAdapter {
                 // Add messages to list and reverse messages in order of least -> most recent
                 for (Message message : history.getRetrievedHistory()) {
                     String member_name = message.getAuthor().getName() + "#" + message.getAuthor().getDiscriminator();
-                    messages.add("**[" +  TimeFormat.TIME_LONG.atTimestamp(message.getTimeCreated().toEpochSecond()*1000) + "] " + member_name + ":** " + message.getContentRaw() + "\n");
+                    messages.add("**[" + TimeFormat.TIME_LONG.atTimestamp(message.getTimeCreated().toEpochSecond() * 1000) + "] " + member_name + ":** " + message.getContentRaw() + "\n");
                 }
                 Collections.reverse(messages);
 
@@ -149,7 +148,7 @@ public class Trigger extends ListenerAdapter {
 
                 // Finish embed
                 builder.setDescription(String.join("", messages));
-                builder.addField("**Source Message**", "[Jump to](" + event.getJumpUrl() + ")" , false);
+                builder.addField("**Source Message**", "[Jump to](" + event.getJumpUrl() + ")", false);
 
                 // DM triggered member
                 member.getUser().openPrivateChannel()
@@ -184,8 +183,7 @@ public class Trigger extends ListenerAdapter {
                                 Button.secondary("previous", "Previous").asDisabled(),
                                 Button.secondary("next", "Next").asEnabled()
                         ).queue();
-                    }
-                    else {
+                    } else {
                         event.editMessageEmbeds(builder.build()).setActionRow(
                                 Button.secondary("previous", "Previous").asEnabled(),
                                 Button.secondary("next", "Next").asEnabled()
@@ -204,8 +202,7 @@ public class Trigger extends ListenerAdapter {
                                 Button.secondary("previous", "Previous").asDisabled(),
                                 Button.secondary("next", "Next").asEnabled()
                         ).queue();
-                    }
-                    else {
+                    } else {
 
                         event.editMessageEmbeds(builder.build()).setActionRow(
                                 Button.secondary("previous", "Previous").asDisabled(),
@@ -227,8 +224,7 @@ public class Trigger extends ListenerAdapter {
                             Button.secondary("previous", "Previous").asEnabled(),
                             Button.secondary("next", "Next").asDisabled()
                     ).queue();
-                }
-                else {
+                } else {
                     event.editMessageEmbeds(builder.build()).setActionRow(
                             Button.secondary("previous", "Previous").asEnabled(),
                             Button.secondary("next", "Next").asEnabled()
@@ -241,7 +237,8 @@ public class Trigger extends ListenerAdapter {
 
     /**
      * Checks if Tree Set contains String
-     * @param str String
+     *
+     * @param str     String
      * @param treeSet Containing Tree Set
      * @return True if set contains String
      */
@@ -254,10 +251,15 @@ public class Trigger extends ListenerAdapter {
 
     /**
      * Template Embed for /trigger list
+     *
+     * <p>
+     * Formats EmbedBuilder containing triggers from range1 to range2
+     * </p>
+     *
      * @param range1 Beginning list index
      * @param range2 Ending list index
-     * @param list List of member triggers
-     * @return
+     * @param list   List of member triggers
+     * @return Embed Message
      */
     EmbedBuilder triggerList(int range1, int range2, List<String> list) {
 
@@ -267,7 +269,7 @@ public class Trigger extends ListenerAdapter {
                 .setFooter("Size: #" + list.size());
 
         for (int i = range1; i < list.size() && i < range2; ++i) {
-            builder.addField("Trigger #" + (i+1),  list.get(i), false);
+            builder.addField("Trigger #" + (i + 1), list.get(i), false);
         }
 
         return builder;
