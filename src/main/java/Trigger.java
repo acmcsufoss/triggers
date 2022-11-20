@@ -44,11 +44,20 @@ public class Trigger extends ListenerAdapter {
                 // Trigger found for member
                 if (triggerMap.containsKey(event.getMember().getId())) {
                     triggerMap.remove(event.getMember().getId());
-                    event.reply("trigger reset").setEphemeral(true).queue();
+
+                    EmbedBuilder builder = new EmbedBuilder()
+                            .setColor(Color.green)
+                            .setDescription("Triggers reset");
+
+                    event.replyEmbeds(builder.build()).setEphemeral(true).queue();
                 }
                 // Member has no trigger
                 else {
-                    event.reply("no trigger found").setEphemeral(true).queue();
+                    EmbedBuilder builder = new EmbedBuilder()
+                            .setColor(Color.red)
+                            .setDescription("No triggers found");
+
+                    event.replyEmbeds(builder.build()).setEphemeral(true).queue();
                 }
 
             }
