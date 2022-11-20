@@ -33,14 +33,26 @@ public class Trigger extends ListenerAdapter {
                 // Takes string result of option ID matching "word"
                 String trigger_phrase = event.getOption("word").getAsString().toLowerCase();
 
-                // Store trigger
-                triggerMap.computeIfAbsent(event.getMember().getId(), k -> new TreeSet<>()).add(trigger_phrase);
+                // If input is a duplicate
+                if (triggerMap.get(event.getMember().getId()) != null && inTreeSet(trigger_phrase, triggerMap.get(event.getMember().getId()))) {
+                    EmbedBuilder builder = new EmbedBuilder()
+                            .setColor(Color.red)
+                            .setTitle("Error")
+                            .setDescription("Duplicate trigger!");
 
-                EmbedBuilder builder = new EmbedBuilder()
-                        .setColor(Color.green)
-                        .setDescription("Trigger added: \"" + trigger_phrase + "\"");
+                    event.replyEmbeds(builder.build()).queue();
+                }
+                else {
 
-                event.replyEmbeds(builder.build()).setEphemeral(true).queue();
+                    // Store trigger
+                    triggerMap.computeIfAbsent(event.getMember().getId(), k -> new TreeSet<>()).add(trigger_phrase);
+
+                    EmbedBuilder builder = new EmbedBuilder()
+                            .setColor(Color.green)
+                            .setDescription("Trigger added: \"" + trigger_phrase + "\"");
+
+                    event.replyEmbeds(builder.build()).setEphemeral(true).queue();
+                }
             }
             case "reset" -> {
 
