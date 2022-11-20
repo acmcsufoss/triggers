@@ -10,14 +10,12 @@ import net.dv8tion.jda.api.interactions.components.buttons.Button;
 import net.dv8tion.jda.api.utils.TimeFormat;
 
 import java.awt.*;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
+import java.util.*;
 import java.util.List;
 
 public class Trigger extends ListenerAdapter {
 
-    HashMap<String, String> triggerMap = new HashMap<>();
+    HashMap<String, TreeSet<String>> triggerMap = new HashMap<>();
 
     @Override
     public void onSlashCommandInteraction(SlashCommandInteractionEvent event) {
@@ -30,8 +28,14 @@ public class Trigger extends ListenerAdapter {
                 // Takes string result of option ID matching "word"
                 String trigger_phrase = event.getOption("word").getAsString().toLowerCase();
 
-                event.reply("trigger set: \"" + trigger_phrase + "\"").setEphemeral(true).queue();
-                triggerMap.put(event.getMember().getId(), trigger_phrase);
+                // Store trigger
+                triggerMap.computeIfAbsent(event.getMember().getId(), k -> new TreeSet<>()).add(trigger_phrase);
+
+                EmbedBuilder builder = new EmbedBuilder()
+                        .setColor(Color.green)
+                        .setDescription("Trigger #"+ triggerMap.get(event.getMember().getId()).size() + " added: \"" + trigger_phrase + "\"");
+
+                event.replyEmbeds(builder.build()).setEphemeral(true).queue();
             }
             case "reset" -> {
 
@@ -61,7 +65,7 @@ public class Trigger extends ListenerAdapter {
         for (String id : triggerMap.keySet()) {
 
             // If members value contains message_content
-            if (message_content.contains(triggerMap.get(id))) {
+            if (inTreeSet(message_content, triggerMap.get(id))) {
 
                 // Retrieve triggered member
                 Member member = event.getGuild().retrieveMemberById(id).complete();
@@ -103,4 +107,12 @@ public class Trigger extends ListenerAdapter {
             }
         }
     }
+
+    boolean inTreeSet(String str, TreeSet<String> treeSet) {
+        for (String string : treeSet) {
+            if (str.contains(string)) return true;
+        }
+        return false;
+    }
+
 }
