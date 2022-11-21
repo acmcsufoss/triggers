@@ -52,8 +52,11 @@
 
 <h3 id='documentation'>Documentation</h3>
 - [JDA](https://github.com/DV8FromTheWorld/JDA)
+
 - [SLF4J](https://github.com/qos-ch/slf4j)
+
 - [dotenv Java](https://github.com/cdimascio/dotenv-java)
+
 - [fuzzywuzzy](https://github.com/xdrop/fuzzywuzzy)
 
 <h3 id='contributing'>Contributing</h3>
