@@ -36,6 +36,8 @@ public class Trigger extends ListenerAdapter {
     int min = 0;
     int max = 5;
 
+    final int MAX_TRIGGERS = 50;
+
     @Override
     public void onSlashCommandInteraction(SlashCommandInteractionEvent event) {
 
@@ -59,14 +61,25 @@ public class Trigger extends ListenerAdapter {
                     event.replyEmbeds(builder.build()).queue();
                 } else {
 
-                    // Store trigger
-                    triggerMap.computeIfAbsent(event.getMember().getId(), k -> new LinkedHashSet<>()).add(trigger_phrase);
+                    // If max size is reached
+                    if (triggerMap.get(event.getMember().getId()) != null && triggerMap.get(event.getMember().getId()).size() >= MAX_TRIGGERS) {
+                        EmbedBuilder builder = new EmbedBuilder()
+                                .setColor(Color.red)
+                                .setTitle("Error")
+                                .setDescription("Max size reached!");
 
-                    EmbedBuilder builder = new EmbedBuilder()
-                            .setColor(Color.green)
-                            .setDescription("Trigger added: \"" + trigger_phrase + "\"");
+                        event.replyEmbeds(builder.build()).setEphemeral(true).queue();
+                    } else {
 
-                    event.replyEmbeds(builder.build()).setEphemeral(true).queue();
+                        // Store trigger
+                        triggerMap.computeIfAbsent(event.getMember().getId(), k -> new LinkedHashSet<>()).add(trigger_phrase);
+
+                        EmbedBuilder builder = new EmbedBuilder()
+                                .setColor(Color.green)
+                                .setDescription("Trigger added: \"" + trigger_phrase + "\"");
+
+                        event.replyEmbeds(builder.build()).setEphemeral(true).queue();
+                    }
                 }
             }
             case "reset" -> {
