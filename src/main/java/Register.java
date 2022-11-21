@@ -28,7 +28,7 @@ public class Register extends ListenerAdapter {
      */
     private void updateCommands(GenericEvent event) {
 
-        Guild guild = null;
+        Guild guild;
 
         if (event instanceof GuildReadyEvent guildReadyEvent) {
             guild = guildReadyEvent.getGuild();
@@ -56,9 +56,9 @@ public class Register extends ListenerAdapter {
         // Trigger command with subcommands "reset" and "new_trigger"
         SubcommandData reset = new SubcommandData("reset", "Removes trigger");
         SubcommandData list = new SubcommandData("list", "Lists triggers");
-        SubcommandData new_trigger = new SubcommandData("new", "Add trigger").addOption(OptionType.STRING, "word", "Trigger word", true);
+        SubcommandData newTrigger = new SubcommandData("new", "Add trigger").addOption(OptionType.STRING, "word", "Trigger word", true);
         SubcommandData delete = new SubcommandData("delete", "Delete trigger").addOption(OptionType.STRING, "word", "Trigger word", true);
-        guildCommandData.add(Commands.slash("trigger", "Receive a DM when trigger word is mentioned in mutual servers").addSubcommands(new_trigger, list, reset, delete));
+        guildCommandData.add(Commands.slash("trigger", "Receive a DM when trigger word is mentioned in mutual servers").addSubcommands(newTrigger, list, reset, delete));
 
         return guildCommandData;
     }
