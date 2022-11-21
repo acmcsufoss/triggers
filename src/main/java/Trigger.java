@@ -149,7 +149,6 @@ public class Trigger extends ListenerAdapter {
                         }
                     }
 
-                    // TODO: Add button to handle similar phrase case
                     EmbedBuilder builder;
                     if (similarPhrase != null) {
                         builder = new EmbedBuilder()
