@@ -4,17 +4,25 @@
 
 ## Table of Contents
 
-   - <a href='#setup'>Setup</a>
+   - <a href='#setup'>IDE Setup</a>
+   - <a href='#bot'>Bot Setup</a>
    - <a href='#running'>Running (IntelliJ)</a>
    - <a href='#commands'>Commands</a>
    - <a href='#contributing'>Contributing</a>
 
-<h3 id='setup'>Setup</h3>
+<h3 id='setup'>IDE Setup</h3>
 
 1. Clone the repository
 2. Create a `.env` file in the main directory with the following variables:
     - `DISCORD_TOKEN`: The token of the bot
 3. Specify JDK version (Tested on JDK 17/19)
+4. Restart IntelliJ
+
+<h3 id='bot'>Bot Setup</h3>
+
+1. Go to the [Discord Developer Dashboard](https://discord.com/developers/applications)
+2. Register your bot
+3. Enable Server Members Intent and Message Content Intent
 
 <h3 id='running'>Running (IntelliJ)</h3>
 
