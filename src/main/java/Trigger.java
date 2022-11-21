@@ -46,6 +46,19 @@ public class Trigger extends ListenerAdapter {
         if (!authenticateMemberByRole(event.getMember())) return;
 
         switch (event.getSubcommandName()) {
+
+            case "help" -> {
+                EmbedBuilder builder = new EmbedBuilder()
+                        .setTitle("Trigger Commands")
+                        .setColor(Color.green)
+                        .addField("/trigger new", "Add trigger", false)
+                        .addField("/trigger reset", "Removes trigger", false)
+                        .addField("/trigger list", "Lists triggers", false)
+                        .addField("/trigger delete", "Delete trigger", false)
+                        .addField("/trigger toggle", "Toggles trigger feature", false);
+
+            event.replyEmbeds(builder.build()).setEphemeral(true).queue();
+            }
             case "new" -> {
 
                 // Takes string result of option ID matching "word"
