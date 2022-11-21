@@ -74,6 +74,19 @@
     - Make sure you have the correct role IDs
     - Make sure you have the correct JDK version
 
+3. **"How can I get my bot ID?"**
+
+   - Go to Discord Developer Dashboard -> Your bot -> General Information -> Application ID
+
+4. **"Why does the bot not respond to my messages?"**
+
+   - Make sure you have the correct role IDs
+
+5. **"How can I get my role ID?"**
+
+   - Go to your server -> Server Settings -> Roles
+   - Right-click on the role you want to get the ID of and select "Copy ID"
+
 <h3 id='contributing'>Contributing</h3>
 
 1. Create a new branch
