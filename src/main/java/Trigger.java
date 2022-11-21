@@ -20,6 +20,9 @@ public class Trigger extends ListenerAdapter {
 
     // Discord member ID : Set of trigger phrases
     HashMap<String, LinkedHashSet<String>> triggerMap = new HashMap<>();
+
+    // Discord member ID : Trigger Activation (true = activated, false = deactivated)
+    HashMap<String, Boolean> triggerToggle = new HashMap<>();
     int min = 0;
     int max = 5;
 
@@ -128,6 +131,23 @@ public class Trigger extends ListenerAdapter {
                     event.replyEmbeds(builder.build()).setEphemeral(true).queue();
                 }
             }
+            case "toggle" -> {
+
+                boolean toggle = event.getOption("switch").getAsBoolean();
+                triggerToggle.put(event.getMember().getId(), toggle);
+
+                EmbedBuilder builder = new EmbedBuilder();
+
+                if (toggle) {
+                    builder.setTitle("Trigger features are now enabled");
+                    builder.setColor(Color.green);
+                } else {
+                    builder.setTitle("Trigger features are now disabled");
+                    builder.setColor(Color.red);
+                }
+
+                event.replyEmbeds(builder.build()).setEphemeral(true).queue();
+            }
         }
     }
 
@@ -159,6 +179,15 @@ public class Trigger extends ListenerAdapter {
                 // Skip if message is self-triggered or member is missing view permissions
                 if (event.getMember() == member || !member.hasPermission(event.getGuildChannel(), Permission.VIEW_CHANNEL))
                     continue;
+
+                // If no toggle setting exists
+                if (!triggerToggle.containsKey(event.getMember().getId())) {
+                    triggerToggle.put(event.getMember().getId(), true);
+                }
+                // If toggle == false, skip to next ID
+                else if (!triggerToggle.get(event.getMember().getId())) {
+                    continue;
+                }
 
                 // Embed
                 EmbedBuilder builder = new EmbedBuilder()
