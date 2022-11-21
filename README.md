@@ -15,6 +15,7 @@
 1. Clone the repository
 2. Create a `.env` file in the main directory with the following variables:
     - `DISCORD_TOKEN`: The token of the bot
+    - `AUTHORIZED_ROLE_ID`: Array of role IDs that are allowed to use the bot (separate by comma)
 3. Specify JDK version (Tested on JDK 17/19)
 4. Restart IntelliJ
 
