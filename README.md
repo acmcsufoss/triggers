@@ -12,13 +12,14 @@
 <h3 id='setup'>Setup</h3>
 
 1. Clone the repository
-1. Create a `.env` file in the main directory with the following variables:
+2. Create a `.env` file in the main directory with the following variables:
     - `DISCORD_TOKEN`: The token of the bot
+3. Specify JDK version (Tested on JDK 17/19)
 
 <h3 id='running'>Running (IntelliJ)</h3>
 
 1. Create a `resources` directory in `src/main`
-2. Go to Project Structure -> Artifacts
+2. Go to File -> Project Structure -> Artifacts
 3. Create a new JAR from modules with dependencies
     - Select `Bot.java` as the main class
     - Select the newly created `resources` as the directory for `META-INF/MANIFEST.MF`
