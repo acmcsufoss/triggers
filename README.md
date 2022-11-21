@@ -4,12 +4,12 @@
 
 ## Table of Contents
 
-   - <a href='#setup'>IDE Setup</a>
-   - <a href='#bot'>Bot Setup</a>
-   - <a href='#running'>Running (IntelliJ)</a>
-   - <a href='#commands'>Commands</a>
-   - <a href='#documentation'>Documentation</a>
-   - <a href='#contributing'>Contributing</a>
+- <a href='#setup'>IDE Setup</a>
+- <a href='#bot'>Bot Setup</a>
+- <a href='#running'>Running (IntelliJ)</a>
+- <a href='#commands'>Commands</a>
+- <a href='#documentation'>Documentation</a>
+- <a href='#contributing'>Contributing</a>
 
 <h3 id='setup'>IDE Setup</h3>
 
@@ -38,7 +38,9 @@
 6. Start your new bot
     - Open terminal, change directories to `out/artifacts/crying_counter_jar`
     - Run the .jar through `java -jar crying-counter.jar`
-7. To invite your bot, use `https://discord.com/api/oauth2/authorize?client_id=$DISCORD_CLIENT_ID&permissions=66560&scope=bot%20applications.commands` and replace `$DISCORD_CLIENT_ID` with the bot ID
+7. To invite your bot,
+   use `https://discord.com/api/oauth2/authorize?client_id=$DISCORD_CLIENT_ID&permissions=66560&scope=bot%20applications.commands`
+   and replace `$DISCORD_CLIENT_ID` with the bot ID
 
 <h3 id='commands'>Commands</h3>
 
