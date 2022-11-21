@@ -9,6 +9,7 @@
 - <a href='#running'>Running (IntelliJ)</a>
 - <a href='#commands'>Commands</a>
 - <a href='#documentation'>Documentation</a>
+- <a href='#faq'>FAQ</a>
 - <a href='#contributing'>Contributing</a>
 
 <h3 id='setup'>IDE Setup</h3>
@@ -18,7 +19,7 @@
     - `DISCORD_TOKEN`: The token of the bot
     - `AUTHORIZED_ROLE_ID`: Array of role IDs that are allowed to use the bot (separate by comma)
 3. Specify JDK version (Tested on JDK 17/19)
-4. Restart IntelliJ
+4. Restart IDE
 
 <h3 id='bot'>Bot Setup</h3>
 
@@ -37,7 +38,7 @@
 5. Copy your `.env` file into `out/artifacts/crying_counter_jar`
 6. Start your new bot
     - Open terminal, change directories to `out/artifacts/crying_counter_jar`
-    - Run the .jar through `java -jar crying-counter.jar`
+    - Run the .jar with `java -jar crying-counter.jar`
 7. To invite your bot,
    use `https://discord.com/api/oauth2/authorize?client_id=$DISCORD_CLIENT_ID&permissions=66560&scope=bot%20applications.commands`
    and replace `$DISCORD_CLIENT_ID` with the bot ID
@@ -58,6 +59,19 @@
 - <a href='https://github.com/qos-ch/slf4j'>SLF4J</a>
 - <a href='https://github.com/cdimascio/dotenv-java'>dotenv Java</a>
 - <a href='https://github.com/xdrop/fuzzywuzzy'>fuzzywuzzy</a>
+
+<h3 id='faq'>FAQ</h3>
+1. **"I can't invite my bot"**
+
+    - Make sure you have the correct permissions (66560)
+    - Make sure you have the correct scope (bot%20applications.commands)
+    - Make sure you have the correct client ID
+
+2. **"I can't run the bot"**
+
+    - Make sure you have the correct token
+    - Make sure you have the correct role IDs
+    - Make sure you have the correct JDK version
 
 <h3 id='contributing'>Contributing</h3>
 
