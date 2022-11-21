@@ -2,6 +2,8 @@ import io.github.cdimascio.dotenv.Dotenv;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.OnlineStatus;
+import net.dv8tion.jda.api.entities.Activity;
+import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.requests.GatewayIntent;
 import net.dv8tion.jda.api.utils.MemberCachePolicy;
 import org.slf4j.LoggerFactory;
@@ -37,5 +39,13 @@ public class Bot {
                 .awaitReady();
 
         LoggerFactory.getLogger(Bot.class).info(jda.getSelfUser().getName() + "#" + jda.getSelfUser().getDiscriminator());
+
+        // Status = # of members for all guilds
+        int numOfMembers = 0;
+        for ( Guild guild : jda.getGuilds()) {
+            numOfMembers += guild.getMemberCount();
+        }
+
+        jda.getPresence().setActivity( Activity.listening(" " + numOfMembers + " members!"));
     }
 }
