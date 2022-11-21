@@ -8,6 +8,7 @@
    - <a href='#bot'>Bot Setup</a>
    - <a href='#running'>Running (IntelliJ)</a>
    - <a href='#commands'>Commands</a>
+   - <a href='#documentation'>Documentation</a>
    - <a href='#contributing'>Contributing</a>
 
 <h3 id='setup'>IDE Setup</h3>
@@ -48,6 +49,12 @@
 | `/trigger list`   | Lists all stored triggers  |
 | `/trigger delete` | Deletes specified trigger  |
 | `/trigger toggle` | Toggles trigger feature    |
+
+<h3 id='documentation'>Documentation</h3>
+- [JDA](https://github.com/DV8FromTheWorld/JDA)
+- [SLF4J](https://github.com/qos-ch/slf4j)
+- [dotenv Java](https://github.com/cdimascio/dotenv-java)
+- [fuzzywuzzy](https://github.com/xdrop/fuzzywuzzy)
 
 <h3 id='contributing'>Contributing</h3>
 
