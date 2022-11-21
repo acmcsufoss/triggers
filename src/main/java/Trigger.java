@@ -57,7 +57,7 @@ public class Trigger extends ListenerAdapter {
 
                 // Trigger found for member
                 if (triggerMap.containsKey(event.getMember().getId())) {
-                    triggerMap.remove(event.getMember().getId());
+                    triggerMap.get(event.getMember().getId()).clear();
 
                     EmbedBuilder builder = new EmbedBuilder()
                             .setColor(Color.green)
@@ -87,10 +87,44 @@ public class Trigger extends ListenerAdapter {
                     List<String> list = new ArrayList<>(triggerMap.get(event.getMember().getId()));
                     EmbedBuilder builder = triggerList(0, 5, list);
 
-                    event.replyEmbeds(builder.build()).setActionRow(
-                            Button.secondary("previous", "Previous").asDisabled(),
-                            Button.secondary("next", "Next")
-                    ).setEphemeral(true).queue();
+                    // If next page does not exist
+                    if (list.size() <= 5) {
+                        event.replyEmbeds(builder.build()).setActionRow(
+                                Button.secondary("previous", "Previous").asDisabled(),
+                                Button.secondary("next", "Next").asDisabled()
+                        ).setEphemeral(true).queue();
+                    } else {
+                        event.replyEmbeds(builder.build()).setActionRow(
+                                Button.secondary("previous", "Previous").asDisabled(),
+                                Button.secondary("next", "Next").asEnabled()
+                        ).setEphemeral(true).queue();
+                    }
+                }
+            }
+            case "delete" -> {
+
+                // Takes string result of option ID matching "word"
+                String query = event.getOption("word").getAsString().toLowerCase();
+
+                // Check if query is stored
+                if (triggerMap.get(event.getMember().getId()) != null && inTreeSet(query, triggerMap.get(event.getMember().getId()))) {
+
+                    // Delete
+                    triggerMap.get(event.getMember().getId()).remove(query);
+
+                    EmbedBuilder builder = new EmbedBuilder()
+                            .setColor(Color.green)
+                            .setDescription("Trigger successfully deleted");
+
+                    event.replyEmbeds(builder.build()).queue();
+                } else {
+
+                    EmbedBuilder builder = new EmbedBuilder()
+                            .setColor(Color.red)
+                            .setTitle("Error")
+                            .setDescription("Trigger not found for: \"" + query + "\"");
+
+                    event.replyEmbeds(builder.build()).setEphemeral(true).queue();
                 }
             }
         }
