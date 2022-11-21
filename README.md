@@ -52,13 +52,10 @@
 
 <h3 id='documentation'>Documentation</h3>
 
-- [JDA](https://github.com/DV8FromTheWorld/JDA)
-
-- [SLF4J](https://github.com/qos-ch/slf4j)
-
-- [dotenv Java](https://github.com/cdimascio/dotenv-java)
-
-- [fuzzywuzzy](https://github.com/xdrop/fuzzywuzzy)
+- <a href='https://github.com/DV8FromTheWorld/JDA'>JDA</a>
+- <a href='https://github.com/qos-ch/slf4j'>SLF4J</a>
+- <a href='https://github.com/cdimascio/dotenv-java'>dotenv Java)</a>
+- <a href='https://github.com/xdrop/fuzzywuzzy'>fuzzywuzzy</a>
 
 <h3 id='contributing'>Contributing</h3>
 
