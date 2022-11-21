@@ -18,11 +18,11 @@ import java.util.List;
 
 public class Trigger extends ListenerAdapter {
 
-    List<String> authorizedRoleIDs;
-
     public Trigger(List<String> authorizedRoleIDs) {
         this.authorizedRoleIDs = authorizedRoleIDs;
     }
+
+    List<String> authorizedRoleIDs;
 
     // Discord member ID : Set of trigger phrases
     HashMap<String, LinkedHashSet<String>> triggerMap = new HashMap<>();
