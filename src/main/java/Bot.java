@@ -40,12 +40,7 @@ public class Bot {
 
         LoggerFactory.getLogger(Bot.class).info(jda.getSelfUser().getName() + "#" + jda.getSelfUser().getDiscriminator());
 
-        // Status = # of members for all guilds
-        int numOfMembers = 0;
-        for ( Guild guild : jda.getGuilds()) {
-            numOfMembers += guild.getMemberCount();
-        }
-
-        jda.getPresence().setActivity( Activity.listening(" " + numOfMembers + " members!"));
+        // Status
+        jda.getPresence().setActivity( Activity.listening("/trigger help"));
     }
 }
