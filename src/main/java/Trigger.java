@@ -381,7 +381,7 @@ public class Trigger extends ListenerAdapter {
      * @return True if interaction is valid
      */
     boolean isValidInteraction(GenericCommandInteractionEvent event) {
-        return event.getMember() != null || event.isGuildCommand();
+        return event.getMember() != null && event.isGuildCommand();
     }
 
     /**
