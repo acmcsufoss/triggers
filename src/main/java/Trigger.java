@@ -158,7 +158,7 @@ public class Trigger extends ListenerAdapter {
     public void onMessageReceived(MessageReceivedEvent event) {
 
         // Only listen to guild messages from live users
-        if (!event.isFromGuild() || event.getMember().getUser().isBot()) return;
+        if (!event.isFromGuild() || event.getMember() != null || event.getMember().getUser().isBot()) return;
 
         String message_content = event.getMessage().getContentRaw().toLowerCase();
 
@@ -363,7 +363,7 @@ public class Trigger extends ListenerAdapter {
      * @return True if interaction is valid
      */
     boolean isValidInteraction(GenericCommandInteractionEvent event) {
-        return event.getMember() != null && event.isGuildCommand();
+        return event.getMember() != null || event.isGuildCommand();
     }
 
     /**
