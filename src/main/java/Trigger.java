@@ -1,8 +1,7 @@
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
-import net.dv8tion.jda.api.entities.Member;
-import net.dv8tion.jda.api.entities.Message;
-import net.dv8tion.jda.api.entities.MessageHistory;
+import net.dv8tion.jda.api.entities.*;
+import net.dv8tion.jda.api.events.interaction.command.GenericCommandInteractionEvent;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
@@ -17,6 +16,12 @@ import java.util.*;
 import java.util.List;
 
 public class Trigger extends ListenerAdapter {
+
+    List<String> authorizedRoleIDs;
+
+    public Trigger(List<String> authorizedRoleIDs) {
+        this.authorizedRoleIDs = authorizedRoleIDs;
+    }
 
     // Discord member ID : Set of trigger phrases
     HashMap<String, LinkedHashSet<String>> triggerMap = new HashMap<>();
@@ -33,7 +38,9 @@ public class Trigger extends ListenerAdapter {
     @Override
     public void onSlashCommandInteraction(SlashCommandInteractionEvent event) {
 
-        if (!event.getName().equals("trigger") || !event.isFromGuild()) return;
+        if (!event.getName().equals("trigger") || !isValidInteraction(event)) return;
+
+        if (!authenticateMemberByRole(event.getMember())) return;
 
         switch (event.getSubcommandName()) {
             case "new" -> {
@@ -350,6 +357,30 @@ public class Trigger extends ListenerAdapter {
     }
 
     /**
+     * Checks if interaction is valid
+     *
+     * @param event Interaction event
+     * @return True if interaction is valid
+     */
+    boolean isValidInteraction(GenericCommandInteractionEvent event) {
+        return event.getMember() != null && event.isGuildCommand();
+    }
+
+    /**
+     * Checks if member contains an authorized role
+     * @param member Event member
+     * @return True if member is authorized
+     */
+    boolean authenticateMemberByRole(Member member) {
+
+        for (Role role : member.getRoles()) {
+            if (authorizedRoleIDs.contains(role.getId())) return true;
+        }
+
+        return false;
+    }
+
+    /**
      * Template Embed for /trigger list
      *
      * <p>
@@ -374,6 +405,5 @@ public class Trigger extends ListenerAdapter {
 
         return builder;
     }
-
 
 }
