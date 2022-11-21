@@ -36,6 +36,7 @@
 | `/trigger reset`  | Resets all stored triggers |
 | `/trigger list`   | Lists all stored triggers  |
 | `/trigger delete` | Deletes specified trigger  |
+| `/trigger toggle` | Toggles trigger feature    |
 
 <h3 id='contributing'>Contributing</h3>
 
