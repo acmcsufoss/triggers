@@ -59,24 +59,13 @@ public class Trigger extends ListenerAdapter {
             }
             case "reset" -> {
 
-                // Trigger found for member
-                if (triggerMap.containsKey(event.getMember().getId())) {
-                    triggerMap.get(event.getMember().getId()).clear();
+                EmbedBuilder builder = new EmbedBuilder()
+                        .setColor(Color.red)
+                        .setTitle("Are you sure you want to reset all triggers?");
 
-                    EmbedBuilder builder = new EmbedBuilder()
-                            .setColor(Color.green)
-                            .setDescription("Triggers reset");
-
-                    event.replyEmbeds(builder.build()).setEphemeral(true).queue();
-                }
-                // Member has no trigger
-                else {
-                    EmbedBuilder builder = new EmbedBuilder()
-                            .setColor(Color.red)
-                            .setDescription("No triggers found");
-
-                    event.replyEmbeds(builder.build()).setEphemeral(true).queue();
-                }
+                event.replyEmbeds(builder.build()).setActionRow(
+                        Button.danger("resetAll", "Yes")
+                ).setEphemeral(true).queue();
             }
             case "list" -> {
 
@@ -231,6 +220,7 @@ public class Trigger extends ListenerAdapter {
 
         switch (event.getComponentId()) {
 
+            // List Command
             case "previous" -> {
 
                 // If not on first page
@@ -275,7 +265,6 @@ public class Trigger extends ListenerAdapter {
                     }
                 }
             }
-
             case "next" -> {
 
                 min += 5;
@@ -295,6 +284,33 @@ public class Trigger extends ListenerAdapter {
                     ).queue();
                 }
 
+            }
+
+            // Confirmation
+            case "resetAll" -> {
+
+                event.deferEdit().queue();
+
+                // Trigger found for member
+                if (triggerMap.containsKey(event.getMember().getId())) {
+                    triggerMap.get(event.getMember().getId()).clear();
+
+                    EmbedBuilder builder = new EmbedBuilder()
+                            .setColor(Color.green)
+                            .setTitle("Triggers reset");
+
+                    event.getHook().editOriginalEmbeds(builder.build()).queue();
+                }
+                // Member has no trigger
+                else {
+                    EmbedBuilder builder = new EmbedBuilder()
+                            .setColor(Color.red)
+                            .setTitle("No triggers found");
+
+                    event.getHook().editOriginalEmbeds(builder.build()).setActionRow(
+                            Button.danger("resetAll", "Yes").asDisabled()
+                    ).queue();
+                }
             }
         }
     }
