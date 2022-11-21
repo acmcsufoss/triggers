@@ -51,6 +51,7 @@
 | `/trigger toggle` | Toggles trigger feature    |
 
 <h3 id='documentation'>Documentation</h3>
+
 - [JDA](https://github.com/DV8FromTheWorld/JDA)
 
 - [SLF4J](https://github.com/qos-ch/slf4j)
