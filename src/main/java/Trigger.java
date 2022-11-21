@@ -18,7 +18,8 @@ import java.util.List;
 
 public class Trigger extends ListenerAdapter {
 
-    HashMap<String, TreeSet<String>> triggerMap = new HashMap<>();
+    // Discord member ID : Set of trigger phrases
+    HashMap<String, LinkedHashSet<String>> triggerMap = new HashMap<>();
     int min = 0;
     int max = 5;
 
@@ -34,7 +35,7 @@ public class Trigger extends ListenerAdapter {
                 String trigger_phrase = event.getOption("word").getAsString().toLowerCase();
 
                 // If input is a duplicate
-                if (triggerMap.get(event.getMember().getId()) != null && inTreeSet(trigger_phrase, triggerMap.get(event.getMember().getId()))) {
+                if (triggerMap.get(event.getMember().getId()) != null && inSet(trigger_phrase, triggerMap.get(event.getMember().getId()))) {
                     EmbedBuilder builder = new EmbedBuilder()
                             .setColor(Color.red)
                             .setTitle("Error")
@@ -44,7 +45,7 @@ public class Trigger extends ListenerAdapter {
                 } else {
 
                     // Store trigger
-                    triggerMap.computeIfAbsent(event.getMember().getId(), k -> new TreeSet<>()).add(trigger_phrase);
+                    triggerMap.computeIfAbsent(event.getMember().getId(), k -> new LinkedHashSet<>()).add(trigger_phrase);
 
                     EmbedBuilder builder = new EmbedBuilder()
                             .setColor(Color.green)
@@ -107,7 +108,7 @@ public class Trigger extends ListenerAdapter {
                 String query = event.getOption("word").getAsString().toLowerCase();
 
                 // Check if query is stored
-                if (triggerMap.get(event.getMember().getId()) != null && inTreeSet(query, triggerMap.get(event.getMember().getId()))) {
+                if (triggerMap.get(event.getMember().getId()) != null && inSet(query, triggerMap.get(event.getMember().getId()))) {
 
                     // Delete
                     triggerMap.get(event.getMember().getId()).remove(query);
@@ -142,7 +143,7 @@ public class Trigger extends ListenerAdapter {
         for (String id : triggerMap.keySet()) {
 
             // If members value contains message_content
-            if (inTreeSet(message_content, triggerMap.get(id))) {
+            if (inSet(message_content, triggerMap.get(id))) {
 
                 // Retrieve triggered member
                 RestAction<Member> action = event.getGuild().retrieveMemberById(id);
@@ -270,15 +271,15 @@ public class Trigger extends ListenerAdapter {
     }
 
     /**
-     * Checks if Tree Set contains String
+     * Checks if Set contains String
      *
      * @param str     String
-     * @param treeSet Containing Tree Set
+     * @param set Containing Set
      * @return True if set contains String
      */
-    boolean inTreeSet(String str, TreeSet<String> treeSet) {
-        for (String string : treeSet) {
-            if (str.contains(string)) return true;
+    boolean inSet(String str, LinkedHashSet<String> set) {
+        for (String string : set) {
+            if (str.equals(string)) return true;
         }
         return false;
     }
