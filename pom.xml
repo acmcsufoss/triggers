@@ -51,6 +51,12 @@
             <artifactId>dotenv-java</artifactId>
             <version>2.2.4</version>
         </dependency>
+        <!--    https://github.com/xdrop/fuzzywuzzy  -->
+        <dependency>
+            <groupId>me.xdrop</groupId>
+            <artifactId>fuzzywuzzy</artifactId>
+            <version>1.4.0</version>
+        </dependency>
     </dependencies>
     
 </project>
