@@ -23,6 +23,10 @@ public class Trigger extends ListenerAdapter {
 
     // Discord member ID : Trigger Activation (true = activated, false = deactivated)
     HashMap<String, Boolean> triggerToggle = new HashMap<>();
+
+    // Discord member ID : Trigger Phrase
+    HashMap<String, String> triggerConfirmation = new HashMap<>();
+
     int min = 0;
     int max = 5;
 
@@ -64,7 +68,7 @@ public class Trigger extends ListenerAdapter {
                         .setTitle("Are you sure you want to reset all triggers?");
 
                 event.replyEmbeds(builder.build()).setActionRow(
-                        Button.danger("resetAll", "Yes")
+                        Button.danger("reset", "Yes")
                 ).setEphemeral(true).queue();
             }
             case "list" -> {
@@ -73,7 +77,7 @@ public class Trigger extends ListenerAdapter {
                 if (!triggerMap.containsKey(event.getMember().getId()) || triggerMap.get(event.getMember().getId()).isEmpty() || triggerMap.get(event.getMember().getId()) == null) {
                     EmbedBuilder builder = new EmbedBuilder()
                             .setColor(Color.red)
-                            .setDescription("No triggers found");
+                            .setTitle("No triggers found");
 
                     event.replyEmbeds(builder.build()).setEphemeral(true).queue();
                 } else {
@@ -102,14 +106,17 @@ public class Trigger extends ListenerAdapter {
                 // Check if query is stored
                 if (triggerMap.get(event.getMember().getId()) != null && inSet(query, triggerMap.get(event.getMember().getId()))) {
 
-                    // Delete
-                    triggerMap.get(event.getMember().getId()).remove(query);
+                    // Store phrase in hashmap
+                    triggerConfirmation.put(event.getMember().getId(), query);
 
                     EmbedBuilder builder = new EmbedBuilder()
-                            .setColor(Color.green)
-                            .setDescription("Trigger successfully deleted");
+                            .setColor(Color.red)
+                            .setTitle("Are you sure you want to delete this trigger?");
 
-                    event.replyEmbeds(builder.build()).queue();
+                    event.replyEmbeds(builder.build()).setActionRow(
+                            Button.danger("delete", "Yes")
+                    ).setEphemeral(true).queue();
+
                 } else {
 
                     EmbedBuilder builder = new EmbedBuilder()
@@ -287,30 +294,43 @@ public class Trigger extends ListenerAdapter {
             }
 
             // Confirmation
-            case "resetAll" -> {
+            case "delete" -> {
 
                 event.deferEdit().queue();
+
+                String query = triggerConfirmation.get(event.getMember().getId());
+
+                EmbedBuilder builder = new EmbedBuilder()
+                        .setColor(Color.green)
+                        .setTitle("Trigger successfully deleted");
+
+                triggerMap.get(event.getMember().getId()).remove(query);
+
+                event.getHook().editOriginalEmbeds(builder.build()).setActionRow(
+                        Button.danger("delete", "Yes").asDisabled()
+                ).queue();
+            }
+            case "reset" -> {
+
+                event.deferEdit().queue();
+                EmbedBuilder builder = new EmbedBuilder();
 
                 // Trigger found for member
                 if (triggerMap.containsKey(event.getMember().getId())) {
                     triggerMap.get(event.getMember().getId()).clear();
 
-                    EmbedBuilder builder = new EmbedBuilder()
-                            .setColor(Color.green)
-                            .setTitle("Triggers reset");
-
-                    event.getHook().editOriginalEmbeds(builder.build()).queue();
+                    builder.setColor(Color.green);
+                    builder.setTitle("Triggers reset");
                 }
                 // Member has no trigger
                 else {
-                    EmbedBuilder builder = new EmbedBuilder()
-                            .setColor(Color.red)
-                            .setTitle("No triggers found");
-
-                    event.getHook().editOriginalEmbeds(builder.build()).setActionRow(
-                            Button.danger("resetAll", "Yes").asDisabled()
-                    ).queue();
+                    builder.setColor(Color.red);
+                    builder.setTitle("No triggers found");
                 }
+
+                event.getHook().editOriginalEmbeds(builder.build()).setActionRow(
+                        Button.danger("reset", "Yes").asDisabled()
+                ).queue();
             }
         }
     }
