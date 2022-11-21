@@ -36,6 +36,7 @@
 6. Start your new bot
     - Open terminal, change directories to `out/artifacts/crying_counter_jar`
     - Run the .jar through `java -jar crying-counter.jar`
+7. To invite your bot, use `https://discord.com/api/oauth2/authorize?client_id=$DISCORD_CLIENT_ID&permissions=66560&scope=bot%20applications.commands` and replace `$DISCORD_CLIENT_ID` with the bot ID
 
 <h3 id='commands'>Commands</h3>
 
