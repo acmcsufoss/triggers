@@ -34,8 +34,7 @@ public class Register extends ListenerAdapter {
             guild = guildReadyEvent.getGuild();
         } else if (event instanceof GuildJoinEvent guildJoinEvent) {
             guild = guildJoinEvent.getGuild();
-        }
-        else return;
+        } else return;
 
         guild.updateCommands().addCommands(guildCommands()).queue((null), (null));
     }
