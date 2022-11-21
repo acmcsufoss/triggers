@@ -2,7 +2,7 @@ import me.xdrop.fuzzywuzzy.FuzzySearch;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
-import net.dv8tion.jda.api.events.interaction.command.GenericCommandInteractionEvent;
+import net.dv8tion.jda.api.events.GenericEvent;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
@@ -176,7 +176,7 @@ public class Trigger extends ListenerAdapter {
     public void onMessageReceived(MessageReceivedEvent event) {
 
         // Only listen to guild messages from live users
-        if (!event.isFromGuild() || event.getMember() != null || event.getMember().getUser().isBot()) return;
+        if (!isValidInteraction(event)) return;
 
         String message_content = event.getMessage().getContentRaw().toLowerCase();
 
@@ -247,6 +247,8 @@ public class Trigger extends ListenerAdapter {
 
     @Override
     public void onButtonInteraction(ButtonInteractionEvent event) {
+
+        if (!isValidInteraction(event)) return;
 
         List<String> list = new ArrayList<>(triggerMap.get(event.getMember().getId()));
 
@@ -377,11 +379,20 @@ public class Trigger extends ListenerAdapter {
     /**
      * Checks if interaction is valid
      *
-     * @param event Interaction event
+     * @param event Interaction/MessageReceived event
      * @return True if interaction is valid
      */
-    boolean isValidInteraction(GenericCommandInteractionEvent event) {
-        return event.getMember() != null && event.isGuildCommand();
+    boolean isValidInteraction(GenericEvent event) {
+
+        if (event instanceof SlashCommandInteractionEvent slashCommandInteractionEvent) {
+            return slashCommandInteractionEvent.getMember() != null && slashCommandInteractionEvent.isGuildCommand();
+        } else if (event instanceof MessageReceivedEvent messageReceivedEvent) {
+            return messageReceivedEvent.getMember() != null && messageReceivedEvent.isFromGuild() && !messageReceivedEvent.getMember().getUser().isBot();
+        } else if (event instanceof ButtonInteractionEvent buttonInteractionEvent) {
+            return buttonInteractionEvent.getMember() != null && buttonInteractionEvent.isFromGuild();
+        } else {
+            return false;
+        }
     }
 
     /**
