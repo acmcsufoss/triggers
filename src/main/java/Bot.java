@@ -6,6 +6,9 @@ import net.dv8tion.jda.api.requests.GatewayIntent;
 import net.dv8tion.jda.api.utils.MemberCachePolicy;
 import org.slf4j.LoggerFactory;
 
+import java.util.Arrays;
+import java.util.List;
+
 public class Bot {
 
     public static void main(String[] args) throws InterruptedException {
@@ -18,6 +21,9 @@ public class Bot {
         // Bot Token
         String token = System.getProperty("DISCORD_TOKEN");
 
+        // List of authorized roles
+        List<String> authorizedRoleIDs = Arrays.asList(System.getProperty("AUTHORIZED_ROLE_ID").split(","));
+
         // JDA Builder
         JDA jda = JDABuilder.createDefault(token)
                 .setStatus(OnlineStatus.ONLINE)
@@ -25,7 +31,7 @@ public class Bot {
                 .setMemberCachePolicy(MemberCachePolicy.ALL)
 
                 // Event listeners (new instances of other classes extending ListenerAdapter)
-                .addEventListeners(new Register(), new Trigger())
+                .addEventListeners(new Register(), new Trigger(authorizedRoleIDs))
 
                 .build()
                 .awaitReady();
