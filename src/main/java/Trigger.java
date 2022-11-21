@@ -1,3 +1,4 @@
+import me.xdrop.fuzzywuzzy.FuzzySearch;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
@@ -126,11 +127,28 @@ public class Trigger extends ListenerAdapter {
 
                 } else {
 
-                    EmbedBuilder builder = new EmbedBuilder()
-                            .setColor(Color.red)
-                            .setTitle("Error")
-                            .setDescription("Trigger not found for: \"" + query + "\"");
+                    String similarPhrase = null;
 
+                    for (String str : triggerMap.get(event.getMember().getId())) {
+                        if (FuzzySearch.ratio(str, query) > 80) {
+                            similarPhrase = str;
+                            break;
+                        }
+                    }
+
+                    // TODO: Add button to handle similar phrase case
+                    EmbedBuilder builder;
+                    if (similarPhrase != null) {
+                        builder = new EmbedBuilder()
+                                .setColor(Color.red)
+                                .setTitle("Error")
+                                .setDescription("Trigger not found! Did you mean \"" + similarPhrase + "\"?");
+                    } else {
+                        builder = new EmbedBuilder()
+                                .setColor(Color.red)
+                                .setTitle("Error")
+                                .setDescription("Trigger not found!");
+                    }
                     event.replyEmbeds(builder.build()).setEphemeral(true).queue();
                 }
             }
@@ -345,7 +363,7 @@ public class Trigger extends ListenerAdapter {
     /**
      * Checks if Set contains String
      *
-     * @param str     String
+     * @param str String
      * @param set Containing Set
      * @return True if set contains String
      */
@@ -368,6 +386,7 @@ public class Trigger extends ListenerAdapter {
 
     /**
      * Checks if member contains an authorized role
+     *
      * @param member Event member
      * @return True if member is authorized
      */
