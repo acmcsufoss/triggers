@@ -61,6 +61,7 @@
 - <a href='https://github.com/xdrop/fuzzywuzzy'>fuzzywuzzy</a>
 
 <h3 id='faq'>FAQ</h3>
+
 1. **"I can't invite my bot"**
 
     - Make sure you have the correct permissions (66560)
