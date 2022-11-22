@@ -9,6 +9,7 @@ import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.dv8tion.jda.api.interactions.commands.Command;
+import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.interactions.components.buttons.Button;
 import net.dv8tion.jda.api.requests.RestAction;
 import net.dv8tion.jda.api.utils.TimeFormat;
@@ -241,6 +242,8 @@ public class Trigger extends ListenerAdapter
     public void onCommandAutoCompleteInteraction( CommandAutoCompleteInteractionEvent event )
     {
         if (event.getName().equals( "trigger" ) && event.getFocusedOption().getName().equals( "word" )) {
+
+            if (triggerMap.get( event.getMember().getId() ) == null) return;
 
             String[] words = new String[triggerMap.get( event.getMember().getId()).size()];
             words = triggerMap.get( event.getMember().getId() ).toArray(words);
