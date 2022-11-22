@@ -68,13 +68,14 @@ public class Register extends ListenerAdapter
         SubcommandData reset = new SubcommandData( "reset", "Removes trigger" );
         SubcommandData list = new SubcommandData( "list", "Lists triggers" );
         SubcommandData toggle =
-                new SubcommandData( "toggle", "Toggles trigger feature" ).addOption( OptionType.BOOLEAN, "switch",
-                        "Toggles feature", true );
+                new SubcommandData( "toggle", "Toggles trigger feature" )
+                        .addOption( OptionType.BOOLEAN, "switch", "Toggles feature", true );
         SubcommandData newTrigger =
-                new SubcommandData( "new", "Add trigger" ).addOption( OptionType.STRING, "word", "Trigger word", true );
+                new SubcommandData( "new", "Add trigger" )
+                        .addOption( OptionType.STRING, "word", "Trigger word", true );
         SubcommandData delete =
-                new SubcommandData( "delete", "Delete trigger" ).addOption( OptionType.STRING, "word", "Trigger word",
-                        true, true );
+                new SubcommandData( "delete", "Delete trigger" )
+                        .addOption( OptionType.STRING, "word", "Trigger word", true, true );
         guildCommandData.add(
                 Commands.slash( "trigger", "Receive a DM when trigger word is mentioned in mutual servers" )
                         .addSubcommands( help, reset, list, toggle, newTrigger, delete ) );
