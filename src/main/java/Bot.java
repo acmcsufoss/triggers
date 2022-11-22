@@ -27,10 +27,16 @@ public class Bot
         // List of authorized roles
         List<String> authorizedRoleIDs = Arrays.asList( System.getProperty( "AUTHORIZED_ROLE_ID" ).split( "," ) );
 
+        // Gateway Intents
+        List<GatewayIntent> gatewayIntents = Arrays.asList(
+                GatewayIntent.GUILD_MEMBERS,
+                GatewayIntent.MESSAGE_CONTENT,
+                GatewayIntent.GUILD_MESSAGES
+        );
+
         // JDA Builder
-        JDA jda = JDABuilder.createDefault( token )
+        JDA jda = JDABuilder.createLight( token, gatewayIntents )
                 .setStatus( OnlineStatus.ONLINE )
-                .enableIntents( GatewayIntent.MESSAGE_CONTENT, GatewayIntent.GUILD_MEMBERS )
                 .setMemberCachePolicy( MemberCachePolicy.ALL )
 
                 // Event listeners (new instances of other classes extending ListenerAdapter)
