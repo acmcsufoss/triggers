@@ -12,7 +12,7 @@
 - <a href='#faq'>FAQ</a>
 - <a href='#contributing'>Contributing</a>
 
-<h3 id='setup'>IDE Setup</h3>
+<h2 id='setup'>IDE Setup</h2>
 
 1. Clone the repository
 2. Create a `.env` file in the main directory with the following variables:
@@ -21,13 +21,13 @@
 3. Specify JDK version (Tested on JDK 17/19)
 4. Restart IDE
 
-<h3 id='bot'>Bot Setup</h3>
+<h2 id='bot'>Bot Setup</h2>
 
 1. Go to the [Discord Developer Dashboard](https://discord.com/developers/applications)
 2. Register your bot
 3. Enable Server Members Intent and Message Content Intent
 
-<h3 id='running'>Running (IntelliJ)</h3>
+<h2 id='running'>Running (IntelliJ)</h2>
 
 1. Create a `resources` directory in `src/main`
 2. Go to File -> Project Structure -> Artifacts
@@ -43,7 +43,7 @@
    use `https://discord.com/api/oauth2/authorize?client_id=$DISCORD_CLIENT_ID&permissions=66560&scope=bot%20applications.commands`
    and replace `$DISCORD_CLIENT_ID` with the bot ID
 
-<h3 id='commands'>Commands</h3>
+<h2 id='commands'>Commands</h2>
 
 | Command           | Description                |
 |-------------------|----------------------------|
@@ -53,14 +53,14 @@
 | `/trigger delete` | Deletes specified trigger  |
 | `/trigger toggle` | Toggles trigger feature    |
 
-<h3 id='documentation'>Documentation</h3>
+<h2 id='documentation'>Documentation</h2>
 
 - <a href='https://github.com/DV8FromTheWorld/JDA'>JDA</a>
 - <a href='https://github.com/qos-ch/slf4j'>SLF4J</a>
 - <a href='https://github.com/cdimascio/dotenv-java'>dotenv Java</a>
 - <a href='https://github.com/xdrop/fuzzywuzzy'>fuzzywuzzy</a>
 
-<h3 id='faq'>FAQ</h3>
+<h2 id='faq'>FAQ</h2>
 
 1. **"I can't invite my bot"**
 
@@ -87,7 +87,7 @@
    - Go to your server -> Server Settings -> Roles
    - Right-click on the role you want to get the ID of and select "Copy ID"
 
-<h3 id='contributing'>Contributing</h3>
+<h2 id='contributing'>Contributing</h2>
 
 1. Create a new branch
 2. Make your changes
