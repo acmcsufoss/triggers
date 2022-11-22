@@ -12,6 +12,7 @@ import net.dv8tion.jda.api.interactions.commands.Command;
 import net.dv8tion.jda.api.interactions.components.buttons.Button;
 import net.dv8tion.jda.api.requests.RestAction;
 import net.dv8tion.jda.api.utils.TimeFormat;
+import org.jetbrains.annotations.NotNull;
 import org.slf4j.LoggerFactory;
 
 import java.awt.*;
@@ -42,7 +43,7 @@ public class Trigger extends ListenerAdapter
     final int MAX_TRIGGERS = 50;
 
     @Override
-    public void onSlashCommandInteraction( SlashCommandInteractionEvent event )
+    public void onSlashCommandInteraction( @NotNull SlashCommandInteractionEvent event )
     {
 
         if ( !event.getName().equals( "trigger" ) || !isValidInteraction( event ) )
@@ -238,7 +239,7 @@ public class Trigger extends ListenerAdapter
     }
 
     @Override
-    public void onCommandAutoCompleteInteraction( CommandAutoCompleteInteractionEvent event )
+    public void onCommandAutoCompleteInteraction( @NotNull CommandAutoCompleteInteractionEvent event )
     {
         if (event.getName().equals( "trigger" ) && event.getFocusedOption().getName().equals( "word" )) {
 
@@ -257,7 +258,7 @@ public class Trigger extends ListenerAdapter
     }
 
     @Override
-    public void onMessageReceived( MessageReceivedEvent event )
+    public void onMessageReceived( @NotNull MessageReceivedEvent event )
     {
 
         // Only listen to guild messages from live users
@@ -347,7 +348,7 @@ public class Trigger extends ListenerAdapter
     }
 
     @Override
-    public void onButtonInteraction( ButtonInteractionEvent event )
+    public void onButtonInteraction( @NotNull ButtonInteractionEvent event )
     {
 
         if ( !isValidInteraction( event ) )
