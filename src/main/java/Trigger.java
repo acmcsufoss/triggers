@@ -32,9 +32,6 @@ public class Trigger extends ListenerAdapter
     // Discord member ID : Trigger Activation (true = activated, false = deactivated)
     HashMap<String, Boolean> triggerToggle = new HashMap<>();
 
-    // Discord member ID : Trigger Phrase
-    HashMap<String, String> triggerConfirmation = new HashMap<>();
-
     int min = 0;
     int max = 5;
 
@@ -85,7 +82,7 @@ public class Trigger extends ListenerAdapter
                             .setTitle( "Error" )
                             .setDescription( "Duplicate trigger!" );
 
-                    event.replyEmbeds( builder.build() ).queue();
+                    event.replyEmbeds( builder.build() ).setEphemeral( true ).queue();
                 }
                 else
                 {
@@ -173,17 +170,12 @@ public class Trigger extends ListenerAdapter
                         triggerMap.get( event.getMember().getId() ) ) )
                 {
 
-                    // Store phrase in hashmap
-                    triggerConfirmation.put( event.getMember().getId(), query );
-
+                    triggerMap.get( event.getMember().getId() ).remove( query );
                     EmbedBuilder builder = new EmbedBuilder()
-                            .setColor( Color.red )
-                            .setTitle( "Are you sure you want to delete this trigger?" );
+                            .setColor( Color.green )
+                            .setDescription( "Trigger deleted: \"" + query + "\"" );
 
-                    event.replyEmbeds( builder.build() ).setActionRow(
-                            Button.danger( "delete", "Yes" )
-                    ).setEphemeral( true ).queue();
-
+                    event.replyEmbeds( builder.build() ).setEphemeral( true ).queue();
                 }
                 else
                 {
@@ -425,23 +417,6 @@ public class Trigger extends ListenerAdapter
             }
 
             // Confirmation
-            case "delete" ->
-            {
-
-                event.deferEdit().queue();
-
-                String query = triggerConfirmation.get( event.getMember().getId() );
-
-                EmbedBuilder builder = new EmbedBuilder()
-                        .setColor( Color.green )
-                        .setTitle( "Trigger successfully deleted" );
-
-                triggerMap.get( event.getMember().getId() ).remove( query );
-
-                event.getHook().editOriginalEmbeds( builder.build() ).setActionRow(
-                        Button.danger( "delete", "Yes" ).asDisabled()
-                ).queue();
-            }
             case "reset" ->
             {
 
