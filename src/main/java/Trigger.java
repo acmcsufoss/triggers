@@ -3,10 +3,12 @@ import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.events.GenericEvent;
+import net.dv8tion.jda.api.events.interaction.command.CommandAutoCompleteInteractionEvent;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
+import net.dv8tion.jda.api.interactions.commands.Command;
 import net.dv8tion.jda.api.interactions.components.buttons.Button;
 import net.dv8tion.jda.api.requests.RestAction;
 import net.dv8tion.jda.api.utils.TimeFormat;
@@ -15,6 +17,8 @@ import org.slf4j.LoggerFactory;
 import java.awt.*;
 import java.util.*;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class Trigger extends ListenerAdapter
 {
@@ -230,6 +234,23 @@ public class Trigger extends ListenerAdapter
 
                 event.replyEmbeds( builder.build() ).setEphemeral( true ).queue();
             }
+        }
+    }
+
+    @Override
+    public void onCommandAutoCompleteInteraction( CommandAutoCompleteInteractionEvent event )
+    {
+        if (event.getName().equals( "trigger" ) && event.getFocusedOption().getName().equals( "word" )) {
+
+            String[] words = new String[triggerMap.get( event.getMember().getId()).size()];
+            words = triggerMap.get( event.getMember().getId() ).toArray(words);
+
+            List<Command.Choice> options = Stream.of(words)
+                            .filter( word -> word.startsWith( event.getFocusedOption().getValue() ) )
+                            .map( word -> new Command.Choice( word, word ) )
+                            .collect( Collectors.toList() );
+
+            event.replyChoices( options ).queue();
         }
     }
 
