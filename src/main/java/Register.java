@@ -12,13 +12,15 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Register extends ListenerAdapter {
+public class Register extends ListenerAdapter
+{
 
     @Override
-    public void onGenericEvent(@NotNull GenericEvent event) {
+    public void onGenericEvent( @NotNull GenericEvent event )
+    {
 
         // Register commands (#updateCommands will CLEAR all commands, don't do this more than once per startup)
-        updateCommands(event);
+        updateCommands( event );
     }
 
     /**
@@ -26,17 +28,25 @@ public class Register extends ListenerAdapter {
      *
      * @param event GuildReadyEvent or GuildJoinEvent
      */
-    private void updateCommands(GenericEvent event) {
+    private void updateCommands( GenericEvent event )
+    {
 
         Guild guild;
 
-        if (event instanceof GuildReadyEvent guildReadyEvent) {
+        if ( event instanceof GuildReadyEvent guildReadyEvent )
+        {
             guild = guildReadyEvent.getGuild();
-        } else if (event instanceof GuildJoinEvent guildJoinEvent) {
+        }
+        else if ( event instanceof GuildJoinEvent guildJoinEvent )
+        {
             guild = guildJoinEvent.getGuild();
-        } else return;
+        }
+        else
+        {
+            return;
+        }
 
-        guild.updateCommands().addCommands(guildCommands()).queue((null), (null));
+        guild.updateCommands().addCommands( guildCommands() ).queue( ( null ), ( null ) );
     }
 
     /**
@@ -47,19 +57,27 @@ public class Register extends ListenerAdapter {
      *
      * @return List containing bot commands
      */
-    private List<CommandData> guildCommands() {
+    private List<CommandData> guildCommands()
+    {
 
         // List holding all guild commands
         List<CommandData> guildCommandData = new ArrayList<>();
 
         // Trigger command with subcommands "reset" and "new_trigger"
-        SubcommandData help = new SubcommandData("help", "Lists all trigger commands");
-        SubcommandData reset = new SubcommandData("reset", "Removes trigger");
-        SubcommandData list = new SubcommandData("list", "Lists triggers");
-        SubcommandData toggle = new SubcommandData("toggle", "Toggles trigger feature").addOption(OptionType.BOOLEAN, "switch", "Toggles feature");
-        SubcommandData newTrigger = new SubcommandData("new", "Add trigger").addOption(OptionType.STRING, "word", "Trigger word", true);
-        SubcommandData delete = new SubcommandData("delete", "Delete trigger").addOption(OptionType.STRING, "word", "Trigger word", true);
-        guildCommandData.add(Commands.slash("trigger", "Receive a DM when trigger word is mentioned in mutual servers").addSubcommands(help, reset, list, toggle, newTrigger, delete));
+        SubcommandData help = new SubcommandData( "help", "Lists all trigger commands" );
+        SubcommandData reset = new SubcommandData( "reset", "Removes trigger" );
+        SubcommandData list = new SubcommandData( "list", "Lists triggers" );
+        SubcommandData toggle =
+                new SubcommandData( "toggle", "Toggles trigger feature" ).addOption( OptionType.BOOLEAN, "switch",
+                        "Toggles feature", true );
+        SubcommandData newTrigger =
+                new SubcommandData( "new", "Add trigger" ).addOption( OptionType.STRING, "word", "Trigger word", true );
+        SubcommandData delete =
+                new SubcommandData( "delete", "Delete trigger" ).addOption( OptionType.STRING, "word", "Trigger word",
+                        true, true );
+        guildCommandData.add(
+                Commands.slash( "trigger", "Receive a DM when trigger word is mentioned in mutual servers" )
+                        .addSubcommands( help, reset, list, toggle, newTrigger, delete ) );
 
         return guildCommandData;
     }

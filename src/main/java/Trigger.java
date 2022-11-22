@@ -16,9 +16,11 @@ import java.awt.*;
 import java.util.*;
 import java.util.List;
 
-public class Trigger extends ListenerAdapter {
+public class Trigger extends ListenerAdapter
+{
 
-    public Trigger(List<String> authorizedRoleIDs) {
+    public Trigger( List<String> authorizedRoleIDs )
+    {
         this.authorizedRoleIDs = authorizedRoleIDs;
     }
 
@@ -39,349 +41,430 @@ public class Trigger extends ListenerAdapter {
     final int MAX_TRIGGERS = 50;
 
     @Override
-    public void onSlashCommandInteraction(SlashCommandInteractionEvent event) {
+    public void onSlashCommandInteraction( SlashCommandInteractionEvent event )
+    {
 
-        if (!event.getName().equals("trigger") || !isValidInteraction(event)) return;
+        if ( !event.getName().equals( "trigger" ) || !isValidInteraction( event ) )
+        {
+            return;
+        }
 
-        if (!authenticateMemberByRole(event.getMember())) return;
+        if ( !authenticateMemberByRole( event.getMember() ) )
+        {
+            return;
+        }
 
-        switch (event.getSubcommandName()) {
+        switch ( event.getSubcommandName() )
+        {
 
-            case "help" -> {
+            case "help" ->
+            {
                 EmbedBuilder builder = new EmbedBuilder()
-                        .setTitle("Trigger Commands")
-                        .setColor(Color.green)
-                        .addField("/trigger new", "Add trigger", false)
-                        .addField("/trigger reset", "Removes trigger", false)
-                        .addField("/trigger list", "Lists triggers", false)
-                        .addField("/trigger delete", "Delete trigger", false)
-                        .addField("/trigger toggle", "Toggles trigger feature", false);
+                        .setTitle( "Trigger Commands" )
+                        .setColor( Color.green )
+                        .addField( "/trigger new", "Add trigger", false )
+                        .addField( "/trigger reset", "Removes trigger", false )
+                        .addField( "/trigger list", "Lists triggers", false )
+                        .addField( "/trigger delete", "Delete trigger", false )
+                        .addField( "/trigger toggle", "Toggles trigger feature", false );
 
-            event.replyEmbeds(builder.build()).setEphemeral(true).queue();
+                event.replyEmbeds( builder.build() ).setEphemeral( true ).queue();
             }
-            case "new" -> {
+            case "new" ->
+            {
 
                 // Takes string result of option ID matching "word"
-                String trigger_phrase = event.getOption("word").getAsString().toLowerCase();
+                String trigger_phrase = event.getOption( "word" ).getAsString().toLowerCase();
 
                 // If input is a duplicate
-                if (triggerMap.get(event.getMember().getId()) != null && inSet(trigger_phrase, triggerMap.get(event.getMember().getId()))) {
+                if ( triggerMap.get( event.getMember().getId() ) != null && inSet( trigger_phrase,
+                        triggerMap.get( event.getMember().getId() ) ) )
+                {
                     EmbedBuilder builder = new EmbedBuilder()
-                            .setColor(Color.red)
-                            .setTitle("Error")
-                            .setDescription("Duplicate trigger!");
+                            .setColor( Color.red )
+                            .setTitle( "Error" )
+                            .setDescription( "Duplicate trigger!" );
 
-                    event.replyEmbeds(builder.build()).queue();
-                } else {
+                    event.replyEmbeds( builder.build() ).queue();
+                }
+                else
+                {
 
                     // If max size is reached
-                    if (triggerMap.get(event.getMember().getId()) != null && triggerMap.get(event.getMember().getId()).size() >= MAX_TRIGGERS) {
+                    if ( triggerMap.get( event.getMember().getId() ) != null
+                            && triggerMap.get( event.getMember().getId() ).size() >= MAX_TRIGGERS )
+                    {
                         EmbedBuilder builder = new EmbedBuilder()
-                                .setColor(Color.red)
-                                .setTitle("Error")
-                                .setDescription("Max size reached!");
+                                .setColor( Color.red )
+                                .setTitle( "Error" )
+                                .setDescription( "Max size reached!" );
 
-                        event.replyEmbeds(builder.build()).setEphemeral(true).queue();
-                    } else {
+                        event.replyEmbeds( builder.build() ).setEphemeral( true ).queue();
+                    }
+                    else
+                    {
 
                         // Store trigger
-                        triggerMap.computeIfAbsent(event.getMember().getId(), k -> new LinkedHashSet<>()).add(trigger_phrase);
+                        triggerMap.computeIfAbsent( event.getMember().getId(), k -> new LinkedHashSet<>() )
+                                .add( trigger_phrase );
 
                         EmbedBuilder builder = new EmbedBuilder()
-                                .setColor(Color.green)
-                                .setDescription("Trigger added: \"" + trigger_phrase + "\"");
+                                .setColor( Color.green )
+                                .setDescription( "Trigger added: \"" + trigger_phrase + "\"" );
 
-                        event.replyEmbeds(builder.build()).setEphemeral(true).queue();
+                        event.replyEmbeds( builder.build() ).setEphemeral( true ).queue();
                     }
                 }
             }
-            case "reset" -> {
+            case "reset" ->
+            {
 
                 EmbedBuilder builder = new EmbedBuilder()
-                        .setColor(Color.red)
-                        .setTitle("Are you sure you want to reset all triggers?");
+                        .setColor( Color.red )
+                        .setTitle( "Are you sure you want to reset all triggers?" );
 
-                event.replyEmbeds(builder.build()).setActionRow(
-                        Button.danger("reset", "Yes")
-                ).setEphemeral(true).queue();
+                event.replyEmbeds( builder.build() ).setActionRow(
+                        Button.danger( "reset", "Yes" )
+                ).setEphemeral( true ).queue();
             }
-            case "list" -> {
+            case "list" ->
+            {
 
                 // If no triggers are found
-                if (!triggerMap.containsKey(event.getMember().getId()) || triggerMap.get(event.getMember().getId()).isEmpty() || triggerMap.get(event.getMember().getId()) == null) {
+                if ( !triggerMap.containsKey( event.getMember().getId() ) || triggerMap.get( event.getMember().getId() )
+                        .isEmpty() || triggerMap.get( event.getMember().getId() ) == null )
+                {
                     EmbedBuilder builder = new EmbedBuilder()
-                            .setColor(Color.red)
-                            .setTitle("No triggers found");
+                            .setColor( Color.red )
+                            .setTitle( "No triggers found" );
 
-                    event.replyEmbeds(builder.build()).setEphemeral(true).queue();
-                } else {
-                    List<String> list = new ArrayList<>(triggerMap.get(event.getMember().getId()));
-                    EmbedBuilder builder = triggerList(0, 5, list);
+                    event.replyEmbeds( builder.build() ).setEphemeral( true ).queue();
+                }
+                else
+                {
+                    List<String> list = new ArrayList<>( triggerMap.get( event.getMember().getId() ) );
+                    EmbedBuilder builder = triggerList( 0, 5, list );
 
                     // If next page does not exist
-                    if (list.size() <= 5) {
-                        event.replyEmbeds(builder.build()).setActionRow(
-                                Button.secondary("previous", "Previous").asDisabled(),
-                                Button.secondary("next", "Next").asDisabled()
-                        ).setEphemeral(true).queue();
-                    } else {
-                        event.replyEmbeds(builder.build()).setActionRow(
-                                Button.secondary("previous", "Previous").asDisabled(),
-                                Button.secondary("next", "Next").asEnabled()
-                        ).setEphemeral(true).queue();
+                    if ( list.size() <= 5 )
+                    {
+                        event.replyEmbeds( builder.build() ).setActionRow(
+                                Button.secondary( "previous", "Previous" ).asDisabled(),
+                                Button.secondary( "next", "Next" ).asDisabled()
+                        ).setEphemeral( true ).queue();
+                    }
+                    else
+                    {
+                        event.replyEmbeds( builder.build() ).setActionRow(
+                                Button.secondary( "previous", "Previous" ).asDisabled(),
+                                Button.secondary( "next", "Next" ).asEnabled()
+                        ).setEphemeral( true ).queue();
                     }
                 }
             }
-            case "delete" -> {
+            case "delete" ->
+            {
 
                 // Takes string result of option ID matching "word"
-                String query = event.getOption("word").getAsString().toLowerCase();
+                String query = event.getOption( "word" ).getAsString().toLowerCase();
 
                 // Check if query is stored
-                if (triggerMap.get(event.getMember().getId()) != null && inSet(query, triggerMap.get(event.getMember().getId()))) {
+                if ( triggerMap.get( event.getMember().getId() ) != null && inSet( query,
+                        triggerMap.get( event.getMember().getId() ) ) )
+                {
 
                     // Store phrase in hashmap
-                    triggerConfirmation.put(event.getMember().getId(), query);
+                    triggerConfirmation.put( event.getMember().getId(), query );
 
                     EmbedBuilder builder = new EmbedBuilder()
-                            .setColor(Color.red)
-                            .setTitle("Are you sure you want to delete this trigger?");
+                            .setColor( Color.red )
+                            .setTitle( "Are you sure you want to delete this trigger?" );
 
-                    event.replyEmbeds(builder.build()).setActionRow(
-                            Button.danger("delete", "Yes")
-                    ).setEphemeral(true).queue();
+                    event.replyEmbeds( builder.build() ).setActionRow(
+                            Button.danger( "delete", "Yes" )
+                    ).setEphemeral( true ).queue();
 
-                } else {
+                }
+                else
+                {
 
                     String similarPhrase = null;
 
-                    for (String str : triggerMap.get(event.getMember().getId())) {
-                        if (FuzzySearch.ratio(str, query) > 80) {
+                    for ( String str : triggerMap.get( event.getMember().getId() ) )
+                    {
+                        if ( FuzzySearch.ratio( str, query ) > 80 )
+                        {
                             similarPhrase = str;
                             break;
                         }
                     }
 
                     EmbedBuilder builder;
-                    if (similarPhrase != null) {
+                    if ( similarPhrase != null )
+                    {
                         builder = new EmbedBuilder()
-                                .setColor(Color.red)
-                                .setTitle("Error")
-                                .setDescription("Trigger not found! Did you mean \"" + similarPhrase + "\"?");
-                    } else {
-                        builder = new EmbedBuilder()
-                                .setColor(Color.red)
-                                .setTitle("Error")
-                                .setDescription("Trigger not found!");
+                                .setColor( Color.red )
+                                .setTitle( "Error" )
+                                .setDescription( "Trigger not found! Did you mean \"" + similarPhrase + "\"?" );
                     }
-                    event.replyEmbeds(builder.build()).setEphemeral(true).queue();
+                    else
+                    {
+                        builder = new EmbedBuilder()
+                                .setColor( Color.red )
+                                .setTitle( "Error" )
+                                .setDescription( "Trigger not found!" );
+                    }
+                    event.replyEmbeds( builder.build() ).setEphemeral( true ).queue();
                 }
             }
-            case "toggle" -> {
+            case "toggle" ->
+            {
 
-                boolean toggle = event.getOption("switch").getAsBoolean();
-                triggerToggle.put(event.getMember().getId(), toggle);
+                boolean toggle = event.getOption( "switch" ).getAsBoolean();
+                triggerToggle.put( event.getMember().getId(), toggle );
 
                 EmbedBuilder builder = new EmbedBuilder();
 
-                if (toggle) {
-                    builder.setTitle("Trigger features are now enabled");
-                    builder.setColor(Color.green);
-                } else {
-                    builder.setTitle("Trigger features are now disabled");
-                    builder.setColor(Color.red);
+                if ( toggle )
+                {
+                    builder.setTitle( "Trigger features are now enabled" );
+                    builder.setColor( Color.green );
+                }
+                else
+                {
+                    builder.setTitle( "Trigger features are now disabled" );
+                    builder.setColor( Color.red );
                 }
 
-                event.replyEmbeds(builder.build()).setEphemeral(true).queue();
+                event.replyEmbeds( builder.build() ).setEphemeral( true ).queue();
             }
         }
     }
 
     @Override
-    public void onMessageReceived(MessageReceivedEvent event) {
+    public void onMessageReceived( MessageReceivedEvent event )
+    {
 
         // Only listen to guild messages from live users
-        if (!isValidInteraction(event)) return;
+        if ( !isValidInteraction( event ) )
+        {
+            return;
+        }
 
         String message_content = event.getMessage().getContentRaw().toLowerCase();
 
         // Loop through HashMap keySet
-        for (String id : triggerMap.keySet()) {
+        for ( String id : triggerMap.keySet() )
+        {
 
             // If members value contains message_content
-            if (inSet(message_content, triggerMap.get(id))) {
+            if ( inSet( message_content, triggerMap.get( id ) ) )
+            {
 
                 // Retrieve triggered member
-                RestAction<Member> action = event.getGuild().retrieveMemberById(id);
-                action.queue((null),
+                RestAction<Member> action = event.getGuild().retrieveMemberById( id );
+                action.queue( ( null ),
 
                         // Handle failure if the member does not exist (or another issue appeared)
-                        (error) -> {
-                            LoggerFactory.getLogger(Trigger.class).error(error.toString());
+                        ( error ) -> {
+                            LoggerFactory.getLogger( Trigger.class ).error( error.toString() );
                         }
                 );
-                Member member = event.getGuild().getMemberById(id);
+                Member member = event.getGuild().getMemberById( id );
 
                 // Skip if message is self-triggered or member is missing view permissions
-                if (event.getMember() == member || !member.hasPermission(event.getGuildChannel(), Permission.VIEW_CHANNEL))
+                if ( event.getMember() == member || !member.hasPermission( event.getGuildChannel(),
+                        Permission.VIEW_CHANNEL ) )
+                {
                     continue;
+                }
 
                 // If no toggle setting exists
-                if (!triggerToggle.containsKey(event.getMember().getId())) {
-                    triggerToggle.put(event.getMember().getId(), true);
+                if ( !triggerToggle.containsKey( event.getMember().getId() ) )
+                {
+                    triggerToggle.put( event.getMember().getId(), true );
                 }
                 // If toggle == false, skip to next ID
-                else if (!triggerToggle.get(event.getMember().getId())) {
+                else if ( !triggerToggle.get( event.getMember().getId() ) )
+                {
                     continue;
                 }
 
                 // Embed
                 EmbedBuilder builder = new EmbedBuilder()
-                        .setTitle("Message Trigger")
-                        .setColor(Color.green)
-                        .setFooter("All timestamps are formatted in PST / UTC+7 !");
+                        .setTitle( "Message Trigger" )
+                        .setColor( Color.green )
+                        .setFooter( "All timestamps are formatted in PST / UTC+7 !" );
 
                 // Retrieve last 4 messages in channel message history
-                MessageHistory history = event.getChannel().getHistoryBefore(event.getMessageId(), 4).complete();
+                MessageHistory history = event.getChannel().getHistoryBefore( event.getMessageId(), 4 ).complete();
                 List<String> messages = new ArrayList<>();
 
                 // Add messages to list and reverse messages in order of least -> most recent
-                for (Message message : history.getRetrievedHistory()) {
+                for ( Message message : history.getRetrievedHistory() )
+                {
                     String member_name = message.getAuthor().getName() + "#" + message.getAuthor().getDiscriminator();
-                    messages.add("**[" + TimeFormat.TIME_LONG.atTimestamp(message.getTimeCreated().toEpochSecond() * 1000) + "] " + member_name + ":** " + message.getContentRaw() + "\n");
+                    messages.add(
+                            "**[" + TimeFormat.TIME_LONG.atTimestamp( message.getTimeCreated().toEpochSecond() * 1000 )
+                                    + "] " + member_name + ":** " + message.getContentRaw() + "\n" );
                 }
-                Collections.reverse(messages);
+                Collections.reverse( messages );
 
                 // Add trigger message
-                String trigger_member = event.getMessage().getAuthor().getName() + "#" + event.getMessage().getAuthor().getDiscriminator();
-                builder.addField("", "**[" + TimeFormat.TIME_LONG.now() + "] " + trigger_member + ":** " + event.getMessage().getContentRaw(), false);
+                String trigger_member = event.getMessage().getAuthor().getName() + "#" + event.getMessage().getAuthor()
+                        .getDiscriminator();
+                builder.addField( "",
+                        "**[" + TimeFormat.TIME_LONG.now() + "] " + trigger_member + ":** " + event.getMessage()
+                                .getContentRaw(), false );
 
                 // Finish embed
-                builder.setDescription(String.join("", messages));
-                builder.addField("**Source Message**", "[Jump to](" + event.getJumpUrl() + ")", false);
+                builder.setDescription( String.join( "", messages ) );
+                builder.addField( "**Source Message**", "[Jump to](" + event.getJumpUrl() + ")", false );
 
                 // DM triggered member
                 member.getUser().openPrivateChannel()
-                        .flatMap(channel -> channel.sendMessageEmbeds(builder.build()).addActionRow(
-                                Button.secondary("server-id", "Server: " + event.getGuild().getName()).asDisabled()
-                        ))
+                        .flatMap( channel -> channel.sendMessageEmbeds( builder.build() ).addActionRow(
+                                Button.secondary( "server-id", "Server: " + event.getGuild().getName() ).asDisabled()
+                        ) )
                         .queue();
             }
         }
     }
 
     @Override
-    public void onButtonInteraction(ButtonInteractionEvent event) {
+    public void onButtonInteraction( ButtonInteractionEvent event )
+    {
 
-        if (!isValidInteraction(event)) return;
+        if ( !isValidInteraction( event ) )
+        {
+            return;
+        }
 
-        List<String> list = new ArrayList<>(triggerMap.get(event.getMember().getId()));
+        List<String> list = new ArrayList<>( triggerMap.get( event.getMember().getId() ) );
 
-        switch (event.getComponentId()) {
+        switch ( event.getComponentId() )
+        {
 
             // List Command
-            case "previous" -> {
+            case "previous" ->
+            {
 
                 // If not on first page
-                if (min != 0) {
+                if ( min != 0 )
+                {
 
                     min -= 5;
                     max -= 5;
 
-                    EmbedBuilder builder = triggerList(min, max, list);
+                    EmbedBuilder builder = triggerList( min, max, list );
 
                     // If new previous page is first page
-                    if (min == 0) {
-                        event.editMessageEmbeds(builder.build()).setActionRow(
-                                Button.secondary("previous", "Previous").asDisabled(),
-                                Button.secondary("next", "Next").asEnabled()
+                    if ( min == 0 )
+                    {
+                        event.editMessageEmbeds( builder.build() ).setActionRow(
+                                Button.secondary( "previous", "Previous" ).asDisabled(),
+                                Button.secondary( "next", "Next" ).asEnabled()
                         ).queue();
-                    } else {
-                        event.editMessageEmbeds(builder.build()).setActionRow(
-                                Button.secondary("previous", "Previous").asEnabled(),
-                                Button.secondary("next", "Next").asEnabled()
+                    }
+                    else
+                    {
+                        event.editMessageEmbeds( builder.build() ).setActionRow(
+                                Button.secondary( "previous", "Previous" ).asEnabled(),
+                                Button.secondary( "next", "Next" ).asEnabled()
                         ).queue();
                     }
                 }
                 // If on first page
-                else {
+                else
+                {
 
-                    EmbedBuilder builder = triggerList(min, max, list);
+                    EmbedBuilder builder = triggerList( min, max, list );
 
                     // If there is a next page
-                    if (list.size() <= 5) {
+                    if ( list.size() <= 5 )
+                    {
 
-                        event.editMessageEmbeds(builder.build()).setActionRow(
-                                Button.secondary("previous", "Previous").asDisabled(),
-                                Button.secondary("next", "Next").asEnabled()
+                        event.editMessageEmbeds( builder.build() ).setActionRow(
+                                Button.secondary( "previous", "Previous" ).asDisabled(),
+                                Button.secondary( "next", "Next" ).asEnabled()
                         ).queue();
-                    } else {
+                    }
+                    else
+                    {
 
-                        event.editMessageEmbeds(builder.build()).setActionRow(
-                                Button.secondary("previous", "Previous").asDisabled(),
-                                Button.secondary("next", "Next").asDisabled()
+                        event.editMessageEmbeds( builder.build() ).setActionRow(
+                                Button.secondary( "previous", "Previous" ).asDisabled(),
+                                Button.secondary( "next", "Next" ).asDisabled()
                         ).queue();
                     }
                 }
             }
-            case "next" -> {
+            case "next" ->
+            {
 
                 min += 5;
                 max += 5;
 
-                EmbedBuilder builder = triggerList(min, max, list);
+                EmbedBuilder builder = triggerList( min, max, list );
 
-                if (max >= list.size()) {
-                    event.editMessageEmbeds(builder.build()).setActionRow(
-                            Button.secondary("previous", "Previous").asEnabled(),
-                            Button.secondary("next", "Next").asDisabled()
+                if ( max >= list.size() )
+                {
+                    event.editMessageEmbeds( builder.build() ).setActionRow(
+                            Button.secondary( "previous", "Previous" ).asEnabled(),
+                            Button.secondary( "next", "Next" ).asDisabled()
                     ).queue();
-                } else {
-                    event.editMessageEmbeds(builder.build()).setActionRow(
-                            Button.secondary("previous", "Previous").asEnabled(),
-                            Button.secondary("next", "Next").asEnabled()
+                }
+                else
+                {
+                    event.editMessageEmbeds( builder.build() ).setActionRow(
+                            Button.secondary( "previous", "Previous" ).asEnabled(),
+                            Button.secondary( "next", "Next" ).asEnabled()
                     ).queue();
                 }
 
             }
 
             // Confirmation
-            case "delete" -> {
+            case "delete" ->
+            {
 
                 event.deferEdit().queue();
 
-                String query = triggerConfirmation.get(event.getMember().getId());
+                String query = triggerConfirmation.get( event.getMember().getId() );
 
                 EmbedBuilder builder = new EmbedBuilder()
-                        .setColor(Color.green)
-                        .setTitle("Trigger successfully deleted");
+                        .setColor( Color.green )
+                        .setTitle( "Trigger successfully deleted" );
 
-                triggerMap.get(event.getMember().getId()).remove(query);
+                triggerMap.get( event.getMember().getId() ).remove( query );
 
-                event.getHook().editOriginalEmbeds(builder.build()).setActionRow(
-                        Button.danger("delete", "Yes").asDisabled()
+                event.getHook().editOriginalEmbeds( builder.build() ).setActionRow(
+                        Button.danger( "delete", "Yes" ).asDisabled()
                 ).queue();
             }
-            case "reset" -> {
+            case "reset" ->
+            {
 
                 event.deferEdit().queue();
                 EmbedBuilder builder = new EmbedBuilder();
 
                 // Trigger found for member
-                if (triggerMap.containsKey(event.getMember().getId())) {
-                    triggerMap.get(event.getMember().getId()).clear();
+                if ( triggerMap.containsKey( event.getMember().getId() ) )
+                {
+                    triggerMap.get( event.getMember().getId() ).clear();
 
-                    builder.setColor(Color.green);
-                    builder.setTitle("Triggers reset");
+                    builder.setColor( Color.green );
+                    builder.setTitle( "Triggers reset" );
                 }
                 // Member has no trigger
-                else {
-                    builder.setColor(Color.red);
-                    builder.setTitle("No triggers found");
+                else
+                {
+                    builder.setColor( Color.red );
+                    builder.setTitle( "No triggers found" );
                 }
 
-                event.getHook().editOriginalEmbeds(builder.build()).setActionRow(
-                        Button.danger("reset", "Yes").asDisabled()
+                event.getHook().editOriginalEmbeds( builder.build() ).setActionRow(
+                        Button.danger( "reset", "Yes" ).asDisabled()
                 ).queue();
             }
         }
@@ -394,9 +477,14 @@ public class Trigger extends ListenerAdapter {
      * @param set Containing Set
      * @return True if set contains String
      */
-    boolean inSet(String str, LinkedHashSet<String> set) {
-        for (String string : set) {
-            if (str.equals(string)) return true;
+    boolean inSet( String str, LinkedHashSet<String> set )
+    {
+        for ( String string : set )
+        {
+            if ( str.equals( string ) )
+            {
+                return true;
+            }
         }
         return false;
     }
@@ -407,15 +495,24 @@ public class Trigger extends ListenerAdapter {
      * @param event Interaction/MessageReceived event
      * @return True if interaction is valid
      */
-    boolean isValidInteraction(GenericEvent event) {
+    boolean isValidInteraction( GenericEvent event )
+    {
 
-        if (event instanceof SlashCommandInteractionEvent slashCommandInteractionEvent) {
+        if ( event instanceof SlashCommandInteractionEvent slashCommandInteractionEvent )
+        {
             return slashCommandInteractionEvent.getMember() != null && slashCommandInteractionEvent.isGuildCommand();
-        } else if (event instanceof MessageReceivedEvent messageReceivedEvent) {
-            return messageReceivedEvent.getMember() != null && messageReceivedEvent.isFromGuild() && !messageReceivedEvent.getMember().getUser().isBot();
-        } else if (event instanceof ButtonInteractionEvent buttonInteractionEvent) {
+        }
+        else if ( event instanceof MessageReceivedEvent messageReceivedEvent )
+        {
+            return messageReceivedEvent.getMember() != null && messageReceivedEvent.isFromGuild()
+                    && !messageReceivedEvent.getMember().getUser().isBot();
+        }
+        else if ( event instanceof ButtonInteractionEvent buttonInteractionEvent )
+        {
             return buttonInteractionEvent.getMember() != null && buttonInteractionEvent.isFromGuild();
-        } else {
+        }
+        else
+        {
             return false;
         }
     }
@@ -426,10 +523,15 @@ public class Trigger extends ListenerAdapter {
      * @param member Event member
      * @return True if member is authorized
      */
-    boolean authenticateMemberByRole(Member member) {
+    boolean authenticateMemberByRole( Member member )
+    {
 
-        for (Role role : member.getRoles()) {
-            if (authorizedRoleIDs.contains(role.getId())) return true;
+        for ( Role role : member.getRoles() )
+        {
+            if ( authorizedRoleIDs.contains( role.getId() ) )
+            {
+                return true;
+            }
         }
 
         return false;
@@ -447,15 +549,17 @@ public class Trigger extends ListenerAdapter {
      * @param list   List of member triggers
      * @return Embed Message
      */
-    EmbedBuilder triggerList(int range1, int range2, List<String> list) {
+    EmbedBuilder triggerList( int range1, int range2, List<String> list )
+    {
 
         EmbedBuilder builder = new EmbedBuilder()
-                .setColor(Color.green)
-                .setTitle("Trigger List")
-                .setFooter("Size: #" + list.size());
+                .setColor( Color.green )
+                .setTitle( "Trigger List" )
+                .setFooter( "Size: #" + list.size() );
 
-        for (int i = range1; i < list.size() && i < range2; ++i) {
-            builder.addField("Trigger #" + (i + 1), list.get(i), false);
+        for ( int i = range1; i < list.size() && i < range2; ++i )
+        {
+            builder.addField( "Trigger #" + ( i + 1 ), list.get( i ), false );
         }
 
         return builder;
