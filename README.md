@@ -28,7 +28,7 @@
 2. Register your bot
 3. Enable Server Members Intent and Message Content Intent
 
-## IDE Setup
+### IDE Setup
 
       NOTE: We highly recommend using IntelliJ IDEA for development.
 
@@ -40,7 +40,7 @@
 4. Download [Maven Code Style]
 5. Restart IDE
 
-## Running
+### Running
 
 1. Create a `resources` directory in `src/main`
 2. Go to File → Project Structure → Artifacts
