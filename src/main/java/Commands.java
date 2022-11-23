@@ -12,7 +12,8 @@ public final class Commands
     public static final String TRIGGER_DELETE = "delete";
     public static final String TRIGGER_TOGGLE = "toggle";
 
-    private Commands() {
+    private Commands()
+    {
 
     }
 

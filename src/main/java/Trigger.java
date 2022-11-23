@@ -59,7 +59,7 @@ public class Trigger extends ListenerAdapter
         switch ( event.getSubcommandName() )
         {
 
-            case (Commands.TRIGGER_HELP) ->
+            case ( Commands.TRIGGER_HELP ) ->
             {
                 EmbedBuilder builder = new EmbedBuilder()
                         .setTitle( "Trigger Commands" )
@@ -72,7 +72,7 @@ public class Trigger extends ListenerAdapter
 
                 event.replyEmbeds( builder.build() ).setEphemeral( true ).queue();
             }
-            case (Commands.TRIGGER_NEW) ->
+            case ( Commands.TRIGGER_NEW ) ->
             {
 
                 // Takes string result of option ID matching "word"
@@ -118,7 +118,7 @@ public class Trigger extends ListenerAdapter
                     }
                 }
             }
-            case (Commands.TRIGGER_RESET) ->
+            case ( Commands.TRIGGER_RESET ) ->
             {
 
                 EmbedBuilder builder = new EmbedBuilder()
@@ -129,7 +129,7 @@ public class Trigger extends ListenerAdapter
                         Button.danger( "reset", "Yes" )
                 ).setEphemeral( true ).queue();
             }
-            case (Commands.TRIGGER_LIST)->
+            case ( Commands.TRIGGER_LIST ) ->
             {
 
                 // If no triggers are found
@@ -164,7 +164,7 @@ public class Trigger extends ListenerAdapter
                     }
                 }
             }
-            case (Commands.TRIGGER_DELETE) ->
+            case ( Commands.TRIGGER_DELETE ) ->
             {
 
                 // Takes string result of option ID matching "word"
@@ -214,7 +214,7 @@ public class Trigger extends ListenerAdapter
                     event.replyEmbeds( builder.build() ).setEphemeral( true ).queue();
                 }
             }
-            case (Commands.TRIGGER_TOGGLE) ->
+            case ( Commands.TRIGGER_TOGGLE ) ->
             {
 
                 boolean toggle = event.getOption( "switch" ).getAsBoolean();
@@ -241,17 +241,21 @@ public class Trigger extends ListenerAdapter
     @Override
     public void onCommandAutoCompleteInteraction( @NotNull CommandAutoCompleteInteractionEvent event )
     {
-        if (event.getName().equals( Commands.TRIGGER ) && event.getFocusedOption().getName().equals( "word" )) {
+        if ( event.getName().equals( Commands.TRIGGER ) && event.getFocusedOption().getName().equals( "word" ) )
+        {
 
-            if (triggerMap.get( event.getMember().getId() ) == null) return;
+            if ( triggerMap.get( event.getMember().getId() ) == null )
+            {
+                return;
+            }
 
-            String[] words = new String[triggerMap.get( event.getMember().getId()).size()];
-            words = triggerMap.get( event.getMember().getId() ).toArray(words);
+            String[] words = new String[triggerMap.get( event.getMember().getId() ).size()];
+            words = triggerMap.get( event.getMember().getId() ).toArray( words );
 
-            List<Command.Choice> options = Stream.of(words)
-                            .filter( word -> word.startsWith( event.getFocusedOption().getValue() ) )
-                            .map( word -> new Command.Choice( word, word ) )
-                            .collect( Collectors.toList() );
+            List<Command.Choice> options = Stream.of( words )
+                    .filter( word -> word.startsWith( event.getFocusedOption().getValue() ) )
+                    .map( word -> new Command.Choice( word, word ) )
+                    .collect( Collectors.toList() );
 
             event.replyChoices( options ).queue();
         }
