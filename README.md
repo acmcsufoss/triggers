@@ -6,21 +6,21 @@
 
 - [Commands](#commands)
 - [Bot Setup](#bot-setup)
-   - [Running](#running)
    - [IDE Setup](#ide-setup)
+   - [Running](#running)
 - [Contributing](#contributing)
 - [FAQ](#faq)
 - [References](#references)
 
-## IDE Setup
+## Commands
 
-1. Clone the repository
-2. Create a `.env` file in the main directory with the following variables:
-    - `DISCORD_TOKEN`: The token of the bot
-    - `AUTHORIZED_ROLE_ID`: Array of role IDs that are allowed to use the bot (separate by comma)
-3. Specify OpenJDK 19 as the project SDK
-4. Download [Maven Code Style]
-5. Restart IDE
+| Command           | Description                |
+|-------------------|----------------------------|
+| `/trigger new`    | Adds new trigger           |
+| `/trigger reset`  | Resets all stored triggers |
+| `/trigger list`   | Lists all stored triggers  |
+| `/trigger delete` | Deletes specified trigger  |
+| `/trigger toggle` | Toggles trigger feature    |
 
 ## Bot Setup
 
@@ -28,9 +28,19 @@
 2. Register your bot
 3. Enable Server Members Intent and Message Content Intent
 
-## Running
+## IDE Setup
 
       NOTE: We highly recommend using IntelliJ IDEA for development.
+
+1. Clone the repository
+2. Create a `.env` file in the main directory with the following variables:
+   - `DISCORD_TOKEN`: The token of the bot
+   - `AUTHORIZED_ROLE_ID`: Array of role IDs that are allowed to use the bot (separate by comma)
+3. Specify OpenJDK 19 as the project SDK
+4. Download [Maven Code Style]
+5. Restart IDE
+
+## Running
 
 1. Create a `resources` directory in `src/main`
 2. Go to File → Project Structure → Artifacts
@@ -46,22 +56,13 @@
    use `https://discord.com/api/oauth2/authorize?client_id=$DISCORD_CLIENT_ID&permissions=66560&scope=bot%20applications.commands`
    and replace `$DISCORD_CLIENT_ID` with the bot ID
 
-## Commands
+## Contributing
 
-| Command           | Description                |
-|-------------------|----------------------------|
-| `/trigger new`    | Adds new trigger           |
-| `/trigger reset`  | Resets all stored triggers |
-| `/trigger list`   | Lists all stored triggers  |
-| `/trigger delete` | Deletes specified trigger  |
-| `/trigger toggle` | Toggles trigger feature    |
-
-## References
-
-- [JDA](https://github.com/DV8FromTheWorld/JDA)
-- [SLF4J](https://github.com/qos-ch/slf4j)
-- [dotenv Java](https://github.com/cdimascio/dotenv-java)
-- [fuzzywuzzy](https://github.com/xdrop/fuzzywuzzy)
+1. Create a new branch
+2. Make your changes
+   - Make sure Maven is set as the current Code Style Scheme
+   - Reformat code with `Ctrl + Alt + L`
+3. Create a pull request
 
 ## FAQ
 
@@ -94,13 +95,12 @@
     - Go to your server → Server Settings → Roles
     - Right-click on the role you want to get the ID of and select "Copy ID"
 
-## Contributing
+## References
 
-1. Create a new branch
-2. Make your changes
-    - Make sure Maven is set as the current Code Style Scheme
-    - Reformat code with `Ctrl + Alt + L`
-3. Create a pull request
+- [JDA](https://github.com/DV8FromTheWorld/JDA)
+- [SLF4J](https://github.com/qos-ch/slf4j)
+- [dotenv Java](https://github.com/cdimascio/dotenv-java)
+- [fuzzywuzzy](https://github.com/xdrop/fuzzywuzzy)
 
 ---
 
