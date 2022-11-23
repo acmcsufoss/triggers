@@ -8,7 +8,7 @@
 - [Bot Setup](#bot-setup)
 - [Running](#running)
 - [Commands](#commands)
-- [Documentation](#documentation)
+- [References](#references)
 - [FAQ](#faq)
 - [Contributing](#contributing)
 
@@ -18,8 +18,9 @@
 2. Create a `.env` file in the main directory with the following variables:
     - `DISCORD_TOKEN`: The token of the bot
     - `AUTHORIZED_ROLE_ID`: Array of role IDs that are allowed to use the bot (separate by comma)
-3. Specify JDK version (Tested on JDK 17/19)
-4. Restart IDE
+3. Specify OpenJDK 19 as the project SDK
+4. Download [Maven Code Style]
+5. Restart IDE
 
 ## Bot Setup
 
@@ -32,7 +33,7 @@
       NOTE: We highly recommend using IntelliJ IDEA for development.
 
 1. Create a `resources` directory in `src/main`
-2. Go to File -> Project Structure -> Artifacts
+2. Go to File → Project Structure → Artifacts
 3. Create a new JAR from modules with dependencies
     - Select `Bot.java` as the main class
     - Select the newly created `resources` as the directory for `META-INF/MANIFEST.MF`
@@ -55,12 +56,12 @@
 | `/trigger delete` | Deletes specified trigger  |
 | `/trigger toggle` | Toggles trigger feature    |
 
-## Documentation
+## References
 
-- <a href='https://github.com/DV8FromTheWorld/JDA'>JDA</a>
-- <a href='https://github.com/qos-ch/slf4j'>SLF4J</a>
-- <a href='https://github.com/cdimascio/dotenv-java'>dotenv Java</a>
-- <a href='https://github.com/xdrop/fuzzywuzzy'>fuzzywuzzy</a>
+- [JDA](https://github.com/DV8FromTheWorld/JDA)
+- [SLF4J](https://github.com/qos-ch/slf4j)
+- [dotenv Java](https://github.com/cdimascio/dotenv-java)
+- [fuzzywuzzy](https://github.com/xdrop/fuzzywuzzy)
 
 ## FAQ
 
@@ -76,23 +77,29 @@
     - Make sure you have the correct role IDs
     - Make sure you have the correct JDK version
 
-3. **"How can I get my bot ID?"**
+3. **"How do I get my bot ID?"**
 
-   - Go to Discord Developer Dashboard -> Your bot -> General Information -> Application ID
+    - Go to Discord Developer Dashboard → Your bot → General Information → Application ID
 
-4. **"Why does the bot not respond to my messages?"**
+4. **"How do I get my bot token?"**
 
-   - Make sure you have the correct role IDs
+    - Go to Discord Developer Dashboard → Your bot → Bot → Token → Copy
 
-5. **"How can I get my role ID?"**
+5. **"Why does the bot not respond to my messages?"**
 
-   - Go to your server -> Server Settings -> Roles
-   - Right-click on the role you want to get the ID of and select "Copy ID"
+    - Make sure you have the correct role IDs
+
+6. **"How can I get my role ID?"**
+
+    - Go to your server → Server Settings → Roles
+    - Right-click on the role you want to get the ID of and select "Copy ID"
 
 ## Contributing
 
 1. Create a new branch
 2. Make your changes
+    - Make sure Maven is set as the current Code Style Scheme
+    - Reformat code with `Ctrl + Alt + L`
 3. Create a pull request
 
 ---
