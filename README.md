@@ -4,13 +4,13 @@
 
 ## Table of Contents
 
-- [IDE Setup](#ide-setup)
-- [Bot Setup](#bot-setup)
-- [Running](#running)
 - [Commands](#commands)
-- [References](#references)
-- [FAQ](#faq)
+- [Bot Setup](#bot-setup)
+   - [Running](#running)
+   - [IDE Setup](#ide-setup)
 - [Contributing](#contributing)
+- [FAQ](#faq)
+- [References](#references)
 
 ## IDE Setup
 
@@ -104,4 +104,4 @@
 
 ---
 
-Created with 💖 by **[acmcsuf.com](https://acmcsuf.com) Bot Committee**
+Created with 💖 by **[acmcsuf.com](https://acmcsuf.com) com.acmcsuf.bot-committee**
