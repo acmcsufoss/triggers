@@ -46,7 +46,7 @@ public class Trigger extends ListenerAdapter
     public void onSlashCommandInteraction( @NotNull SlashCommandInteractionEvent event )
     {
 
-        if ( !event.getName().equals( "trigger" ) || !isValidInteraction( event ) )
+        if ( !event.getName().equals( Commands.TRIGGER ) || !isValidInteraction( event ) )
         {
             return;
         }
@@ -59,7 +59,7 @@ public class Trigger extends ListenerAdapter
         switch ( event.getSubcommandName() )
         {
 
-            case "help" ->
+            case (Commands.TRIGGER_HELP) ->
             {
                 EmbedBuilder builder = new EmbedBuilder()
                         .setTitle( "Trigger Commands" )
@@ -72,7 +72,7 @@ public class Trigger extends ListenerAdapter
 
                 event.replyEmbeds( builder.build() ).setEphemeral( true ).queue();
             }
-            case "new" ->
+            case (Commands.TRIGGER_NEW) ->
             {
 
                 // Takes string result of option ID matching "word"
@@ -118,7 +118,7 @@ public class Trigger extends ListenerAdapter
                     }
                 }
             }
-            case "reset" ->
+            case (Commands.TRIGGER_RESET) ->
             {
 
                 EmbedBuilder builder = new EmbedBuilder()
@@ -129,7 +129,7 @@ public class Trigger extends ListenerAdapter
                         Button.danger( "reset", "Yes" )
                 ).setEphemeral( true ).queue();
             }
-            case "list" ->
+            case (Commands.TRIGGER_LIST)->
             {
 
                 // If no triggers are found
@@ -164,7 +164,7 @@ public class Trigger extends ListenerAdapter
                     }
                 }
             }
-            case "delete" ->
+            case (Commands.TRIGGER_DELETE) ->
             {
 
                 // Takes string result of option ID matching "word"
@@ -214,7 +214,7 @@ public class Trigger extends ListenerAdapter
                     event.replyEmbeds( builder.build() ).setEphemeral( true ).queue();
                 }
             }
-            case "toggle" ->
+            case (Commands.TRIGGER_TOGGLE) ->
             {
 
                 boolean toggle = event.getOption( "switch" ).getAsBoolean();
@@ -241,7 +241,7 @@ public class Trigger extends ListenerAdapter
     @Override
     public void onCommandAutoCompleteInteraction( @NotNull CommandAutoCompleteInteractionEvent event )
     {
-        if (event.getName().equals( "trigger" ) && event.getFocusedOption().getName().equals( "word" )) {
+        if (event.getName().equals( Commands.TRIGGER ) && event.getFocusedOption().getName().equals( "word" )) {
 
             if (triggerMap.get( event.getMember().getId() ) == null) return;
 
