@@ -49,10 +49,9 @@ public class Register extends ListenerAdapter
             return;
         }
 
-        guild.updateCommands().addCommands( guildCommands() ).queue( ( null ), ( (error) -> {
-            LoggerFactory.getLogger( Bot.class )
-                    .info( "Failed to update commands for " + guild.getName() + " (" + guild.getId() + ")" );
-        } ) );
+        guild.updateCommands().addCommands( guildCommands() )
+                .queue( ( null ), ( ( error ) -> LoggerFactory.getLogger( Bot.class )
+                        .info( "Failed to update commands for " + guild.getName() + " (" + guild.getId() + ")" ) ) );
     }
 
     /**
@@ -69,21 +68,28 @@ public class Register extends ListenerAdapter
         // List holding all guild commands
         List<CommandData> guildCommandData = new ArrayList<>();
 
-        // Trigger command with subcommands "reset" and "new_trigger"
-        SubcommandData help = new SubcommandData( "help", "Lists all trigger commands" );
-        SubcommandData reset = new SubcommandData( "reset", "Removes trigger" );
-        SubcommandData list = new SubcommandData( "list", "Lists triggers" );
+        // Trigger command + subcommands
+        SubcommandData help = new SubcommandData( com.acmcsuf.bot_committee.Commands.TRIGGER_HELP,
+                com.acmcsuf.bot_committee.Commands.TRIGGER_HELP_DESCRIPTION );
+        SubcommandData reset = new SubcommandData( com.acmcsuf.bot_committee.Commands.TRIGGER_RESET,
+                com.acmcsuf.bot_committee.Commands.TRIGGER_RESET_DESCRIPTION );
+        SubcommandData list = new SubcommandData( com.acmcsuf.bot_committee.Commands.TRIGGER_LIST,
+                com.acmcsuf.bot_committee.Commands.TRIGGER_LIST_DESCRIPTION );
         SubcommandData toggle =
-                new SubcommandData( "toggle", "Toggles trigger feature" )
+                new SubcommandData( com.acmcsuf.bot_committee.Commands.TRIGGER_TOGGLE,
+                        com.acmcsuf.bot_committee.Commands.TRIGGER_TOGGLE_DESCRIPTION )
                         .addOption( OptionType.BOOLEAN, "switch", "Toggles feature", true );
         SubcommandData newTrigger =
-                new SubcommandData( "new", "Add trigger" )
+                new SubcommandData( com.acmcsuf.bot_committee.Commands.TRIGGER_NEW,
+                        com.acmcsuf.bot_committee.Commands.TRIGGER_NEW_DESCRIPTION )
                         .addOption( OptionType.STRING, "word", "Trigger word", true );
         SubcommandData delete =
-                new SubcommandData( "delete", "Delete trigger" )
+                new SubcommandData( com.acmcsuf.bot_committee.Commands.TRIGGER_DELETE,
+                        com.acmcsuf.bot_committee.Commands.TRIGGER_DELETE_DESCRIPTION )
                         .addOption( OptionType.STRING, "word", "Trigger word", true, true );
         guildCommandData.add(
-                Commands.slash( "trigger", "Receive a DM when trigger word is mentioned in mutual servers" )
+                Commands.slash( com.acmcsuf.bot_committee.Commands.TRIGGER,
+                                com.acmcsuf.bot_committee.Commands.TRIGGER_DESCRIPTION )
                         .addSubcommands( help, reset, list, toggle, newTrigger, delete ) );
 
         return guildCommandData;
