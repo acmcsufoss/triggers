@@ -1,4 +1,4 @@
-package com.acmcsuf;
+package com.acmcsuf.bot_committee;
 
 import me.xdrop.fuzzywuzzy.FuzzySearch;
 import net.dv8tion.jda.api.EmbedBuilder;

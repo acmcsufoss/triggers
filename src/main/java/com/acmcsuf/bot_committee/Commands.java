@@ -1,4 +1,4 @@
-package com.acmcsuf;
+package com.acmcsuf.bot_committee;
 
 public final class Commands
 {

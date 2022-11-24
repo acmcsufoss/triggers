@@ -1,4 +1,4 @@
-package com.acmcsuf;
+package com.acmcsuf.bot_committee;
 
 import java.util.Arrays;
 import java.util.List;
