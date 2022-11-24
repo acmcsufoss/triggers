@@ -36,7 +36,7 @@
 2. Create a `.env` file in the main directory with the following variables:
    - `DISCORD_TOKEN`: The token of the bot
    - `AUTHORIZED_ROLE_ID`: Array of role IDs that are allowed to use the bot (separate by comma)
-3. Specify OpenJDK 19 as the project SDK
+3. Specify Corretto 17 as the project SDK
 4. Download [Maven Code Style]
 5. Restart IDE
 
@@ -45,13 +45,13 @@
 1. Create a `resources` directory in `src/main`
 2. Go to File → Project Structure → Artifacts
 3. Create a new JAR from modules with dependencies
-    - Select `Bot.java` as the main class
-    - Select the newly created `resources` as the directory for `META-INF/MANIFEST.MF`
+   - Select `Bot.java` as the main class
+   - Select the newly created `resources` as the directory for `META-INF/MANIFEST.MF`
 4. Build artifacts
 5. Copy your `.env` file into `out/artifacts/crying_counter_jar`
 6. Start your new bot
-    - Open terminal, change directories to `out/artifacts/crying_counter_jar`
-    - Run the .jar with `java -jar crying-counter.jar`
+   - Open terminal, change directories to `out/artifacts/crying_counter_jar`
+   - Run the .jar with `java -jar crying-counter.jar`
 7. To invite your bot,
    use `https://discord.com/api/oauth2/authorize?client_id=$DISCORD_CLIENT_ID&permissions=66560&scope=bot%20applications.commands`
    and replace `$DISCORD_CLIENT_ID` with the bot ID
@@ -68,32 +68,32 @@
 
 1. **"I can't invite my bot"**
 
-    - Make sure you have the correct permissions (66560)
-    - Make sure you have the correct scope (bot%20applications.commands)
-    - Make sure you have the correct client ID
+   - Make sure you have the correct permissions (66560)
+   - Make sure you have the correct scope (bot%20applications.commands)
+   - Make sure you have the correct client ID
 
 2. **"I can't run the bot"**
 
-    - Make sure you have the correct token
-    - Make sure you have the correct role IDs
-    - Make sure you have the correct JDK version
+   - Make sure you have the correct token
+   - Make sure you have the correct role IDs
+   - Make sure you have the correct JDK version
 
 3. **"How do I get my bot ID?"**
 
-    - Go to Discord Developer Dashboard → Your bot → General Information → Application ID
+   - Go to Discord Developer Dashboard → Your bot → General Information → Application ID
 
 4. **"How do I get my bot token?"**
 
-    - Go to Discord Developer Dashboard → Your bot → Bot → Token → Copy
+   - Go to Discord Developer Dashboard → Your bot → Bot → Token → Copy
 
 5. **"Why does the bot not respond to my messages?"**
 
-    - Make sure you have the correct role IDs
+   - Make sure you have the correct role IDs
 
 6. **"How can I get my role ID?"**
 
-    - Go to your server → Server Settings → Roles
-    - Right-click on the role you want to get the ID of and select "Copy ID"
+   - Go to your server → Server Settings → Roles
+   - Right-click on the role you want to get the ID of and select "Copy ID"
 
 ## References
 

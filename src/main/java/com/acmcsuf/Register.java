@@ -1,3 +1,5 @@
+package com.acmcsuf;
+
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.events.GenericEvent;
 import net.dv8tion.jda.api.events.guild.GuildJoinEvent;
@@ -8,6 +10,7 @@ import net.dv8tion.jda.api.interactions.commands.build.CommandData;
 import net.dv8tion.jda.api.interactions.commands.build.Commands;
 import net.dv8tion.jda.api.interactions.commands.build.SubcommandData;
 import org.jetbrains.annotations.NotNull;
+import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -46,7 +49,10 @@ public class Register extends ListenerAdapter
             return;
         }
 
-        guild.updateCommands().addCommands( guildCommands() ).queue( ( null ), ( null ) );
+        guild.updateCommands().addCommands( guildCommands() ).queue( ( null ), ( (error) -> {
+            LoggerFactory.getLogger( Bot.class )
+                    .info( "Failed to update commands for " + guild.getName() + " (" + guild.getId() + ")" );
+        } ) );
     }
 
     /**
