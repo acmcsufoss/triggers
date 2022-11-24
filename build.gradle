@@ -19,7 +19,9 @@ dependencies {
 
     implementation 'io.github.cdimascio:dotenv-java:2.3.1'
 
-    implementation group: 'net.dv8tion', name: 'JDA', version: '5.0.0-alpha.22'
+    implementation("net.dv8tion:JDA:5.0.0-alpha.22") {
+        exclude module: 'opus-java'
+    }
 
     implementation 'me.xdrop:fuzzywuzzy:1.4.0'
 }
