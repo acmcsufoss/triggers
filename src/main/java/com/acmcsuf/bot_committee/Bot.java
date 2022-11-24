@@ -10,6 +10,7 @@ import net.dv8tion.jda.api.OnlineStatus;
 import net.dv8tion.jda.api.entities.Activity;
 import net.dv8tion.jda.api.requests.GatewayIntent;
 import net.dv8tion.jda.api.utils.MemberCachePolicy;
+import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class Bot
@@ -24,10 +25,18 @@ public class Bot
                 .load();
 
         // Bot Token
-        String token = System.getProperty( "DISCORD_TOKEN" );
+        final String token = System.getProperty( "DISCORD_TOKEN" );
+
+        // SLF4J Logger
+        final Logger log = LoggerFactory.getLogger( Bot.class );
 
         // List of authorized roles
         List<String> authorizedRoleIDs = Arrays.asList( System.getProperty( "AUTHORIZED_ROLE_ID" ).split( "," ) );
+
+        if ( authorizedRoleIDs.get( 0 ).equals( "" ) )
+        {
+            log.error( "No authorized roles found. Please add at least one role ID to the .env file." );
+        }
 
         // Gateway Intents
         List<GatewayIntent> gatewayIntents = Arrays.asList(
@@ -47,8 +56,7 @@ public class Bot
                 .build()
                 .awaitReady();
 
-        LoggerFactory.getLogger( Bot.class )
-                .info( jda.getSelfUser().getName() + "#" + jda.getSelfUser().getDiscriminator() );
+        log.info( jda.getSelfUser().getName() + "#" + jda.getSelfUser().getDiscriminator() );
 
         // Status
         jda.getPresence().setActivity( Activity.listening( "/trigger help" ) );
