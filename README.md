@@ -104,4 +104,4 @@
 
 ---
 
-Created with 💖 by **[acmcsuf.com](https://acmcsuf.com) com.acmcsuf.bot-committee**
+Created with 💖 by **[acmcsuf.com](https://acmcsuf.com) com.acmcsuf.bot_committee**
