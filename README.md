@@ -36,7 +36,7 @@
 2. Create a `.env` file in the main directory with the following variables:
    - `DISCORD_TOKEN`: The token of the bot
    - `AUTHORIZED_ROLE_ID`: Array of role IDs that are allowed to use the bot (separate by comma)
-3. Specify Corretto 17 as the project SDK
+3. Specify Corretto 18 as the project SDK
 4. Download [Maven Code Style](https://maven.apache.org/developers/conventions/code.html#intellij-idea)
 5. Restart IDE
 
@@ -94,6 +94,10 @@
 
    - Go to your server → Server Settings → Roles
    - Right-click on the role you want to get the ID of and select "Copy ID"
+
+7. **"It says 'Class has been compiled by a more recent version of the Java Environment' when I try to run the bot"**
+
+   - Make sure you have the correct JDK version. Download [JDK 19](https://www.oracle.com/java/technologies/downloads/#jdk19-windows) here.
 
 ## References
 
