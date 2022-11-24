@@ -37,7 +37,7 @@
    - `DISCORD_TOKEN`: The token of the bot
    - `AUTHORIZED_ROLE_ID`: Array of role IDs that are allowed to use the bot (separate by comma)
 3. Specify Corretto 17 as the project SDK
-4. Download [Maven Code Style]
+4. Download [Maven Code Style](https://maven.apache.org/developers/conventions/code.html#intellij-idea)
 5. Restart IDE
 
 ### Running
