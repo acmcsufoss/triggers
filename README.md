@@ -33,7 +33,7 @@
       NOTE: We highly recommend using IntelliJ IDEA for development.
 
 1. Clone the repository
-2. Create a `.env` file in the main directory with the following variables:
+2. Create a `.env` file in the main directory with the following variables (copy [.env.example](.env.example)):
    - `DISCORD_TOKEN`: The token of the bot
    - `AUTHORIZED_ROLE_ID`: Array of role IDs that are allowed to use the bot (separate by comma)
 3. Specify Corretto 18 as the project SDK
