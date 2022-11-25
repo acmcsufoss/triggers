@@ -49,9 +49,18 @@ public class Register extends ListenerAdapter
             return;
         }
 
-        guild.updateCommands().addCommands( guildCommands() )
-                .queue( ( null ), ( ( error ) -> LoggerFactory.getLogger( Bot.class )
-                        .info( "Failed to update commands for " + guild.getName() + " (" + guild.getId() + ")" ) ) );
+        // acmCSUF Guild ID
+        if (guild.getId().equals( "710225099923521558" ))
+        {
+            guild.updateCommands().addCommands( guildCommands() )
+                    .queue( ( null ), ( ( error ) -> LoggerFactory.getLogger( Bot.class )
+                            .info( "Failed to update commands for " + guild.getName() + " (" + guild.getId()
+                                    + ")" ) ) );
+        }
+        // Clears commands from other guilds
+        else {
+            guild.updateCommands().queue();
+        }
     }
 
     /**
@@ -87,6 +96,7 @@ public class Register extends ListenerAdapter
                 new SubcommandData( com.acmcsuf.bot_committee.Commands.TRIGGER_DELETE,
                         com.acmcsuf.bot_committee.Commands.TRIGGER_DELETE_DESCRIPTION )
                         .addOption( OptionType.STRING, "word", "Trigger word", true, true );
+
         guildCommandData.add(
                 Commands.slash( com.acmcsuf.bot_committee.Commands.TRIGGER,
                                 com.acmcsuf.bot_committee.Commands.TRIGGER_DESCRIPTION )
