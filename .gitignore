@@ -1,7 +1,7 @@
 # Intellij
 .idea
 out/
-.env
+*.env
 
 ### Gradle ###
 .gradle
