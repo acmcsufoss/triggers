@@ -49,8 +49,8 @@ public class Register extends ListenerAdapter
             return;
         }
 
-        // acmCSUF Guild ID
-        if (guild.getId().equals( "710225099923521558" ))
+        // Registers guild from env file
+        if (guild.getId().equals( System.getProperty( "GUILD_ID" ) ))
         {
             guild.updateCommands().addCommands( guildCommands() )
                     .queue( ( null ), ( ( error ) -> LoggerFactory.getLogger( Bot.class )

@@ -35,6 +35,7 @@
 1. Clone the repository
 2. Create a `.env` file in the main directory with the following variables (copy [.env.example](.env.example)):
    - `DISCORD_TOKEN`: The token of the bot
+   - `GUILD_ID`: The guild ID of the server
    - `AUTHORIZED_ROLE_ID`: Array of role IDs that are allowed to use the bot (separate by comma)
 3. Specify Corretto 18 as the project SDK
 4. Download [Maven Code Style](https://maven.apache.org/developers/conventions/code.html#intellij-idea)
