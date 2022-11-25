@@ -58,7 +58,7 @@ public class Trigger extends ListenerAdapter
             EmbedBuilder builder = new EmbedBuilder()
                     .setColor( Color.red )
                     .setDescription( "You are not authorized to use this feature!" )
-                    .setDescription( "If you believe this is a mistake, contact your server admin" );
+                    .setDescription( "If you believe this is a mistake, contact your server admin." );
 
             event.replyEmbeds( builder.build() ).setEphemeral( true ).queue();
             return;
