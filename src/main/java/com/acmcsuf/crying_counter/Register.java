@@ -1,4 +1,4 @@
-package com.acmcsuf.bot_committee;
+package com.acmcsuf.crying_counter;
 
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.events.GenericEvent;
@@ -78,28 +78,28 @@ public class Register extends ListenerAdapter
         List<CommandData> guildCommandData = new ArrayList<>();
 
         // Trigger command + subcommands
-        SubcommandData help = new SubcommandData( com.acmcsuf.bot_committee.Commands.TRIGGER_HELP,
-                com.acmcsuf.bot_committee.Commands.TRIGGER_HELP_DESCRIPTION );
-        SubcommandData reset = new SubcommandData( com.acmcsuf.bot_committee.Commands.TRIGGER_RESET,
-                com.acmcsuf.bot_committee.Commands.TRIGGER_RESET_DESCRIPTION );
-        SubcommandData list = new SubcommandData( com.acmcsuf.bot_committee.Commands.TRIGGER_LIST,
-                com.acmcsuf.bot_committee.Commands.TRIGGER_LIST_DESCRIPTION );
+        SubcommandData help = new SubcommandData( com.acmcsuf.crying_counter.Commands.TRIGGER_HELP,
+                com.acmcsuf.crying_counter.Commands.TRIGGER_HELP_DESCRIPTION );
+        SubcommandData reset = new SubcommandData( com.acmcsuf.crying_counter.Commands.TRIGGER_RESET,
+                com.acmcsuf.crying_counter.Commands.TRIGGER_RESET_DESCRIPTION );
+        SubcommandData list = new SubcommandData( com.acmcsuf.crying_counter.Commands.TRIGGER_LIST,
+                com.acmcsuf.crying_counter.Commands.TRIGGER_LIST_DESCRIPTION );
         SubcommandData toggle =
-                new SubcommandData( com.acmcsuf.bot_committee.Commands.TRIGGER_TOGGLE,
-                        com.acmcsuf.bot_committee.Commands.TRIGGER_TOGGLE_DESCRIPTION )
+                new SubcommandData( com.acmcsuf.crying_counter.Commands.TRIGGER_TOGGLE,
+                        com.acmcsuf.crying_counter.Commands.TRIGGER_TOGGLE_DESCRIPTION )
                         .addOption( OptionType.BOOLEAN, "switch", "Toggles feature", true );
         SubcommandData newTrigger =
-                new SubcommandData( com.acmcsuf.bot_committee.Commands.TRIGGER_NEW,
-                        com.acmcsuf.bot_committee.Commands.TRIGGER_NEW_DESCRIPTION )
+                new SubcommandData( com.acmcsuf.crying_counter.Commands.TRIGGER_NEW,
+                        com.acmcsuf.crying_counter.Commands.TRIGGER_NEW_DESCRIPTION )
                         .addOption( OptionType.STRING, "word", "Trigger word", true );
         SubcommandData delete =
-                new SubcommandData( com.acmcsuf.bot_committee.Commands.TRIGGER_DELETE,
-                        com.acmcsuf.bot_committee.Commands.TRIGGER_DELETE_DESCRIPTION )
+                new SubcommandData( com.acmcsuf.crying_counter.Commands.TRIGGER_DELETE,
+                        com.acmcsuf.crying_counter.Commands.TRIGGER_DELETE_DESCRIPTION )
                         .addOption( OptionType.STRING, "word", "Trigger word", true, true );
 
         guildCommandData.add(
-                Commands.slash( com.acmcsuf.bot_committee.Commands.TRIGGER,
-                                com.acmcsuf.bot_committee.Commands.TRIGGER_DESCRIPTION )
+                Commands.slash( com.acmcsuf.crying_counter.Commands.TRIGGER,
+                                com.acmcsuf.crying_counter.Commands.TRIGGER_DESCRIPTION )
                         .addSubcommands( help, reset, list, toggle, newTrigger, delete ) );
 
         return guildCommandData;

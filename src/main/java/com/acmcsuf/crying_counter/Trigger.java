@@ -1,4 +1,4 @@
-package com.acmcsuf.bot_committee;
+package com.acmcsuf.crying_counter;
 
 import me.xdrop.fuzzywuzzy.FuzzySearch;
 import net.dv8tion.jda.api.EmbedBuilder;

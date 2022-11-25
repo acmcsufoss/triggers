@@ -1,4 +1,4 @@
-package com.acmcsuf.bot_committee;
+package com.acmcsuf.crying_counter;
 
 import java.util.Arrays;
 import java.util.List;

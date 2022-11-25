@@ -1,4 +1,4 @@
-package com.acmcsuf.bot_committee;
+package com.acmcsuf.crying_counter;
 
 public final class Commands
 {
