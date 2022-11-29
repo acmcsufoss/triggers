@@ -50,7 +50,7 @@ public class Register extends ListenerAdapter
         }
 
         // Registers guild from env file
-        if (guild.getId().equals( System.getProperty( "GUILD_ID" ) ))
+        if ( guild.getId().equals( System.getProperty( "GUILD_ID" ) ) )
         {
             guild.updateCommands().addCommands( guildCommands() )
                     .queue( ( null ), ( ( error ) -> LoggerFactory.getLogger( Bot.class )
@@ -58,7 +58,8 @@ public class Register extends ListenerAdapter
                                     + ")" ) ) );
         }
         // Clears commands from other guilds
-        else {
+        else
+        {
             guild.updateCommands().queue();
         }
     }
@@ -87,15 +88,18 @@ public class Register extends ListenerAdapter
         SubcommandData toggle =
                 new SubcommandData( com.acmcsuf.crying_counter.Commands.TRIGGER_TOGGLE,
                         com.acmcsuf.crying_counter.Commands.TRIGGER_TOGGLE_DESCRIPTION )
-                        .addOption( OptionType.BOOLEAN, com.acmcsuf.crying_counter.Commands.TRIGGER_TOGGLE_OPTION_NAME, com.acmcsuf.crying_counter.Commands.TRIGGER_TOGGLE_OPTION_DESCRIPTION, true );
+                        .addOption( OptionType.BOOLEAN, com.acmcsuf.crying_counter.Commands.TRIGGER_TOGGLE_OPTION_NAME,
+                                com.acmcsuf.crying_counter.Commands.TRIGGER_TOGGLE_OPTION_DESCRIPTION, true );
         SubcommandData newTrigger =
                 new SubcommandData( com.acmcsuf.crying_counter.Commands.TRIGGER_NEW,
                         com.acmcsuf.crying_counter.Commands.TRIGGER_NEW_DESCRIPTION )
-                        .addOption( OptionType.STRING, com.acmcsuf.crying_counter.Commands.TRIGGER_NEW_OPTION_NAME, com.acmcsuf.crying_counter.Commands.TRIGGER_NEW_OPTION_DESCRIPTION, true );
+                        .addOption( OptionType.STRING, com.acmcsuf.crying_counter.Commands.TRIGGER_NEW_OPTION_NAME,
+                                com.acmcsuf.crying_counter.Commands.TRIGGER_NEW_OPTION_DESCRIPTION, true );
         SubcommandData delete =
                 new SubcommandData( com.acmcsuf.crying_counter.Commands.TRIGGER_DELETE,
                         com.acmcsuf.crying_counter.Commands.TRIGGER_DELETE_DESCRIPTION )
-                        .addOption( OptionType.STRING,  com.acmcsuf.crying_counter.Commands.TRIGGER_DELETE_OPTION_NAME, com.acmcsuf.crying_counter.Commands.TRIGGER_DELETE_OPTION_DESCRIPTION, true, true );
+                        .addOption( OptionType.STRING, com.acmcsuf.crying_counter.Commands.TRIGGER_DELETE_OPTION_NAME,
+                                com.acmcsuf.crying_counter.Commands.TRIGGER_DELETE_OPTION_DESCRIPTION, true, true );
 
         guildCommandData.add(
                 Commands.slash( com.acmcsuf.crying_counter.Commands.TRIGGER,
