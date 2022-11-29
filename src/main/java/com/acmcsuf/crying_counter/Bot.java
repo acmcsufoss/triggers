@@ -65,13 +65,16 @@ public class Bot
         // Status
         jda.getPresence().setActivity( Activity.listening( "/trigger help" ) );
 
-        try {
+        try
+        {
             Properties props = new Properties();
             props.setProperty( "user", System.getProperty( "DATABASE_USER" ) );
             props.setProperty( "password", System.getProperty( "DATABASE_PASSWORD" ) );
 
-            Connection db = DriverManager.getConnection(System.getProperty( "DATABASE_URL" ), props);
-        } catch (SQLException e) {
+            Connection db = DriverManager.getConnection( System.getProperty( "DATABASE_URL" ), props );
+        }
+        catch ( SQLException e )
+        {
             e.printStackTrace();
         }
     }
