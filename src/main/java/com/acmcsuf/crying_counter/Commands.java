@@ -1,4 +1,4 @@
-package com.acmcsuf.bot_committee;
+package com.acmcsuf.crying_counter;
 
 public final class Commands
 {
@@ -19,11 +19,17 @@ public final class Commands
 
     public static final String TRIGGER_NEW = "new";
     public static final String TRIGGER_NEW_DESCRIPTION = "Add a new trigger";
+    public static final String TRIGGER_NEW_OPTION_NAME = "word";
+    public static final String TRIGGER_NEW_OPTION_DESCRIPTION = "Trigger word";
 
     public static final String TRIGGER_DELETE = "delete";
     public static final String TRIGGER_DELETE_DESCRIPTION = "Delete a stored trigger";
+    public static final String TRIGGER_DELETE_OPTION_NAME = "word";
+    public static final String TRIGGER_DELETE_OPTION_DESCRIPTION = "Trigger word";
 
     public static final String TRIGGER_TOGGLE = "toggle";
+    public static final String TRIGGER_TOGGLE_OPTION_NAME = "switch";
+    public static final String TRIGGER_TOGGLE_OPTION_DESCRIPTION = "Toggles feature";
     public static final String TRIGGER_TOGGLE_DESCRIPTION = "Toggles trigger feature";
 
     private Commands()

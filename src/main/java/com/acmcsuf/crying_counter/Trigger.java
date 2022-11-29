@@ -1,4 +1,4 @@
-package com.acmcsuf.bot_committee;
+package com.acmcsuf.crying_counter;
 
 import me.xdrop.fuzzywuzzy.FuzzySearch;
 import net.dv8tion.jda.api.EmbedBuilder;
@@ -55,6 +55,12 @@ public class Trigger extends ListenerAdapter
 
         if ( !authenticateMemberByRole( event.getMember() ) )
         {
+            EmbedBuilder builder = new EmbedBuilder()
+                    .setColor( Color.red )
+                    .setDescription( "You are not authorized to use this feature!" )
+                    .setDescription( "If you believe this is a mistake, contact your server admin." );
+
+            event.replyEmbeds( builder.build() ).setEphemeral( true ).queue();
             return;
         }
 
