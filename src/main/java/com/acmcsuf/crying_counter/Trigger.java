@@ -84,10 +84,10 @@ public class Trigger extends ListenerAdapter
             {
 
                 // Takes string result of option ID matching "word"
-                String trigger_phrase = event.getOption( "word" ).getAsString().toLowerCase();
+                String triggerPhrase = event.getOption( "word" ).getAsString().toLowerCase();
 
                 // If input is a duplicate
-                if ( triggerMap.get( event.getMember().getId() ) != null && inSet( trigger_phrase,
+                if ( triggerMap.get( event.getMember().getId() ) != null && inSet( triggerPhrase,
                         triggerMap.get( event.getMember().getId() ) ) )
                 {
                     EmbedBuilder builder = new EmbedBuilder()
@@ -116,11 +116,11 @@ public class Trigger extends ListenerAdapter
 
                         // Store trigger
                         triggerMap.computeIfAbsent( event.getMember().getId(), k -> new LinkedHashSet<>() )
-                                .add( trigger_phrase );
+                                .add( triggerPhrase );
 
                         EmbedBuilder builder = new EmbedBuilder()
                                 .setColor( Color.green )
-                                .setDescription( "Trigger added: \"" + trigger_phrase + "\"" );
+                                .setDescription( "Trigger added: \"" + triggerPhrase + "\"" );
 
                         event.replyEmbeds( builder.build() ).setEphemeral( true ).queue();
                     }
@@ -279,14 +279,14 @@ public class Trigger extends ListenerAdapter
             return;
         }
 
-        String message_content = event.getMessage().getContentRaw().toLowerCase();
+        String messageContent = event.getMessage().getContentRaw().toLowerCase();
 
         // Loop through HashMap keySet
         for ( String id : triggerMap.keySet() )
         {
 
-            // If members value contains message_content
-            if ( inSet( message_content, triggerMap.get( id ) ) )
+            // If members value contains messageContent
+            if ( inSet( messageContent, triggerMap.get( id ) ) )
             {
 
                 // Retrieve triggered member
@@ -331,18 +331,18 @@ public class Trigger extends ListenerAdapter
                 // Add messages to list and reverse messages in order of least -> most recent
                 for ( Message message : history.getRetrievedHistory() )
                 {
-                    String member_name = message.getAuthor().getName() + "#" + message.getAuthor().getDiscriminator();
+                    String memberName = message.getAuthor().getName() + "#" + message.getAuthor().getDiscriminator();
                     messages.add(
                             "**[" + TimeFormat.TIME_LONG.atTimestamp( message.getTimeCreated().toEpochSecond() * 1000 )
-                                    + "] " + member_name + ":** " + message.getContentRaw() + "\n" );
+                                    + "] " + memberName + ":** " + message.getContentRaw() + "\n" );
                 }
                 Collections.reverse( messages );
 
                 // Add trigger message
-                String trigger_member = event.getMessage().getAuthor().getName() + "#" + event.getMessage().getAuthor()
+                String triggerMember = event.getMessage().getAuthor().getName() + "#" + event.getMessage().getAuthor()
                         .getDiscriminator();
                 builder.addField( "",
-                        "**[" + TimeFormat.TIME_LONG.now() + "] " + trigger_member + ":** " + event.getMessage()
+                        "**[" + TimeFormat.TIME_LONG.now() + "] " + triggerMember + ":** " + event.getMessage()
                                 .getContentRaw(), false );
 
                 // Finish embed
