@@ -2,7 +2,7 @@ plugins {
     id 'java'
 }
 
-group 'om.acmcsuf'
+group 'com.acmcsuf'
 version '1.0-SNAPSHOT'
 
 repositories {
