@@ -204,21 +204,16 @@ public class Trigger extends ListenerAdapter
                         }
                     }
 
-                    EmbedBuilder builder;
+                    EmbedBuilder builder = new EmbedBuilder()
+                            .setColor( Color.red )
+                            .setTitle( "Error" )
+                            .setDescription( "Trigger not found!" );
+
                     if ( similarPhrase != null )
                     {
-                        builder = new EmbedBuilder()
-                                .setColor( Color.red )
-                                .setTitle( "Error" )
-                                .setDescription( "Trigger not found! Did you mean \"" + similarPhrase + "\"?" );
+                        builder.setDescription( "Trigger not found! Did you mean \"" + similarPhrase + "\"?" );
                     }
-                    else
-                    {
-                        builder = new EmbedBuilder()
-                                .setColor( Color.red )
-                                .setTitle( "Error" )
-                                .setDescription( "Trigger not found!" );
-                    }
+
                     event.replyEmbeds( builder.build() ).setEphemeral( true ).queue();
                 }
             }
