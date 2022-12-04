@@ -75,6 +75,28 @@ public class Database
     }
 
     /**
+     * Resets user's trigger list
+     * @param member Event member
+     * @throws SQLException On failure to interact with database
+     */
+    public static void resetTriggers( Member member ) throws SQLException
+    {
+        String userID = member.getId();
+
+        String sql = """
+                UPDATE triggers
+                SET phrase = '{}'
+                WHERE user_id = ?""";
+
+        try ( Connection conn = getConnect() )
+        {
+            PreparedStatement preparedStatement = conn.prepareStatement( sql );
+            preparedStatement.setLong( 1, Long.parseLong( userID ) );
+            preparedStatement.executeUpdate();
+        }
+    }
+
+    /**
      * Toggle trigger response on/off
      * @param member Event member
      * @param toggle Toggle value
