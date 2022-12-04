@@ -62,7 +62,7 @@ public class Database
         // TODO: Check if phrase already exists in database
         String sql = """
                 UPDATE triggers
-                SET phrase = array_append(phrase, ?)
+                SET phrase = array_append(phrase, ?::text)
                 WHERE user_id = ?""";
 
         try ( Connection conn = getConnect() )
