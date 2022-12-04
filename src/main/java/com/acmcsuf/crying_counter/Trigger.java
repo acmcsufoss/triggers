@@ -175,7 +175,6 @@ public class Trigger extends ListenerAdapter
                     }
                 }
             }
-            // TODO: Implement this
             case ( Commands.TRIGGER_DELETE ) ->
             {
 
