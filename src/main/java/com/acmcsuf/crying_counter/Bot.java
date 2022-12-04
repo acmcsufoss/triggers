@@ -72,6 +72,9 @@ public class Bot
             props.setProperty( "password", System.getProperty( "DATABASE_PASSWORD" ) );
 
             Connection db = DriverManager.getConnection( System.getProperty( "DATABASE_URL" ), props );
+
+            String sql = " CREATE TABLE IF NOT EXISTS triggers(user_id bigint, toggle boolean, phrase text[])";
+            db.createStatement().execute( sql );
         }
         catch ( SQLException e )
         {
