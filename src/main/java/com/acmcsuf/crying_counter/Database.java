@@ -188,6 +188,11 @@ public class Database
         }
     }
 
+    /**
+     * Initializes user if not found
+     * @param member Event member
+     * @throws SQLException On failure to interact with database
+     */
     public static void initializeIfNotExists( Member member ) throws SQLException
     {
         if ( !isStoredUser( member ) )
