@@ -109,7 +109,7 @@ public class Trigger extends ListenerAdapter
                     event.replyEmbeds( builder.build() ).setEphemeral( true ).queue();
                     return;
                 }
-                if ( triggerMap.get( event.getMember().getId() ).size() > MAX_TRIGGERS )
+                if ( triggerMap.get( event.getMember().getId() ).size() >= MAX_TRIGGERS )
                 {
                     EmbedBuilder builder = new EmbedBuilder()
                             .setColor( Color.red )
