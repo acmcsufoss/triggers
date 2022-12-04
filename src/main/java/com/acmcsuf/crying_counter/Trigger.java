@@ -85,51 +85,49 @@ public class Trigger extends ListenerAdapter
 
                 event.replyEmbeds( builder.build() ).setEphemeral( true ).queue();
             }
+            // TODO: Sync triggerMap with database on this command
             case ( Commands.TRIGGER_NEW ) ->
             {
 
                 // Takes string result of option ID matching "word"
                 String trigger_phrase = event.getOption( "word" ).getAsString().toLowerCase();
 
-                // If input is a duplicate
-                if ( triggerMap.get( event.getMember().getId() ) != null && inSet( trigger_phrase,
-                        triggerMap.get( event.getMember().getId() ) ) )
+                // TODO: Reimplement this
+//                if ( inSet( trigger_phrase, triggerMap.get( event.getMember().getId() ) ) )
+//                {
+//                    EmbedBuilder builder = new EmbedBuilder()
+//                            .setColor( Color.red )
+//                            .setTitle( "Error" )
+//                            .setDescription( "Duplicate trigger!" );
+//
+//                    event.replyEmbeds( builder.build() ).setEphemeral( true ).queue();
+//                    return;
+//                }
+//                if ( triggerMap.get( event.getMember().getId() ).size() > MAX_TRIGGERS )
+//                {
+//                    EmbedBuilder builder = new EmbedBuilder()
+//                            .setColor( Color.red )
+//                            .setTitle( "Error" )
+//                            .setDescription( "Max triggers reached!" );
+//
+//                    event.replyEmbeds( builder.build() ).setEphemeral( true ).queue();
+//                    return;
+//                }
+
+                try
                 {
-                    EmbedBuilder builder = new EmbedBuilder()
-                            .setColor( Color.red )
-                            .setTitle( "Error" )
-                            .setDescription( "Duplicate trigger!" );
-
-                    event.replyEmbeds( builder.build() ).setEphemeral( true ).queue();
+                    Database.appendPhrase( event.getMember(), trigger_phrase );
                 }
-                else
+                catch ( SQLException e )
                 {
-
-                    // If max size is reached
-                    if ( triggerMap.get( event.getMember().getId() ) != null
-                            && triggerMap.get( event.getMember().getId() ).size() >= MAX_TRIGGERS )
-                    {
-                        EmbedBuilder builder = new EmbedBuilder()
-                                .setColor( Color.red )
-                                .setTitle( "Error" )
-                                .setDescription( "Max size reached!" );
-
-                        event.replyEmbeds( builder.build() ).setEphemeral( true ).queue();
-                    }
-                    else
-                    {
-
-                        // Store trigger
-                        triggerMap.computeIfAbsent( event.getMember().getId(), k -> new LinkedHashSet<>() )
-                                .add( trigger_phrase );
-
-                        EmbedBuilder builder = new EmbedBuilder()
-                                .setColor( Color.green )
-                                .setDescription( "Trigger added: \"" + trigger_phrase + "\"" );
-
-                        event.replyEmbeds( builder.build() ).setEphemeral( true ).queue();
-                    }
+                    log.error( "Failed to append trigger", e );
                 }
+
+                EmbedBuilder builder = new EmbedBuilder()
+                        .setColor( Color.green )
+                        .setDescription( "Trigger added: \"" + trigger_phrase + "\"" );
+
+                event.replyEmbeds( builder.build() ).setEphemeral( true ).queue();
             }
             case ( Commands.TRIGGER_RESET ) ->
             {
@@ -142,6 +140,7 @@ public class Trigger extends ListenerAdapter
                         Button.danger( "reset", "Yes" )
                 ).setEphemeral( true ).queue();
             }
+            // TODO: Implement
             case ( Commands.TRIGGER_LIST ) ->
             {
 
@@ -177,6 +176,7 @@ public class Trigger extends ListenerAdapter
                     }
                 }
             }
+            // TODO: Implement See com/acmcsuf/crying_counter/Trigger.java:94
             case ( Commands.TRIGGER_DELETE ) ->
             {
 
@@ -381,110 +381,107 @@ public class Trigger extends ListenerAdapter
             return;
         }
 
-        List<String> list = new ArrayList<>( triggerMap.get( event.getMember().getId() ) );
+        //        List<String> list = new ArrayList<>( triggerMap.get( event.getMember().getId() ) );
 
+        // TODO: Reimplement this
         switch ( event.getComponentId() )
         {
 
-            // List Command
-            case "previous" ->
-            {
-
-                // If not on first page
-                if ( min != 0 )
-                {
-
-                    min -= 5;
-                    max -= 5;
-
-                    EmbedBuilder builder = triggerList( min, max, list );
-
-                    // If new previous page is first page
-                    if ( min == 0 )
-                    {
-                        event.editMessageEmbeds( builder.build() ).setActionRow(
-                                Button.secondary( "previous", "Previous" ).asDisabled(),
-                                Button.secondary( "next", "Next" ).asEnabled()
-                        ).queue();
-                    }
-                    else
-                    {
-                        event.editMessageEmbeds( builder.build() ).setActionRow(
-                                Button.secondary( "previous", "Previous" ).asEnabled(),
-                                Button.secondary( "next", "Next" ).asEnabled()
-                        ).queue();
-                    }
-                }
-                // If on first page
-                else
-                {
-
-                    EmbedBuilder builder = triggerList( min, max, list );
-
-                    // If there is a next page
-                    if ( list.size() <= 5 )
-                    {
-
-                        event.editMessageEmbeds( builder.build() ).setActionRow(
-                                Button.secondary( "previous", "Previous" ).asDisabled(),
-                                Button.secondary( "next", "Next" ).asEnabled()
-                        ).queue();
-                    }
-                    else
-                    {
-
-                        event.editMessageEmbeds( builder.build() ).setActionRow(
-                                Button.secondary( "previous", "Previous" ).asDisabled(),
-                                Button.secondary( "next", "Next" ).asDisabled()
-                        ).queue();
-                    }
-                }
-            }
-            case "next" ->
-            {
-
-                min += 5;
-                max += 5;
-
-                EmbedBuilder builder = triggerList( min, max, list );
-
-                if ( max >= list.size() )
-                {
-                    event.editMessageEmbeds( builder.build() ).setActionRow(
-                            Button.secondary( "previous", "Previous" ).asEnabled(),
-                            Button.secondary( "next", "Next" ).asDisabled()
-                    ).queue();
-                }
-                else
-                {
-                    event.editMessageEmbeds( builder.build() ).setActionRow(
-                            Button.secondary( "previous", "Previous" ).asEnabled(),
-                            Button.secondary( "next", "Next" ).asEnabled()
-                    ).queue();
-                }
-
-            }
+                        // List Command
+//                        case "previous" ->
+//                        {
+//
+//                            // If not on first page
+//                            if ( min != 0 )
+//                            {
+//
+//                                min -= 5;
+//                                max -= 5;
+//
+//                                EmbedBuilder builder = triggerList( min, max, list );
+//
+//                                // If new previous page is first page
+//                                if ( min == 0 )
+//                                {
+//                                    event.editMessageEmbeds( builder.build() ).setActionRow(
+//                                            Button.secondary( "previous", "Previous" ).asDisabled(),
+//                                            Button.secondary( "next", "Next" ).asEnabled()
+//                                    ).queue();
+//                                }
+//                                else
+//                                {
+//                                    event.editMessageEmbeds( builder.build() ).setActionRow(
+//                                            Button.secondary( "previous", "Previous" ).asEnabled(),
+//                                            Button.secondary( "next", "Next" ).asEnabled()
+//                                    ).queue();
+//                                }
+//                            }
+                            // If on first page
+//                            else
+//                            {
+//
+//                                EmbedBuilder builder = triggerList( min, max, list );
+//
+//                                // If there is a next page
+//                                if ( list.size() <= 5 )
+//                                {
+//
+//                                    event.editMessageEmbeds( builder.build() ).setActionRow(
+//                                            Button.secondary( "previous", "Previous" ).asDisabled(),
+//                                            Button.secondary( "next", "Next" ).asEnabled()
+//                                    ).queue();
+//                                }
+//                                else
+//                                {
+//
+//                                    event.editMessageEmbeds( builder.build() ).setActionRow(
+//                                            Button.secondary( "previous", "Previous" ).asDisabled(),
+//                                            Button.secondary( "next", "Next" ).asDisabled()
+//                                    ).queue();
+//                                }
+//                            }
+//                        }
+//                        case "next" ->
+//                        {
+//
+//                            min += 5;
+//                            max += 5;
+//
+//                            EmbedBuilder builder = triggerList( min, max, list );
+//
+//                            if ( max >= list.size() )
+//                            {
+//                                event.editMessageEmbeds( builder.build() ).setActionRow(
+//                                        Button.secondary( "previous", "Previous" ).asEnabled(),
+//                                        Button.secondary( "next", "Next" ).asDisabled()
+//                                ).queue();
+//                            }
+//                            else
+//                            {
+//                                event.editMessageEmbeds( builder.build() ).setActionRow(
+//                                        Button.secondary( "previous", "Previous" ).asEnabled(),
+//                                        Button.secondary( "next", "Next" ).asEnabled()
+//                                ).queue();
+//                            }
+//
+//                        }
 
             // Confirmation
             case "reset" ->
             {
 
                 event.deferEdit().queue();
-                EmbedBuilder builder = new EmbedBuilder();
+                EmbedBuilder builder = new EmbedBuilder()
+                        .setColor( Color.green )
+                        .setTitle( "Triggers reset" );
 
-                // Trigger found for member
-                if ( triggerMap.containsKey( event.getMember().getId() ) )
+                try
                 {
-                    triggerMap.get( event.getMember().getId() ).clear();
-
-                    builder.setColor( Color.green );
-                    builder.setTitle( "Triggers reset" );
+                    Database.resetTriggers( event.getMember() );
                 }
-                // Member has no trigger
-                else
+                catch ( SQLException e )
                 {
-                    builder.setColor( Color.red );
-                    builder.setTitle( "No triggers found" );
+                    log.error( "Failed to reset user's triggers", e );
                 }
 
                 event.getHook().editOriginalEmbeds( builder.build() ).setActionRow(
