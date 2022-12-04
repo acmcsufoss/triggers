@@ -90,6 +90,8 @@ public class Trigger extends ListenerAdapter
             case ( Commands.TRIGGER_NEW ) ->
             {
 
+                Database.syncMap( triggerMap );
+
                 // Takes string result of option ID matching "word"
                 String trigger_phrase = event.getOption( "word" ).getAsString().toLowerCase();
 
@@ -131,6 +133,8 @@ public class Trigger extends ListenerAdapter
             }
             case ( Commands.TRIGGER_RESET ) ->
             {
+
+                Database.syncMap( triggerMap );
 
                 EmbedBuilder builder = new EmbedBuilder()
                         .setColor( Color.red )
@@ -489,6 +493,8 @@ public class Trigger extends ListenerAdapter
                 EmbedBuilder builder = new EmbedBuilder()
                         .setColor( Color.green )
                         .setTitle( "Triggers reset" );
+
+                triggerMap.get( event.getMember().getId() ).clear();
 
                 try
                 {
