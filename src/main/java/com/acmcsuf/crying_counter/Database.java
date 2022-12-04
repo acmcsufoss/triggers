@@ -198,13 +198,13 @@ public class Database
         if ( !isStoredUser( member ) )
         {
             String userID = member.getId();
-            String insert = String.format( """
+            String sql = String.format( """
                     INSERT INTO triggers(user_id, toggle, phrase)
                     VALUES(%s, TRUE, '{}');""", userID );
 
             try ( Connection conn = getConnect() )
             {
-                conn.createStatement().execute( insert );
+                conn.createStatement().execute( sql );
             }
         }
     }
