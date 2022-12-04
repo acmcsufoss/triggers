@@ -5,6 +5,8 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.HashMap;
+import java.util.LinkedHashSet;
 
 import net.dv8tion.jda.api.entities.Member;
 import org.slf4j.Logger;
@@ -172,5 +174,14 @@ public class Database
                 conn.createStatement().execute( insert );
             }
         }
+    }
+
+    /**
+     * Sync in-memory triggers with database
+     * @param triggerMap In-memory trigger map
+     */
+    public static void syncMap( HashMap<String, LinkedHashSet<String>> triggerMap )
+    {
+        // TODO: Implement this
     }
 }
