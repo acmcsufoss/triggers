@@ -510,7 +510,11 @@ public class Trigger extends ListenerAdapter
         }
         else if ( event instanceof MessageReceivedEvent messageReceivedEvent )
         {
-            return messageReceivedEvent.getMember() != null && messageReceivedEvent.isFromGuild()
+            String guild_id = System.getProperty( "GUILD_ID" );
+
+            return messageReceivedEvent.getGuild().getId().equals( guild_id )
+                    && messageReceivedEvent.getMember() != null
+                    && messageReceivedEvent.isFromGuild()
                     && !messageReceivedEvent.getMember().getUser().isBot();
         }
         else if ( event instanceof ButtonInteractionEvent buttonInteractionEvent )
