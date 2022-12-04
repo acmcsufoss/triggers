@@ -13,15 +13,16 @@ public class Database
 {
 
     // Constants
-    public static final String URL = System.getProperty( "DATABASE_URL" );
-    public static final String USER = System.getProperty( "DATABASE_USER" );
-    public static final String PASSWORD = System.getProperty( "DATABASE_PASSWORD" );
+    private static final String URL = System.getProperty( "DATABASE_URL" );
+    private static final String USER = System.getProperty( "DATABASE_USER" );
+    private static final String PASSWORD = System.getProperty( "DATABASE_PASSWORD" );
 
     // SLF4J Logger
     private static final Logger log = LoggerFactory.getLogger( Database.class );
 
     /**
      * Connects to database
+     *
      * @return Connection object
      * @throws SQLException On failure to interact with database
      */
@@ -32,18 +33,24 @@ public class Database
 
     /**
      * Connects to and initializes database
+     *
      * @throws SQLException On failure to interact with database
      */
     public static void initializeDatabase() throws SQLException
     {
         String sql = " CREATE TABLE IF NOT EXISTS triggers(user_id bigint, toggle boolean, phrase text[])";
-        getConnect().createStatement().execute( sql );
+
+        try ( Connection conn = getConnect() )
+        {
+            conn.createStatement().execute( sql );
+        }
 
         log.info( "Connected to PostgreSQL server" );
     }
 
     /**
      * Checks if a user is registered in the database.
+     *
      * @param member Event member
      * @return User is registered
      * @throws SQLException On failure to interact with database
@@ -60,15 +67,11 @@ public class Database
         {
             return set.next();
         }
-        catch ( SQLException e )
-        {
-            e.printStackTrace();
-            return false;
-        }
     }
 
     /**
      * Checks if a user is registered in the database.
+     *
      * @param userID Event member ID
      * @return User is registered
      * @throws SQLException On failure to interact with database
@@ -83,11 +86,6 @@ public class Database
         try ( ResultSet set = getConnect().createStatement().executeQuery( sql ) )
         {
             return set.next();
-        }
-        catch ( SQLException e )
-        {
-            e.printStackTrace();
-            return false;
         }
     }
 }
