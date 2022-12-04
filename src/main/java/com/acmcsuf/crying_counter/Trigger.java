@@ -140,7 +140,7 @@ public class Trigger extends ListenerAdapter
                         Button.danger( "reset", "Yes" )
                 ).setEphemeral( true ).queue();
             }
-            // TODO: Implement
+            // TODO: Implement this
             case ( Commands.TRIGGER_LIST ) ->
             {
 
@@ -176,7 +176,7 @@ public class Trigger extends ListenerAdapter
                     }
                 }
             }
-            // TODO: Implement See com/acmcsuf/crying_counter/Trigger.java:94
+            // TODO: Implement this
             case ( Commands.TRIGGER_DELETE ) ->
             {
 
@@ -381,90 +381,98 @@ public class Trigger extends ListenerAdapter
             return;
         }
 
-        //        List<String> list = new ArrayList<>( triggerMap.get( event.getMember().getId() ) );
+        if (!triggerMap.containsKey( event.getMember().getId() ))
+        {
+            EmbedBuilder builder = new EmbedBuilder()
+                    .setTitle( "Error" )
+                    .setDescription( "You have no triggers set!" )
+                    .setColor( Color.red );
 
-        // TODO: Reimplement this
+            event.replyEmbeds( builder.build() ).setEphemeral( true ).queue();
+            return;
+        }
+        List<String> list = new ArrayList<>( triggerMap.get( event.getMember().getId() ) );
+
         switch ( event.getComponentId() )
         {
+            // List Command
+            case "previous" ->
+            {
 
-                        // List Command
-//                        case "previous" ->
-//                        {
-//
-//                            // If not on first page
-//                            if ( min != 0 )
-//                            {
-//
-//                                min -= 5;
-//                                max -= 5;
-//
-//                                EmbedBuilder builder = triggerList( min, max, list );
-//
-//                                // If new previous page is first page
-//                                if ( min == 0 )
-//                                {
-//                                    event.editMessageEmbeds( builder.build() ).setActionRow(
-//                                            Button.secondary( "previous", "Previous" ).asDisabled(),
-//                                            Button.secondary( "next", "Next" ).asEnabled()
-//                                    ).queue();
-//                                }
-//                                else
-//                                {
-//                                    event.editMessageEmbeds( builder.build() ).setActionRow(
-//                                            Button.secondary( "previous", "Previous" ).asEnabled(),
-//                                            Button.secondary( "next", "Next" ).asEnabled()
-//                                    ).queue();
-//                                }
-//                            }
-                            // If on first page
-//                            else
-//                            {
-//
-//                                EmbedBuilder builder = triggerList( min, max, list );
-//
-//                                // If there is a next page
-//                                if ( list.size() <= 5 )
-//                                {
-//
-//                                    event.editMessageEmbeds( builder.build() ).setActionRow(
-//                                            Button.secondary( "previous", "Previous" ).asDisabled(),
-//                                            Button.secondary( "next", "Next" ).asEnabled()
-//                                    ).queue();
-//                                }
-//                                else
-//                                {
-//
-//                                    event.editMessageEmbeds( builder.build() ).setActionRow(
-//                                            Button.secondary( "previous", "Previous" ).asDisabled(),
-//                                            Button.secondary( "next", "Next" ).asDisabled()
-//                                    ).queue();
-//                                }
-//                            }
-//                        }
-//                        case "next" ->
-//                        {
-//
-//                            min += 5;
-//                            max += 5;
-//
-//                            EmbedBuilder builder = triggerList( min, max, list );
-//
-//                            if ( max >= list.size() )
-//                            {
-//                                event.editMessageEmbeds( builder.build() ).setActionRow(
-//                                        Button.secondary( "previous", "Previous" ).asEnabled(),
-//                                        Button.secondary( "next", "Next" ).asDisabled()
-//                                ).queue();
-//                            }
-//                            else
-//                            {
-//                                event.editMessageEmbeds( builder.build() ).setActionRow(
-//                                        Button.secondary( "previous", "Previous" ).asEnabled(),
-//                                        Button.secondary( "next", "Next" ).asEnabled()
-//                                ).queue();
-//                            }
-//
-//                        }
+                // If not on first page
+                if ( min != 0 )
+                {
+
+                    min -= 5;
+                    max -= 5;
+
+                    EmbedBuilder builder = triggerList( min, max, list );
+
+                    // If new previous page is first page
+                    if ( min == 0 )
+                    {
+                        event.editMessageEmbeds( builder.build() ).setActionRow(
+                                Button.secondary( "previous", "Previous" ).asDisabled(),
+                                Button.secondary( "next", "Next" ).asEnabled()
+                        ).queue();
+                    }
+                    else
+                    {
+                        event.editMessageEmbeds( builder.build() ).setActionRow(
+                                Button.secondary( "previous", "Previous" ).asEnabled(),
+                                Button.secondary( "next", "Next" ).asEnabled()
+                        ).queue();
+                    }
+                }
+                // If on first page
+                else
+                {
+
+                    EmbedBuilder builder = triggerList( min, max, list );
+
+                    // If there is a next page
+                    if ( list.size() <= 5 )
+                    {
+
+                        event.editMessageEmbeds( builder.build() ).setActionRow(
+                                Button.secondary( "previous", "Previous" ).asDisabled(),
+                                Button.secondary( "next", "Next" ).asEnabled()
+                        ).queue();
+                    }
+                    else
+                    {
+
+                        event.editMessageEmbeds( builder.build() ).setActionRow(
+                                Button.secondary( "previous", "Previous" ).asDisabled(),
+                                Button.secondary( "next", "Next" ).asDisabled()
+                        ).queue();
+                    }
+                }
+            }
+            case "next" ->
+            {
+
+                min += 5;
+                max += 5;
+
+                EmbedBuilder builder = triggerList( min, max, list );
+
+                if ( max >= list.size() )
+                {
+                    event.editMessageEmbeds( builder.build() ).setActionRow(
+                            Button.secondary( "previous", "Previous" ).asEnabled(),
+                            Button.secondary( "next", "Next" ).asDisabled()
+                    ).queue();
+                }
+                else
+                {
+                    event.editMessageEmbeds( builder.build() ).setActionRow(
+                            Button.secondary( "previous", "Previous" ).asEnabled(),
+                            Button.secondary( "next", "Next" ).asEnabled()
+                    ).queue();
+                }
+
+            }
 
             // Confirmation
             case "reset" ->
