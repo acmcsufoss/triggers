@@ -1,7 +1,5 @@
 package com.acmcsuf.crying_counter;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.List;
@@ -66,14 +64,11 @@ public class Bot
 
         try
         {
-            Connection conn = DriverManager.getConnection( Database.URL, Database.USER, Database.PASSWORD );
-            log.info( "Connected to PostgreSQL server" );
-
-            String sql = " CREATE TABLE IF NOT EXISTS triggers(user_id bigint, toggle boolean, phrase text[])";
-            conn.createStatement().execute( sql );
+            Database.initializeDatabase();
         }
         catch ( SQLException e )
         {
+            log.error( "Failed to initialize database" );
             e.printStackTrace();
         }
     }
