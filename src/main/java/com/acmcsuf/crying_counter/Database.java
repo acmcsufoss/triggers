@@ -49,10 +49,17 @@ public class Database
         log.info( "Connected to PostgreSQL server" );
     }
 
+    /**
+     * Appends new phrase to user's trigger ist
+     * @param member Event member
+     * @param phrase Phrase to add
+     * @throws SQLException On failure to interact with database
+     */
     public static void appendPhrase( Member member, String phrase ) throws SQLException
     {
         String userID = member.getId();
 
+        // TODO: Check if phrase already exists in database
         String sql = """
                 UPDATE triggers
                 SET phrase = array_append(phrase, ?)
@@ -62,6 +69,30 @@ public class Database
         {
             PreparedStatement preparedStatement = conn.prepareStatement( sql );
             preparedStatement.setString( 1, phrase );
+            preparedStatement.setLong( 2, Long.parseLong( userID ) );
+            preparedStatement.executeUpdate();
+        }
+    }
+
+    /**
+     * Toggle trigger response on/off
+     * @param member Event member
+     * @param toggle Toggle value
+     * @throws SQLException On failure to interact with database
+     */
+    public static void toggleTrigger( Member member, boolean toggle ) throws SQLException
+    {
+        String userID = member.getId();
+
+        String sql = """
+                UPDATE triggers
+                SET toggle = ?
+                WHERE user_id = ?""";
+
+        try ( Connection conn = getConnect() )
+        {
+            PreparedStatement preparedStatement = conn.prepareStatement( sql );
+            preparedStatement.setBoolean( 1, toggle );
             preparedStatement.setLong( 2, Long.parseLong( userID ) );
             preparedStatement.executeUpdate();
         }
@@ -82,25 +113,28 @@ public class Database
                 FROM triggers
                 WHERE user_id = %s;""", userID );
 
-        try ( ResultSet set = getConnect().createStatement().executeQuery( sql ) )
+        try ( Connection conn = getConnect() )
         {
+
+            ResultSet set = conn.createStatement().executeQuery( sql );
+            boolean found = false;
+
             // Insert user if not found
             if ( !set.next() )
             {
-                try ( Connection conn = getConnect() )
-                {
-                    String insert = String.format( """
-                            INSERT INTO triggers(user_id, toggle, phrase)
-                            VALUES(%s, TRUE, '{}');""", userID );
+                String insert = String.format( """
+                        INSERT INTO triggers(user_id, toggle, phrase)
+                        VALUES(%s, TRUE, '{}');""", userID );
 
-                    conn.createStatement().execute( insert );
-                    return false;
-                }
+                conn.createStatement().execute( insert );
             }
             else
             {
-                return false;
+                found = true;
             }
+
+            conn.close();
+            return found;
         }
     }
 }
