@@ -2,6 +2,7 @@ package com.acmcsuf.crying_counter;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
@@ -48,8 +49,26 @@ public class Database
         log.info( "Connected to PostgreSQL server" );
     }
 
+    public static void appendPhrase( Member member, String phrase ) throws SQLException
+    {
+        String userID = member.getId();
+
+        String sql = """
+                UPDATE triggers
+                SET phrase = array_append(phrase, ?)
+                WHERE user_id = ?""";
+
+        try ( Connection conn = getConnect() )
+        {
+            PreparedStatement preparedStatement = conn.prepareStatement( sql );
+            preparedStatement.setString( 1, phrase );
+            preparedStatement.setLong( 2, Long.parseLong( userID ) );
+            preparedStatement.executeUpdate();
+        }
+    }
+
     /**
-     * Checks if a user is registered in the database.
+     * Checks if a user is registered in the database and inserts if not found
      *
      * @param member Event member
      * @return User is registered
@@ -65,27 +84,23 @@ public class Database
 
         try ( ResultSet set = getConnect().createStatement().executeQuery( sql ) )
         {
-            return set.next();
-        }
-    }
+            // Insert user if not found
+            if ( !set.next() )
+            {
+                try ( Connection conn = getConnect() )
+                {
+                    String insert = String.format( """
+                            INSERT INTO triggers(user_id, toggle, phrase)
+                            VALUES(%s, TRUE, '{}');""", userID );
 
-    /**
-     * Checks if a user is registered in the database.
-     *
-     * @param userID Event member ID
-     * @return User is registered
-     * @throws SQLException On failure to interact with database
-     */
-    public static boolean isStoredUser( String userID ) throws SQLException
-    {
-        String sql = String.format( """
-                SELECT user_id
-                FROM triggers
-                WHERE user_id = %s;""", userID );
-
-        try ( ResultSet set = getConnect().createStatement().executeQuery( sql ) )
-        {
-            return set.next();
+                    conn.createStatement().execute( insert );
+                    return false;
+                }
+            }
+            else
+            {
+                return false;
+            }
         }
     }
 }
