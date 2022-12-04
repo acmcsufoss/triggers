@@ -54,6 +54,7 @@ public class Database
 
     /**
      * Appends new phrase to user's trigger ist
+     *
      * @param member Event member
      * @param phrase Phrase to add
      * @throws SQLException On failure to interact with database
@@ -77,6 +78,7 @@ public class Database
 
     /**
      * Deletes phrase from user's trigger list
+     *
      * @param member Event member
      * @param phrase Phrase to delete
      * @throws SQLException On failure to interact with database
@@ -100,6 +102,7 @@ public class Database
 
     /**
      * Resets user's trigger list
+     *
      * @param member Event member
      * @throws SQLException On failure to interact with database
      */
@@ -122,6 +125,7 @@ public class Database
 
     /**
      * Toggle trigger response on/off
+     *
      * @param member Event member
      * @param toggle Toggle value
      * @throws SQLException On failure to interact with database
@@ -202,11 +206,12 @@ public class Database
 
     /**
      * Sync in-memory triggers with database
+     *
      * @param triggerMap In-memory trigger map
      */
-    public static void syncData( HashMap<String, LinkedHashSet<String>> triggerMap, HashMap<String, Boolean> triggerToggle ) throws SQLException
+    public static void syncData( HashMap<String, LinkedHashSet<String>> triggerMap,
+                                 HashMap<String, Boolean> triggerToggle ) throws SQLException
     {
-        // TODO: Implement this
         String sql = "SELECT * FROM triggers";
 
         try ( Connection conn = getConnect() )

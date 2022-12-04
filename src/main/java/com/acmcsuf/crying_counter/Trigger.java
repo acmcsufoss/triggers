@@ -72,8 +72,6 @@ public class Trigger extends ListenerAdapter
         switch ( event.getSubcommandName() )
         {
 
-            // TODO: Sync triggerMap with database on NEW, RESET, LIST, AND DELETE commands
-
             case ( Commands.TRIGGER_HELP ) ->
             {
                 EmbedBuilder builder = new EmbedBuilder()
@@ -89,7 +87,6 @@ public class Trigger extends ListenerAdapter
             }
             case ( Commands.TRIGGER_NEW ) ->
             {
-
                 try
                 {
                     Database.syncData( triggerMap, triggerToggle );
@@ -140,7 +137,6 @@ public class Trigger extends ListenerAdapter
             }
             case ( Commands.TRIGGER_RESET ) ->
             {
-
                 try
                 {
                     Database.syncData( triggerMap, triggerToggle );
@@ -160,7 +156,6 @@ public class Trigger extends ListenerAdapter
             }
             case ( Commands.TRIGGER_LIST ) ->
             {
-
                 try
                 {
                     Database.syncData( triggerMap, triggerToggle );
@@ -204,7 +199,6 @@ public class Trigger extends ListenerAdapter
             }
             case ( Commands.TRIGGER_DELETE ) ->
             {
-
                 try
                 {
                     Database.syncData( triggerMap, triggerToggle );
@@ -425,7 +419,7 @@ public class Trigger extends ListenerAdapter
             return;
         }
 
-        if (!triggerMap.containsKey( event.getMember().getId() ))
+        if ( !triggerMap.containsKey( event.getMember().getId() ) )
         {
             EmbedBuilder builder = new EmbedBuilder()
                     .setTitle( "Error" )
