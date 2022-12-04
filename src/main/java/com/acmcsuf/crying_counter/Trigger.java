@@ -90,7 +90,14 @@ public class Trigger extends ListenerAdapter
             case ( Commands.TRIGGER_NEW ) ->
             {
 
-                Database.syncMap( triggerMap );
+                try
+                {
+                    Database.syncData( triggerMap, triggerToggle );
+                }
+                catch ( SQLException e )
+                {
+                    log.error( "Failed to sync database", e );
+                }
 
                 // Takes string result of option ID matching "word"
                 String trigger_phrase = event.getOption( "word" ).getAsString().toLowerCase();
@@ -134,7 +141,14 @@ public class Trigger extends ListenerAdapter
             case ( Commands.TRIGGER_RESET ) ->
             {
 
-                Database.syncMap( triggerMap );
+                try
+                {
+                    Database.syncData( triggerMap, triggerToggle );
+                }
+                catch ( SQLException e )
+                {
+                    log.error( "Failed to sync database", e );
+                }
 
                 EmbedBuilder builder = new EmbedBuilder()
                         .setColor( Color.red )
@@ -146,6 +160,15 @@ public class Trigger extends ListenerAdapter
             }
             case ( Commands.TRIGGER_LIST ) ->
             {
+
+                try
+                {
+                    Database.syncData( triggerMap, triggerToggle );
+                }
+                catch ( SQLException e )
+                {
+                    log.error( "Failed to sync database", e );
+                }
 
                 // If no triggers are found
                 if ( !triggerMap.containsKey( event.getMember().getId() ) || triggerMap.get( event.getMember().getId() )
@@ -181,6 +204,15 @@ public class Trigger extends ListenerAdapter
             }
             case ( Commands.TRIGGER_DELETE ) ->
             {
+
+                try
+                {
+                    Database.syncData( triggerMap, triggerToggle );
+                }
+                catch ( SQLException e )
+                {
+                    log.error( "Failed to sync database", e );
+                }
 
                 // Takes string result of option ID matching "word"
                 String query = event.getOption( "word" ).getAsString().toLowerCase();
@@ -246,6 +278,7 @@ public class Trigger extends ListenerAdapter
 
                     boolean toggle = event.getOption( "switch" ).getAsBoolean();
                     Database.toggleTrigger( event.getMember(), toggle );
+                    triggerToggle.put( event.getMember().getId(), toggle );
 
                     EmbedBuilder builder = new EmbedBuilder();
 

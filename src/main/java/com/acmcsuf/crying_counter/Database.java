@@ -5,6 +5,7 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedHashSet;
 
@@ -203,8 +204,25 @@ public class Database
      * Sync in-memory triggers with database
      * @param triggerMap In-memory trigger map
      */
-    public static void syncMap( HashMap<String, LinkedHashSet<String>> triggerMap )
+    public static void syncData( HashMap<String, LinkedHashSet<String>> triggerMap, HashMap<String, Boolean> triggerToggle ) throws SQLException
     {
         // TODO: Implement this
+        String sql = "SELECT * FROM triggers";
+
+        try ( Connection conn = getConnect() )
+        {
+            ResultSet set = conn.createStatement().executeQuery( sql );
+
+            while ( set.next() )
+            {
+                String userID = set.getString( "user_id" );
+                boolean toggle = set.getBoolean( "toggle" );
+                String[] phrases = (String[]) set.getArray( "phrase" ).getArray();
+
+                LinkedHashSet<String> set1 = new LinkedHashSet<>( Arrays.asList( phrases ) );
+                triggerMap.put( userID, set1 );
+                triggerToggle.put( userID, toggle );
+            }
+        }
     }
 }
