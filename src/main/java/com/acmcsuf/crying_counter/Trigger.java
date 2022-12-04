@@ -72,6 +72,8 @@ public class Trigger extends ListenerAdapter
         switch ( event.getSubcommandName() )
         {
 
+            // TODO: Sync triggerMap with database on NEW, RESET, LIST, AND DELETE commands
+
             case ( Commands.TRIGGER_HELP ) ->
             {
                 EmbedBuilder builder = new EmbedBuilder()
@@ -85,34 +87,32 @@ public class Trigger extends ListenerAdapter
 
                 event.replyEmbeds( builder.build() ).setEphemeral( true ).queue();
             }
-            // TODO: Sync triggerMap with database on this command
             case ( Commands.TRIGGER_NEW ) ->
             {
 
                 // Takes string result of option ID matching "word"
                 String trigger_phrase = event.getOption( "word" ).getAsString().toLowerCase();
 
-                // TODO: Reimplement this
-//                if ( inSet( trigger_phrase, triggerMap.get( event.getMember().getId() ) ) )
-//                {
-//                    EmbedBuilder builder = new EmbedBuilder()
-//                            .setColor( Color.red )
-//                            .setTitle( "Error" )
-//                            .setDescription( "Duplicate trigger!" );
-//
-//                    event.replyEmbeds( builder.build() ).setEphemeral( true ).queue();
-//                    return;
-//                }
-//                if ( triggerMap.get( event.getMember().getId() ).size() > MAX_TRIGGERS )
-//                {
-//                    EmbedBuilder builder = new EmbedBuilder()
-//                            .setColor( Color.red )
-//                            .setTitle( "Error" )
-//                            .setDescription( "Max triggers reached!" );
-//
-//                    event.replyEmbeds( builder.build() ).setEphemeral( true ).queue();
-//                    return;
-//                }
+                if ( inSet( trigger_phrase, triggerMap.get( event.getMember().getId() ) ) )
+                {
+                    EmbedBuilder builder = new EmbedBuilder()
+                            .setColor( Color.red )
+                            .setTitle( "Error" )
+                            .setDescription( "Duplicate trigger!" );
+
+                    event.replyEmbeds( builder.build() ).setEphemeral( true ).queue();
+                    return;
+                }
+                if ( triggerMap.get( event.getMember().getId() ).size() > MAX_TRIGGERS )
+                {
+                    EmbedBuilder builder = new EmbedBuilder()
+                            .setColor( Color.red )
+                            .setTitle( "Error" )
+                            .setDescription( "Max triggers reached!" );
+
+                    event.replyEmbeds( builder.build() ).setEphemeral( true ).queue();
+                    return;
+                }
 
                 try
                 {
@@ -140,7 +140,6 @@ public class Trigger extends ListenerAdapter
                         Button.danger( "reset", "Yes" )
                 ).setEphemeral( true ).queue();
             }
-            // TODO: Implement this
             case ( Commands.TRIGGER_LIST ) ->
             {
 
@@ -192,6 +191,15 @@ public class Trigger extends ListenerAdapter
                     EmbedBuilder builder = new EmbedBuilder()
                             .setColor( Color.green )
                             .setDescription( "Trigger deleted: \"" + query + "\"" );
+
+                    try
+                    {
+                        Database.deletePhrase( event.getMember(), query );
+                    }
+                    catch ( SQLException e )
+                    {
+                        log.error( "Failed to delete trigger", e );
+                    }
 
                     event.replyEmbeds( builder.build() ).setEphemeral( true ).queue();
                 }
