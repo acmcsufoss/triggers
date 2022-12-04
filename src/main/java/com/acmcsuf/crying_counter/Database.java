@@ -59,7 +59,6 @@ public class Database
     {
         String userID = member.getId();
 
-        // TODO: Check if phrase already exists in database
         String sql = """
                 UPDATE triggers
                 SET phrase = array_append(phrase, ?::text)
