@@ -75,6 +75,29 @@ public class Database
     }
 
     /**
+     * Deletes phrase from user's trigger list
+     * @param member Event member
+     * @param phrase Phrase to delete
+     * @throws SQLException On failure to interact with database
+     */
+    public static void deletePhrase( Member member, String phrase ) throws SQLException
+    {
+        String userID = member.getId();
+
+        String sql = """
+                UPDATE triggers
+                SET phrase = array_remove(phrase, ?::text)
+                WHERE user_id =""" + userID;
+
+        try ( Connection conn = getConnect() )
+        {
+            PreparedStatement preparedStatement = conn.prepareStatement( sql );
+            preparedStatement.setString( 1, phrase );
+            preparedStatement.executeUpdate();
+        }
+    }
+
+    /**
      * Resets user's trigger list
      * @param member Event member
      * @throws SQLException On failure to interact with database
