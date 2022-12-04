@@ -137,4 +137,20 @@ public class Database
             return found;
         }
     }
+
+    public static void initializeIfNotExists( Member member ) throws SQLException
+    {
+        if ( !isStoredUser( member ) )
+        {
+            String userID = member.getId();
+            String insert = String.format( """
+                    INSERT INTO triggers(user_id, toggle, phrase)
+                    VALUES(%s, TRUE, '{}');""", userID );
+
+            try ( Connection conn = getConnect() )
+            {
+                conn.createStatement().execute( insert );
+            }
+        }
+    }
 }
