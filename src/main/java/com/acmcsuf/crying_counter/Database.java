@@ -63,13 +63,12 @@ public class Database
         String sql = """
                 UPDATE triggers
                 SET phrase = array_append(phrase, ?::text)
-                WHERE user_id = ?""";
+                WHERE user_id =""" + userID;
 
         try ( Connection conn = getConnect() )
         {
             PreparedStatement preparedStatement = conn.prepareStatement( sql );
             preparedStatement.setString( 1, phrase );
-            preparedStatement.setLong( 2, Long.parseLong( userID ) );
             preparedStatement.executeUpdate();
         }
     }
