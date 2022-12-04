@@ -15,9 +15,11 @@ import net.dv8tion.jda.api.interactions.components.buttons.Button;
 import net.dv8tion.jda.api.requests.RestAction;
 import net.dv8tion.jda.api.utils.TimeFormat;
 import org.jetbrains.annotations.NotNull;
+import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.awt.*;
+import java.sql.SQLException;
 import java.util.*;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -43,6 +45,9 @@ public class Trigger extends ListenerAdapter
     int max = 5;
 
     final int MAX_TRIGGERS = 50;
+
+    // SLF4J Logger
+    final Logger log = LoggerFactory.getLogger( Trigger.class );
 
     @Override
     public void onSlashCommandInteraction( @NotNull SlashCommandInteractionEvent event )
@@ -224,24 +229,32 @@ public class Trigger extends ListenerAdapter
             }
             case ( Commands.TRIGGER_TOGGLE ) ->
             {
-
-                boolean toggle = event.getOption( "switch" ).getAsBoolean();
-                triggerToggle.put( event.getMember().getId(), toggle );
-
-                EmbedBuilder builder = new EmbedBuilder();
-
-                if ( toggle )
+                try
                 {
-                    builder.setTitle( "Trigger features are now enabled" );
-                    builder.setColor( Color.green );
-                }
-                else
-                {
-                    builder.setTitle( "Trigger features are now disabled" );
-                    builder.setColor( Color.red );
-                }
+                    Database.initializeIfNotExists( event.getMember() );
 
-                event.replyEmbeds( builder.build() ).setEphemeral( true ).queue();
+                    boolean toggle = event.getOption( "switch" ).getAsBoolean();
+                    Database.toggleTrigger( event.getMember(), toggle );
+
+                    EmbedBuilder builder = new EmbedBuilder();
+
+                    if ( toggle )
+                    {
+                        builder.setTitle( "Trigger features are now enabled" );
+                        builder.setColor( Color.green );
+                    }
+                    else
+                    {
+                        builder.setTitle( "Trigger features are now disabled" );
+                        builder.setColor( Color.red );
+                    }
+
+                    event.replyEmbeds( builder.build() ).setEphemeral( true ).queue();
+                }
+                catch ( SQLException e )
+                {
+                    log.error( "Failed to check for stored user", e );
+                }
             }
         }
     }
