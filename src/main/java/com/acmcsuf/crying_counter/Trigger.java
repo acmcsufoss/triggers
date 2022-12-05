@@ -5,6 +5,7 @@ import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.events.GenericEvent;
+import net.dv8tion.jda.api.events.guild.GuildReadyEvent;
 import net.dv8tion.jda.api.events.interaction.command.CommandAutoCompleteInteractionEvent;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent;
@@ -48,6 +49,23 @@ public class Trigger extends ListenerAdapter
 
     // SLF4J Logger
     final Logger log = LoggerFactory.getLogger( Trigger.class );
+
+    @Override
+    public void onGuildReady( GuildReadyEvent event )
+    {
+        if ( event.getGuild().getId().equals( System.getProperty( "GUILD_ID" ) ) )
+        {
+            // Loads triggers from database
+            try
+            {
+               Database.syncData( triggerMap, triggerToggle );
+            }
+            catch ( SQLException e )
+            {
+                log.error( "Failed to sync database", e );
+            }
+        }
+    }
 
     @Override
     public void onSlashCommandInteraction( @NotNull SlashCommandInteractionEvent event )
