@@ -144,6 +144,7 @@ public class Trigger extends ListenerAdapter
                 try
                 {
                     Database.initializeIfNotExistsAndAppend( event.getMember(), trigger_phrase );
+                    Database.syncData( triggerMap, triggerToggle );
                 }
                 catch ( SQLException e )
                 {
@@ -256,10 +257,11 @@ public class Trigger extends ListenerAdapter
                     try
                     {
                         Database.deletePhrase( event.getMember(), query );
+                        Database.syncData( triggerMap, triggerToggle );
                     }
                     catch ( SQLException e )
                     {
-                        log.error( "Failed to delete trigger", e );
+                        log.error( "Failed to delete trigger or sync database", e );
                     }
 
                     event.replyEmbeds( builder.build() ).setEphemeral( true ).queue();
@@ -558,6 +560,7 @@ public class Trigger extends ListenerAdapter
                 try
                 {
                     Database.resetTriggers( event.getMember() );
+                    Database.syncData( triggerMap, triggerToggle );
                 }
                 catch ( SQLException e )
                 {
