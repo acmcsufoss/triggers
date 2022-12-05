@@ -143,8 +143,7 @@ public class Trigger extends ListenerAdapter
 
                 try
                 {
-                    Database.initializeIfNotExists( event.getMember() );
-                    Database.appendPhrase( event.getMember(), trigger_phrase );
+                    Database.initializeAndAppend( event.getMember(), trigger_phrase );
                 }
                 catch ( SQLException e )
                 {

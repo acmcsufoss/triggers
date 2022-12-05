@@ -82,6 +82,35 @@ public class Database
     }
 
     /**
+     * Appends new phrase to user's trigger ist
+     *
+     * @param member Event member
+     * @param phrase Phrase to add
+     * @param connection Connection object
+     * @throws SQLException On failure to interact with database
+     */
+    public static void appendPhrase( Member member, String phrase, Connection connection ) throws SQLException
+    {
+        String userID = member.getId();
+
+        String sql = """
+                UPDATE triggers
+                SET phrase = array_append(phrase, ?::text)
+                WHERE user_id =""" + userID;
+
+        try
+        {
+            PreparedStatement preparedStatement = connection.prepareStatement( sql );
+            preparedStatement.setString( 1, phrase );
+            preparedStatement.executeUpdate();
+        }
+        catch ( PSQLException e )
+        {
+            log.error( "Error appending phrase to database", e );
+        }
+    }
+
+    /**
      * Deletes phrase from user's trigger list
      *
      * @param member Event member
@@ -154,6 +183,22 @@ public class Database
     }
 
     /**
+     * Initializes user and appends one phrase to their trigger list
+     * @param member Event member
+     * @param phrase Phrase to add
+     * @throws SQLException On failure to interact with database
+     */
+    public static void initializeAndAppend( Member member, String phrase ) throws SQLException
+    {
+        Connection connection = getConnect();
+
+        initializeIfNotExists( connection, member );
+        appendPhrase( member, phrase, connection );
+        connection.close();
+    }
+
+
+    /**
      * Checks if a user is registered in the database and inserts if not found
      *
      * @param member Event member
@@ -210,6 +255,31 @@ public class Database
             try ( Connection conn = getConnect() )
             {
                 conn.createStatement().execute( sql );
+            }
+            catch ( PSQLException ignore )
+            {
+            }
+        }
+    }
+
+    /**
+     * Initializes user if not found
+     * @param connection Connection object
+     * @param member Event member
+     * @throws SQLException On failure to interact with database
+     */
+    public static void initializeIfNotExists( Connection connection, Member member ) throws SQLException
+    {
+        if ( !isStoredUser( member ) )
+        {
+            String userID = member.getId();
+            String sql = String.format( """
+                    INSERT INTO triggers(user_id, toggle, phrase)
+                    VALUES(%s, TRUE, '{}');""", userID );
+
+            try
+            {
+                connection.createStatement().execute( sql );
             }
             catch ( PSQLException ignore )
             {
