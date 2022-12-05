@@ -10,6 +10,7 @@ import java.util.HashMap;
 import java.util.LinkedHashSet;
 
 import net.dv8tion.jda.api.entities.Member;
+import org.postgresql.util.PSQLException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -42,7 +43,11 @@ public class Database
      */
     public static void initializeDatabase() throws SQLException
     {
-        String sql = " CREATE TABLE IF NOT EXISTS triggers(user_id bigint, toggle boolean, phrase text[])";
+        String sql = """
+                CREATE TABLE IF NOT EXISTS triggers(
+                user_id bigint PRIMARY KEY ,
+                toggle boolean,
+                phrase text[])""";
 
         try ( Connection conn = getConnect() )
         {
@@ -205,6 +210,9 @@ public class Database
             try ( Connection conn = getConnect() )
             {
                 conn.createStatement().execute( sql );
+            }
+            catch ( PSQLException ignore )
+            {
             }
         }
     }
