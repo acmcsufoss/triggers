@@ -146,6 +146,17 @@ public class Trigger extends ListenerAdapter
                     log.error( "Failed to sync database", e );
                 }
 
+                if ( triggerMap.get( event.getMember().getId() ).isEmpty() )
+                {
+                    EmbedBuilder builder = new EmbedBuilder()
+                            .setColor( Color.red )
+                            .setTitle( "Error" )
+                            .setDescription( "No triggers to remove!" );
+
+                    event.replyEmbeds( builder.build() ).setEphemeral( true ).queue();
+                    return;
+                }
+
                 EmbedBuilder builder = new EmbedBuilder()
                         .setColor( Color.red )
                         .setTitle( "Are you sure you want to reset all triggers?" );
