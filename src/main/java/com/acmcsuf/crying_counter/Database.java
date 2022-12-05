@@ -188,7 +188,7 @@ public class Database
      * @param phrase Phrase to add
      * @throws SQLException On failure to interact with database
      */
-    public static void initializeAndAppend( Member member, String phrase ) throws SQLException
+    public static void initializeIfNotExistsAndAppend( Member member, String phrase ) throws SQLException
     {
         Connection connection = getConnect();
 
