@@ -99,29 +99,33 @@ public class Trigger extends ListenerAdapter
                 // Takes string result of option ID matching "word"
                 String trigger_phrase = event.getOption( "word" ).getAsString().toLowerCase();
 
-                if ( inSet( trigger_phrase, triggerMap.get( event.getMember().getId() ) ) )
+                if ( triggerMap.containsKey( event.getMember().getId() ))
                 {
-                    EmbedBuilder builder = new EmbedBuilder()
-                            .setColor( Color.red )
-                            .setTitle( "Error" )
-                            .setDescription( "Duplicate trigger!" );
+                    if ( inSet( trigger_phrase, triggerMap.get( event.getMember().getId() ) ) )
+                    {
+                        EmbedBuilder builder = new EmbedBuilder()
+                                .setColor( Color.red )
+                                .setTitle( "Error" )
+                                .setDescription( "Duplicate trigger!" );
 
-                    event.replyEmbeds( builder.build() ).setEphemeral( true ).queue();
-                    return;
-                }
-                if ( triggerMap.get( event.getMember().getId() ).size() >= MAX_TRIGGERS )
-                {
-                    EmbedBuilder builder = new EmbedBuilder()
-                            .setColor( Color.red )
-                            .setTitle( "Error" )
-                            .setDescription( "Max triggers reached!" );
+                        event.replyEmbeds( builder.build() ).setEphemeral( true ).queue();
+                        return;
+                    }
+                    if ( triggerMap.get( event.getMember().getId() ).size() >= MAX_TRIGGERS )
+                    {
+                        EmbedBuilder builder = new EmbedBuilder()
+                                .setColor( Color.red )
+                                .setTitle( "Error" )
+                                .setDescription( "Max triggers reached!" );
 
-                    event.replyEmbeds( builder.build() ).setEphemeral( true ).queue();
-                    return;
+                        event.replyEmbeds( builder.build() ).setEphemeral( true ).queue();
+                        return;
+                    }
                 }
 
                 try
                 {
+                    Database.initializeIfNotExists( event.getMember() );
                     Database.appendPhrase( event.getMember(), trigger_phrase );
                 }
                 catch ( SQLException e )
