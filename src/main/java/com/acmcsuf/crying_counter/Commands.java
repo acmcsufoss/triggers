@@ -32,6 +32,11 @@ public final class Commands
     public static final String TRIGGER_TOGGLE_OPTION_DESCRIPTION = "Toggles feature";
     public static final String TRIGGER_TOGGLE_DESCRIPTION = "Toggles trigger feature";
 
+    public static final String VIEW = "view";
+    public static final String VIEW_DESCRIPTION = "View a members triggers";
+    public static final String VIEW_OPTION_NAME = "user";
+    public static final String VIEW_OPTION_DESCRIPTION = "Member to view";
+
     private Commands()
     {
 

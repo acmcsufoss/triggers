@@ -292,6 +292,26 @@ public class Trigger extends ListenerAdapter
                     log.error( "Failed to check for stored user", e );
                 }
             }
+            case ( Commands.VIEW ) ->
+            {
+                Member member = event.getOption( "user" ).getAsMember();
+
+                // If no triggers are found
+                if ( !triggerMap.containsKey( member.getId() ) || triggerMap.get( member.getId() )
+                        .isEmpty() || triggerMap.get( member.getId() ) == null )
+                {
+                    EmbedBuilder builder = new EmbedBuilder()
+                            .setColor( Color.red )
+                            .setTitle( "No triggers found" );
+
+                    event.replyEmbeds( builder.build() ).setEphemeral( true ).queue();
+                }
+
+                List<String> list = new ArrayList<>( triggerMap.get( member.getId() ) );
+                EmbedBuilder builder = new EmbedBuilder(triggerList( 0, list.size(), list ));
+
+                event.replyEmbeds( builder.build() ).setEphemeral( true ).queue();
+            }
         }
     }
 
@@ -417,16 +437,6 @@ public class Trigger extends ListenerAdapter
             return;
         }
 
-        if ( !triggerMap.containsKey( event.getMember().getId() ) )
-        {
-            EmbedBuilder builder = new EmbedBuilder()
-                    .setTitle( "Error" )
-                    .setDescription( "You have no triggers set!" )
-                    .setColor( Color.red );
-
-            event.replyEmbeds( builder.build() ).setEphemeral( true ).queue();
-            return;
-        }
         List<String> list = new ArrayList<>( triggerMap.get( event.getMember().getId() ) );
 
         switch ( event.getComponentId() )

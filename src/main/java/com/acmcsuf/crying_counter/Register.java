@@ -1,13 +1,16 @@
 package com.acmcsuf.crying_counter;
 
+import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.events.GenericEvent;
 import net.dv8tion.jda.api.events.guild.GuildJoinEvent;
 import net.dv8tion.jda.api.events.guild.GuildReadyEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
+import net.dv8tion.jda.api.interactions.commands.DefaultMemberPermissions;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.interactions.commands.build.CommandData;
 import net.dv8tion.jda.api.interactions.commands.build.Commands;
+import net.dv8tion.jda.api.interactions.commands.build.SlashCommandData;
 import net.dv8tion.jda.api.interactions.commands.build.SubcommandData;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.LoggerFactory;
@@ -52,8 +55,8 @@ public class Register extends ListenerAdapter
         // Registers guild from env file
         if ( guild.getId().equals( System.getProperty( "GUILD_ID" ) ) )
         {
-            guild.updateCommands().addCommands( guildCommands() )
-                    .queue( ( null ), ( ( error ) -> LoggerFactory.getLogger( Bot.class )
+            guild.updateCommands().addCommands( guildCommands() ).queue( ( null ),
+                    ( ( error ) -> LoggerFactory.getLogger( Bot.class )
                             .info( "Failed to update commands for " + guild.getName() + " (" + guild.getId()
                                     + ")" ) ) );
         }
@@ -78,33 +81,39 @@ public class Register extends ListenerAdapter
         // List holding all guild commands
         List<CommandData> guildCommandData = new ArrayList<>();
 
-        // Trigger command + subcommands
+        // Trigger subcommands
         SubcommandData help = new SubcommandData( com.acmcsuf.crying_counter.Commands.TRIGGER_HELP,
                 com.acmcsuf.crying_counter.Commands.TRIGGER_HELP_DESCRIPTION );
         SubcommandData reset = new SubcommandData( com.acmcsuf.crying_counter.Commands.TRIGGER_RESET,
                 com.acmcsuf.crying_counter.Commands.TRIGGER_RESET_DESCRIPTION );
         SubcommandData list = new SubcommandData( com.acmcsuf.crying_counter.Commands.TRIGGER_LIST,
                 com.acmcsuf.crying_counter.Commands.TRIGGER_LIST_DESCRIPTION );
-        SubcommandData toggle =
-                new SubcommandData( com.acmcsuf.crying_counter.Commands.TRIGGER_TOGGLE,
-                        com.acmcsuf.crying_counter.Commands.TRIGGER_TOGGLE_DESCRIPTION )
-                        .addOption( OptionType.BOOLEAN, com.acmcsuf.crying_counter.Commands.TRIGGER_TOGGLE_OPTION_NAME,
-                                com.acmcsuf.crying_counter.Commands.TRIGGER_TOGGLE_OPTION_DESCRIPTION, true );
-        SubcommandData newTrigger =
-                new SubcommandData( com.acmcsuf.crying_counter.Commands.TRIGGER_NEW,
-                        com.acmcsuf.crying_counter.Commands.TRIGGER_NEW_DESCRIPTION )
-                        .addOption( OptionType.STRING, com.acmcsuf.crying_counter.Commands.TRIGGER_NEW_OPTION_NAME,
-                                com.acmcsuf.crying_counter.Commands.TRIGGER_NEW_OPTION_DESCRIPTION, true );
-        SubcommandData delete =
-                new SubcommandData( com.acmcsuf.crying_counter.Commands.TRIGGER_DELETE,
-                        com.acmcsuf.crying_counter.Commands.TRIGGER_DELETE_DESCRIPTION )
-                        .addOption( OptionType.STRING, com.acmcsuf.crying_counter.Commands.TRIGGER_DELETE_OPTION_NAME,
-                                com.acmcsuf.crying_counter.Commands.TRIGGER_DELETE_OPTION_DESCRIPTION, true, true );
+        SubcommandData toggle = new SubcommandData( com.acmcsuf.crying_counter.Commands.TRIGGER_TOGGLE,
+                com.acmcsuf.crying_counter.Commands.TRIGGER_TOGGLE_DESCRIPTION ).addOption( OptionType.BOOLEAN,
+                com.acmcsuf.crying_counter.Commands.TRIGGER_TOGGLE_OPTION_NAME,
+                com.acmcsuf.crying_counter.Commands.TRIGGER_TOGGLE_OPTION_DESCRIPTION, true );
+        SubcommandData newTrigger = new SubcommandData( com.acmcsuf.crying_counter.Commands.TRIGGER_NEW,
+                com.acmcsuf.crying_counter.Commands.TRIGGER_NEW_DESCRIPTION ).addOption( OptionType.STRING,
+                com.acmcsuf.crying_counter.Commands.TRIGGER_NEW_OPTION_NAME,
+                com.acmcsuf.crying_counter.Commands.TRIGGER_NEW_OPTION_DESCRIPTION, true );
+        SubcommandData delete = new SubcommandData( com.acmcsuf.crying_counter.Commands.TRIGGER_DELETE,
+                com.acmcsuf.crying_counter.Commands.TRIGGER_DELETE_DESCRIPTION ).addOption( OptionType.STRING,
+                com.acmcsuf.crying_counter.Commands.TRIGGER_DELETE_OPTION_NAME,
+                com.acmcsuf.crying_counter.Commands.TRIGGER_DELETE_OPTION_DESCRIPTION, true, true );
 
-        guildCommandData.add(
-                Commands.slash( com.acmcsuf.crying_counter.Commands.TRIGGER,
-                                com.acmcsuf.crying_counter.Commands.TRIGGER_DESCRIPTION )
-                        .addSubcommands( help, reset, list, toggle, newTrigger, delete ) );
+        // View subcommands
+        SubcommandData view = new SubcommandData( com.acmcsuf.crying_counter.Commands.VIEW,
+                com.acmcsuf.crying_counter.Commands.VIEW_DESCRIPTION ).addOption( OptionType.USER,
+                com.acmcsuf.crying_counter.Commands.VIEW_OPTION_NAME,
+                com.acmcsuf.crying_counter.Commands.VIEW_OPTION_DESCRIPTION, true );
+
+        guildCommandData.add( Commands.slash( com.acmcsuf.crying_counter.Commands.TRIGGER,
+                        com.acmcsuf.crying_counter.Commands.TRIGGER_DESCRIPTION )
+                .addSubcommands( help, reset, list, toggle, newTrigger, delete ) );
+
+        guildCommandData.add( Commands.slash( com.acmcsuf.crying_counter.Commands.VIEW,
+                        com.acmcsuf.crying_counter.Commands.VIEW_DESCRIPTION ).addSubcommands( view )
+                .setDefaultPermissions( DefaultMemberPermissions.enabledFor( Permission.ADMINISTRATOR ) ) );
 
         return guildCommandData;
     }
