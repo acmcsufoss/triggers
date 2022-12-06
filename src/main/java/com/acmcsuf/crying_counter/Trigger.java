@@ -58,7 +58,7 @@ public class Trigger extends ListenerAdapter
             // Loads triggers from database
             try
             {
-               Database.syncData( triggerMap, triggerToggle );
+                Database.syncData( triggerMap, triggerToggle );
             }
             catch ( SQLException e )
             {
@@ -108,7 +108,7 @@ public class Trigger extends ListenerAdapter
                 // Takes string result of option ID matching "word"
                 String trigger_phrase = event.getOption( "word" ).getAsString().toLowerCase();
 
-                if ( triggerMap.containsKey( event.getMember().getId() ))
+                if ( triggerMap.containsKey( event.getMember().getId() ) )
                 {
                     if ( inSet( trigger_phrase, triggerMap.get( event.getMember().getId() ) ) )
                     {
@@ -134,7 +134,8 @@ public class Trigger extends ListenerAdapter
 
                 try
                 {
-                    Database.initializeIfNotExistsAndAppend( event.getMember(), trigger_phrase, triggerMap, triggerToggle );
+                    Database.initializeIfNotExistsAndAppend( event.getMember(), trigger_phrase, triggerMap,
+                            triggerToggle );
                 }
                 catch ( SQLException e )
                 {
