@@ -308,7 +308,7 @@ public class Trigger extends ListenerAdapter
                 }
 
                 List<String> list = new ArrayList<>( triggerMap.get( member.getId() ) );
-                EmbedBuilder builder = new EmbedBuilder(triggerList( 0, list.size(), list ));
+                EmbedBuilder builder = new EmbedBuilder( triggerList( 0, list.size(), list ) );
 
                 event.replyEmbeds( builder.build() ).setEphemeral( true ).queue();
             }
@@ -363,9 +363,7 @@ public class Trigger extends ListenerAdapter
                 action.queue( ( null ),
 
                         // Handle failure if the member does not exist (or another issue appeared)
-                        ( error ) -> {
-                            LoggerFactory.getLogger( Trigger.class ).error( error.toString() );
-                        }
+                        ( error ) -> LoggerFactory.getLogger( Trigger.class ).error( error.toString() )
                 );
                 Member member = event.getGuild().getMemberById( id );
 
