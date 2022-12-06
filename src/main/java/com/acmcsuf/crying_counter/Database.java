@@ -103,13 +103,19 @@ public class Database
     }
 
     /**
-     * Deletes phrase from user's trigger list
+     * Deletes trigger phrase
+     *
+     * <p>
+     * Deletes phrase from user's trigger list and syncs with database afterwards
+     * </p>
      *
      * @param member Event member
      * @param phrase Phrase to delete
      * @throws SQLException On failure to interact with database
      */
-    public static void deletePhrase( Member member, String phrase ) throws SQLException
+    public static void deletePhrase( Member member, String phrase,
+                                     HashMap<String, LinkedHashSet<String>> triggerMap,
+                                     HashMap<String, Boolean> triggerToggle ) throws SQLException
     {
         String userID = member.getId();
 
@@ -123,6 +129,19 @@ public class Database
             PreparedStatement preparedStatement = conn.prepareStatement( sql );
             preparedStatement.setString( 1, phrase );
             preparedStatement.executeUpdate();
+
+            try
+            {
+                syncUserData( conn, member, triggerMap, triggerToggle );
+            }
+            catch ( PSQLException e )
+            {
+                log.error( "Error syncing user data", e );
+            }
+        }
+        catch ( PSQLException e )
+        {
+            log.error( "Error deleting phrase from database", e );
         }
     }
 

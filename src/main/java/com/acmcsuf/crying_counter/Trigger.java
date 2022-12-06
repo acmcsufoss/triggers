@@ -220,8 +220,7 @@ public class Trigger extends ListenerAdapter
 
                     try
                     {
-                        Database.deletePhrase( event.getMember(), query );
-                        Database.syncUserData( event.getMember(), triggerMap, triggerToggle );
+                        Database.deletePhrase( event.getMember(), query, triggerMap, triggerToggle );
                     }
                     catch ( SQLException e )
                     {
