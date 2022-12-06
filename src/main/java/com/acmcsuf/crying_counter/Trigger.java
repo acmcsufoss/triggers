@@ -105,15 +105,6 @@ public class Trigger extends ListenerAdapter
             }
             case ( Commands.TRIGGER_NEW ) ->
             {
-                try
-                {
-                    Database.syncData( triggerMap, triggerToggle );
-                }
-                catch ( SQLException e )
-                {
-                    log.error( "Failed to sync database", e );
-                }
-
                 // Takes string result of option ID matching "word"
                 String trigger_phrase = event.getOption( "word" ).getAsString().toLowerCase();
 
@@ -143,8 +134,7 @@ public class Trigger extends ListenerAdapter
 
                 try
                 {
-                    Database.initializeIfNotExistsAndAppend( event.getMember(), trigger_phrase );
-                    Database.syncData( triggerMap, triggerToggle );
+                    Database.initializeIfNotExistsAndAppend( event.getMember(), trigger_phrase, triggerMap, triggerToggle );
                 }
                 catch ( SQLException e )
                 {
@@ -159,15 +149,6 @@ public class Trigger extends ListenerAdapter
             }
             case ( Commands.TRIGGER_RESET ) ->
             {
-                try
-                {
-                    Database.syncData( triggerMap, triggerToggle );
-                }
-                catch ( SQLException e )
-                {
-                    log.error( "Failed to sync database", e );
-                }
-
                 if ( triggerMap.get( event.getMember().getId() ).isEmpty() )
                 {
                     EmbedBuilder builder = new EmbedBuilder()
@@ -189,15 +170,6 @@ public class Trigger extends ListenerAdapter
             }
             case ( Commands.TRIGGER_LIST ) ->
             {
-                try
-                {
-                    Database.syncData( triggerMap, triggerToggle );
-                }
-                catch ( SQLException e )
-                {
-                    log.error( "Failed to sync database", e );
-                }
-
                 // If no triggers are found
                 if ( !triggerMap.containsKey( event.getMember().getId() ) || triggerMap.get( event.getMember().getId() )
                         .isEmpty() || triggerMap.get( event.getMember().getId() ) == null )
@@ -232,15 +204,6 @@ public class Trigger extends ListenerAdapter
             }
             case ( Commands.TRIGGER_DELETE ) ->
             {
-                try
-                {
-                    Database.syncData( triggerMap, triggerToggle );
-                }
-                catch ( SQLException e )
-                {
-                    log.error( "Failed to sync database", e );
-                }
-
                 // Takes string result of option ID matching "word"
                 String query = event.getOption( "word" ).getAsString().toLowerCase();
 
@@ -257,7 +220,7 @@ public class Trigger extends ListenerAdapter
                     try
                     {
                         Database.deletePhrase( event.getMember(), query );
-                        Database.syncData( triggerMap, triggerToggle );
+                        Database.syncUserData( event.getMember(), triggerMap, triggerToggle );
                     }
                     catch ( SQLException e )
                     {
@@ -560,7 +523,7 @@ public class Trigger extends ListenerAdapter
                 try
                 {
                     Database.resetTriggers( event.getMember() );
-                    Database.syncData( triggerMap, triggerToggle );
+                    Database.syncUserData( event.getMember(), triggerMap, triggerToggle );
                 }
                 catch ( SQLException e )
                 {

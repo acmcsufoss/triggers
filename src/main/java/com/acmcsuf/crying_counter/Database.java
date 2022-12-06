@@ -58,38 +58,22 @@ public class Database
     }
 
     /**
-     * Appends new phrase to user's trigger ist
+     * Appends trigger phrase
      *
-     * @param member Event member
-     * @param phrase Phrase to add
+     * <p>
+     * Appends new phrase to user's trigger list if it is not already in the list and syncs with database afterwards
+     * </p>
+     *
+     * @param member        Event member
+     * @param phrase        Phrase to add
+     * @param connection    Connection object
+     * @param triggerMap    Map of user IDs to trigger phrases
+     * @param triggerToggle Map of user IDs to trigger toggle
      * @throws SQLException On failure to interact with database
      */
-    public static void appendPhrase( Member member, String phrase ) throws SQLException
-    {
-        String userID = member.getId();
-
-        String sql = """
-                UPDATE triggers
-                SET phrase = array_append(phrase, ?::text)
-                WHERE user_id =""" + userID;
-
-        try ( Connection conn = getConnect() )
-        {
-            PreparedStatement preparedStatement = conn.prepareStatement( sql );
-            preparedStatement.setString( 1, phrase );
-            preparedStatement.executeUpdate();
-        }
-    }
-
-    /**
-     * Appends new phrase to user's trigger ist
-     *
-     * @param member Event member
-     * @param phrase Phrase to add
-     * @param connection Connection object
-     * @throws SQLException On failure to interact with database
-     */
-    public static void appendPhrase( Member member, String phrase, Connection connection ) throws SQLException
+    public static void appendPhrase( Member member, String phrase, Connection connection,
+                                     HashMap<String, LinkedHashSet<String>> triggerMap,
+                                     HashMap<String, Boolean> triggerToggle ) throws SQLException
     {
         String userID = member.getId();
 
@@ -107,6 +91,14 @@ public class Database
         catch ( PSQLException e )
         {
             log.error( "Error appending phrase to database", e );
+        }
+        try
+        {
+            syncUserData( connection, member, triggerMap, triggerToggle );
+        }
+        catch ( PSQLException e )
+        {
+            log.error( "Error syncing user data", e );
         }
     }
 
@@ -184,16 +176,19 @@ public class Database
 
     /**
      * Initializes user and appends one phrase to their trigger list
+     *
      * @param member Event member
      * @param phrase Phrase to add
      * @throws SQLException On failure to interact with database
      */
-    public static void initializeIfNotExistsAndAppend( Member member, String phrase ) throws SQLException
+    public static void initializeIfNotExistsAndAppend( Member member, String phrase,
+                                                       HashMap<String, LinkedHashSet<String>> triggerMap,
+                                                       HashMap<String, Boolean> triggerToggle  ) throws SQLException
     {
         Connection connection = getConnect();
 
         initializeIfNotExists( connection, member );
-        appendPhrase( member, phrase, connection );
+        appendPhrase( member, phrase, connection, triggerMap, triggerToggle );
         connection.close();
     }
 
@@ -240,6 +235,7 @@ public class Database
 
     /**
      * Initializes user if not found
+     *
      * @param member Event member
      * @throws SQLException On failure to interact with database
      */
@@ -264,8 +260,9 @@ public class Database
 
     /**
      * Initializes user if not found
+     *
      * @param connection Connection object
-     * @param member Event member
+     * @param member     Event member
      * @throws SQLException On failure to interact with database
      */
     public static void initializeIfNotExists( Connection connection, Member member ) throws SQLException
@@ -304,13 +301,82 @@ public class Database
             while ( set.next() )
             {
                 String userID = set.getString( "user_id" );
-                boolean toggle = set.getBoolean( "toggle" );
-                String[] phrases = (String[]) set.getArray( "phrase" ).getArray();
-
-                LinkedHashSet<String> set1 = new LinkedHashSet<>( Arrays.asList( phrases ) );
-                triggerMap.put( userID, set1 );
-                triggerToggle.put( userID, toggle );
+                insertData( triggerMap, triggerToggle, userID, set );
             }
         }
+    }
+
+    /**
+     * Sync member's in-memory trigger with database
+     *
+     * @param member        Event member
+     * @param triggerMap    In-memory trigger map
+     * @param triggerToggle In-memory trigger toggle map
+     * @throws SQLException On failure to interact with database
+     */
+    public static void syncUserData( Member member, HashMap<String, LinkedHashSet<String>> triggerMap,
+                                     HashMap<String, Boolean> triggerToggle ) throws SQLException
+    {
+        String userID = member.getId();
+        String sql = String.format( """
+                SELECT * FROM triggers
+                WHERE user_id = %s;""", userID );
+
+        try ( Connection conn = getConnect() )
+        {
+            ResultSet set = conn.createStatement().executeQuery( sql );
+
+            if ( set.next() )
+            {
+                insertData( triggerMap, triggerToggle, userID, set );
+            }
+        }
+    }
+
+    /**
+     * Sync member's in-memory trigger with database
+     *
+     * @param connection    Connection object
+     * @param member        Event member
+     * @param triggerMap    In-memory trigger map
+     * @param triggerToggle In-memory trigger toggle map
+     * @throws SQLException On failure to interact with database
+     */
+    public static void syncUserData( Connection connection, Member member,
+                                     HashMap<String, LinkedHashSet<String>> triggerMap,
+                                     HashMap<String, Boolean> triggerToggle ) throws SQLException
+    {
+        String userID = member.getId();
+        String sql = String.format( """
+                SELECT * FROM triggers
+                WHERE user_id = %s;""", userID );
+
+        ResultSet set = connection.createStatement().executeQuery( sql );
+
+        if ( set.next() )
+        {
+            insertData( triggerMap, triggerToggle, userID, set );
+        }
+    }
+
+    /**
+     * Inserts data into in-memory maps
+     *
+     * @param triggerMap    In-memory trigger map
+     * @param triggerToggle In-memory trigger toggle map
+     * @param userID        User ID
+     * @param set           Result set
+     * @throws SQLException On failure to interact with database
+     */
+    private static void insertData( HashMap<String, LinkedHashSet<String>> triggerMap,
+                                    HashMap<String, Boolean> triggerToggle, String userID, ResultSet set )
+            throws SQLException
+    {
+        boolean toggle = set.getBoolean( "toggle" );
+        String[] phrases = (String[]) set.getArray( "phrase" ).getArray();
+
+        LinkedHashSet<String> set1 = new LinkedHashSet<>( Arrays.asList( phrases ) );
+        triggerMap.put( userID, set1 );
+        triggerToggle.put( userID, toggle );
     }
 }
