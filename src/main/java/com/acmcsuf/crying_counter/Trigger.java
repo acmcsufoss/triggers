@@ -140,6 +140,13 @@ public class Trigger extends ListenerAdapter
                 catch ( SQLException e )
                 {
                     log.error( "Failed to append trigger", e );
+                    EmbedBuilder builder = new EmbedBuilder()
+                            .setColor( Color.red )
+                            .setTitle( "Error" )
+                            .setDescription( "An error occurred while adding your trigger. Please try again later." );
+
+                    event.replyEmbeds( builder.build() ).setEphemeral( true ).queue();
+                    return;
                 }
 
                 EmbedBuilder builder = new EmbedBuilder()
@@ -225,6 +232,13 @@ public class Trigger extends ListenerAdapter
                     catch ( SQLException e )
                     {
                         log.error( "Failed to delete trigger or sync database", e );
+                        EmbedBuilder error = new EmbedBuilder()
+                                .setColor( Color.red )
+                                .setTitle( "Error" )
+                                .setDescription( "An error occurred while deleting your trigger. Please try again later." );
+
+                        event.replyEmbeds( error.build() ).setEphemeral( true ).queue();
+                        return;
                     }
 
                     event.replyEmbeds( builder.build() ).setEphemeral( true ).queue();
@@ -289,6 +303,13 @@ public class Trigger extends ListenerAdapter
                 catch ( SQLException e )
                 {
                     log.error( "Failed to check for stored user", e );
+                    EmbedBuilder error = new EmbedBuilder()
+                            .setColor( Color.red )
+                            .setTitle( "Error" )
+                            .setDescription( "A database error has occurred. Please try again later." );
+
+                    event.replyEmbeds( error.build() ).setEphemeral( true ).queue();
+                    return;
                 }
             }
             case ( Commands.VIEW ) ->
@@ -535,6 +556,13 @@ public class Trigger extends ListenerAdapter
                 catch ( SQLException e )
                 {
                     log.error( "Failed to reset user's triggers", e );
+                    EmbedBuilder error = new EmbedBuilder()
+                            .setColor( Color.red )
+                            .setTitle( "Error" )
+                            .setDescription( "An error occurred while resetting your triggers. Please try again later." );
+
+                    event.getHook().editOriginalEmbeds( error.build() ).queue();
+                    return;
                 }
 
                 event.getHook().editOriginalEmbeds( builder.build() ).setActionRow(
