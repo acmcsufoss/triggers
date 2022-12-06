@@ -151,7 +151,9 @@ public class Database
      * @param member Event member
      * @throws SQLException On failure to interact with database
      */
-    public static void resetTriggers( Member member ) throws SQLException
+    public static void resetTriggers( Member member,
+                                      HashMap<String, LinkedHashSet<String>> triggerMap,
+                                      HashMap<String, Boolean> triggerToggle ) throws SQLException
     {
         String userID = member.getId();
 
@@ -165,6 +167,19 @@ public class Database
             PreparedStatement preparedStatement = conn.prepareStatement( sql );
             preparedStatement.setLong( 1, Long.parseLong( userID ) );
             preparedStatement.executeUpdate();
+
+            try
+            {
+                syncUserData( conn, member, triggerMap, triggerToggle );
+            }
+            catch ( PSQLException e )
+            {
+                log.error( "Error syncing user data", e );
+            }
+        }
+        catch ( PSQLException e )
+        {
+            log.error( "Error resetting triggers", e );
         }
     }
 

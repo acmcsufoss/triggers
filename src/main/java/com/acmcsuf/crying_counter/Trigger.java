@@ -530,8 +530,7 @@ public class Trigger extends ListenerAdapter
 
                 try
                 {
-                    Database.resetTriggers( event.getMember() );
-                    Database.syncUserData( event.getMember(), triggerMap, triggerToggle );
+                    Database.resetTriggers( event.getMember(), triggerMap, triggerToggle );
                 }
                 catch ( SQLException e )
                 {
