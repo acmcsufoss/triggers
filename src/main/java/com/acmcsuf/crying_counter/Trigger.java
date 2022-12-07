@@ -5,6 +5,7 @@ import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.events.GenericEvent;
+import net.dv8tion.jda.api.events.guild.GuildReadyEvent;
 import net.dv8tion.jda.api.events.interaction.command.CommandAutoCompleteInteractionEvent;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent;
@@ -15,9 +16,11 @@ import net.dv8tion.jda.api.interactions.components.buttons.Button;
 import net.dv8tion.jda.api.requests.RestAction;
 import net.dv8tion.jda.api.utils.TimeFormat;
 import org.jetbrains.annotations.NotNull;
+import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.awt.*;
+import java.sql.SQLException;
 import java.util.*;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -43,6 +46,26 @@ public class Trigger extends ListenerAdapter
     int max = 5;
 
     final int MAX_TRIGGERS = 50;
+
+    // SLF4J Logger
+    final Logger log = LoggerFactory.getLogger( Trigger.class );
+
+    @Override
+    public void onGuildReady( GuildReadyEvent event )
+    {
+        if ( event.getGuild().getId().equals( System.getProperty( "GUILD_ID" ) ) )
+        {
+            // Loads triggers from database
+            try
+            {
+                Database.syncData( triggerMap, triggerToggle );
+            }
+            catch ( SQLException e )
+            {
+                log.error( "Failed to sync database", e );
+            }
+        }
+    }
 
     @Override
     public void onSlashCommandInteraction( @NotNull SlashCommandInteractionEvent event )
@@ -82,52 +105,68 @@ public class Trigger extends ListenerAdapter
             }
             case ( Commands.TRIGGER_NEW ) ->
             {
-
                 // Takes string result of option ID matching "word"
                 String triggerPhrase = event.getOption( "word" ).getAsString().toLowerCase();
 
-                // If input is a duplicate
-                if ( triggerMap.get( event.getMember().getId() ) != null && inSet( triggerPhrase,
-                        triggerMap.get( event.getMember().getId() ) ) )
+                if ( triggerMap.containsKey( event.getMember().getId() ) )
                 {
-                    EmbedBuilder builder = new EmbedBuilder()
-                            .setColor( Color.red )
-                            .setTitle( "Error" )
-                            .setDescription( "Duplicate trigger!" );
-
-                    event.replyEmbeds( builder.build() ).setEphemeral( true ).queue();
-                }
-                else
-                {
-
-                    // If max size is reached
-                    if ( triggerMap.get( event.getMember().getId() ) != null
-                            && triggerMap.get( event.getMember().getId() ).size() >= MAX_TRIGGERS )
+                    if ( inSet( trigger_phrase, triggerMap.get( event.getMember().getId() ) ) )
                     {
                         EmbedBuilder builder = new EmbedBuilder()
                                 .setColor( Color.red )
                                 .setTitle( "Error" )
-                                .setDescription( "Max size reached!" );
+                                .setDescription( "Duplicate trigger!" );
 
                         event.replyEmbeds( builder.build() ).setEphemeral( true ).queue();
+                        return;
                     }
-                    else
+                    if ( triggerMap.get( event.getMember().getId() ).size() >= MAX_TRIGGERS )
                     {
-
-                        // Store trigger
-                        triggerMap.computeIfAbsent( event.getMember().getId(), k -> new LinkedHashSet<>() )
-                                .add( triggerPhrase );
-
                         EmbedBuilder builder = new EmbedBuilder()
-                                .setColor( Color.green )
-                                .setDescription( "Trigger added: \"" + triggerPhrase + "\"" );
+                                .setColor( Color.red )
+                                .setTitle( "Error" )
+                                .setDescription( "Max triggers reached!" );
 
                         event.replyEmbeds( builder.build() ).setEphemeral( true ).queue();
+                        return;
                     }
                 }
+
+                try
+                {
+                    Database.initializeIfNotExistsAndAppend( event.getMember(), trigger_phrase, triggerMap,
+                            triggerToggle );
+                }
+                catch ( SQLException e )
+                {
+                    log.error( "Failed to append trigger", e );
+                    EmbedBuilder builder = new EmbedBuilder()
+                            .setColor( Color.red )
+                            .setTitle( "Error" )
+                            .setDescription( "An error occurred while adding your trigger. Please try again later." );
+
+                    event.replyEmbeds( builder.build() ).setEphemeral( true ).queue();
+                    return;
+                }
+
+                EmbedBuilder builder = new EmbedBuilder()
+                        .setColor( Color.green )
+                        .setDescription( "Trigger added: \"" + trigger_phrase + "\"" );
+
+                event.replyEmbeds( builder.build() ).setEphemeral( true ).queue();
             }
             case ( Commands.TRIGGER_RESET ) ->
             {
+                if ( triggerMap.get( event.getMember().getId() ).isEmpty() )
+                {
+                    EmbedBuilder builder = new EmbedBuilder()
+                            .setColor( Color.red )
+                            .setTitle( "Error" )
+                            .setDescription( "No triggers to remove!" );
+
+                    event.replyEmbeds( builder.build() ).setEphemeral( true ).queue();
+                    return;
+                }
 
                 EmbedBuilder builder = new EmbedBuilder()
                         .setColor( Color.red )
@@ -139,7 +178,6 @@ public class Trigger extends ListenerAdapter
             }
             case ( Commands.TRIGGER_LIST ) ->
             {
-
                 // If no triggers are found
                 if ( !triggerMap.containsKey( event.getMember().getId() ) || triggerMap.get( event.getMember().getId() )
                         .isEmpty() || triggerMap.get( event.getMember().getId() ) == null )
@@ -174,7 +212,6 @@ public class Trigger extends ListenerAdapter
             }
             case ( Commands.TRIGGER_DELETE ) ->
             {
-
                 // Takes string result of option ID matching "word"
                 String query = event.getOption( "word" ).getAsString().toLowerCase();
 
@@ -187,6 +224,22 @@ public class Trigger extends ListenerAdapter
                     EmbedBuilder builder = new EmbedBuilder()
                             .setColor( Color.green )
                             .setDescription( "Trigger deleted: \"" + query + "\"" );
+
+                    try
+                    {
+                        Database.deletePhrase( event.getMember(), query, triggerMap, triggerToggle );
+                    }
+                    catch ( SQLException e )
+                    {
+                        log.error( "Failed to delete trigger or sync database", e );
+                        EmbedBuilder error = new EmbedBuilder()
+                                .setColor( Color.red )
+                                .setTitle( "Error" )
+                                .setDescription( "An error occurred while deleting your trigger. Please try again later." );
+
+                        event.replyEmbeds( error.build() ).setEphemeral( true ).queue();
+                        return;
+                    }
 
                     event.replyEmbeds( builder.build() ).setEphemeral( true ).queue();
                 }
@@ -219,22 +272,58 @@ public class Trigger extends ListenerAdapter
             }
             case ( Commands.TRIGGER_TOGGLE ) ->
             {
-
-                boolean toggle = event.getOption( "switch" ).getAsBoolean();
-                triggerToggle.put( event.getMember().getId(), toggle );
-
-                EmbedBuilder builder = new EmbedBuilder();
-
-                if ( toggle )
+                try
                 {
-                    builder.setTitle( "Trigger features are now enabled" );
-                    builder.setColor( Color.green );
+                    Database.initializeIfNotExists( event.getMember() );
+
+                    boolean toggle = event.getOption( "switch" ).getAsBoolean();
+                    Database.toggleTrigger( event.getMember(), toggle );
+                    triggerToggle.put( event.getMember().getId(), toggle );
+
+                    EmbedBuilder builder = new EmbedBuilder();
+
+                    if ( toggle )
+                    {
+                        builder.setTitle( "Trigger features are now enabled" );
+                        builder.setColor( Color.green );
+                    }
+                    else
+                    {
+                        builder.setTitle( "Trigger features are now disabled" );
+                        builder.setColor( Color.red );
+                    }
+
+                    event.replyEmbeds( builder.build() ).setEphemeral( true ).queue();
                 }
-                else
+                catch ( SQLException e )
                 {
-                    builder.setTitle( "Trigger features are now disabled" );
-                    builder.setColor( Color.red );
+                    log.error( "Failed to check for stored user", e );
+                    EmbedBuilder error = new EmbedBuilder()
+                            .setColor( Color.red )
+                            .setTitle( "Error" )
+                            .setDescription( "A database error has occurred. Please try again later." );
+
+                    event.replyEmbeds( error.build() ).setEphemeral( true ).queue();
+                    return;
                 }
+            }
+            case ( Commands.VIEW ) ->
+            {
+                Member member = event.getOption( "user" ).getAsMember();
+
+                // If no triggers are found
+                if ( !triggerMap.containsKey( member.getId() ) || triggerMap.get( member.getId() )
+                        .isEmpty() || triggerMap.get( member.getId() ) == null )
+                {
+                    EmbedBuilder builder = new EmbedBuilder()
+                            .setColor( Color.red )
+                            .setTitle( "No triggers found" );
+
+                    event.replyEmbeds( builder.build() ).setEphemeral( true ).queue();
+                }
+
+                List<String> list = new ArrayList<>( triggerMap.get( member.getId() ) );
+                EmbedBuilder builder = new EmbedBuilder( triggerList( 0, list.size(), list ) );
 
                 event.replyEmbeds( builder.build() ).setEphemeral( true ).queue();
             }
@@ -289,9 +378,7 @@ public class Trigger extends ListenerAdapter
                 action.queue( ( null ),
 
                         // Handle failure if the member does not exist (or another issue appeared)
-                        ( error ) -> {
-                            LoggerFactory.getLogger( Trigger.class ).error( error.toString() );
-                        }
+                        ( error ) -> LoggerFactory.getLogger( Trigger.class ).error( error.toString() )
                 );
                 Member member = event.getGuild().getMemberById( id );
 
@@ -367,7 +454,6 @@ public class Trigger extends ListenerAdapter
 
         switch ( event.getComponentId() )
         {
-
             // List Command
             case "previous" ->
             {
@@ -452,21 +538,26 @@ public class Trigger extends ListenerAdapter
             {
 
                 event.deferEdit().queue();
-                EmbedBuilder builder = new EmbedBuilder();
+                EmbedBuilder builder = new EmbedBuilder()
+                        .setColor( Color.green )
+                        .setTitle( "Triggers reset" );
 
-                // Trigger found for member
-                if ( triggerMap.containsKey( event.getMember().getId() ) )
+                triggerMap.get( event.getMember().getId() ).clear();
+
+                try
                 {
-                    triggerMap.get( event.getMember().getId() ).clear();
-
-                    builder.setColor( Color.green );
-                    builder.setTitle( "Triggers reset" );
+                    Database.resetTriggers( event.getMember(), triggerMap, triggerToggle );
                 }
-                // Member has no trigger
-                else
+                catch ( SQLException e )
                 {
-                    builder.setColor( Color.red );
-                    builder.setTitle( "No triggers found" );
+                    log.error( "Failed to reset user's triggers", e );
+                    EmbedBuilder error = new EmbedBuilder()
+                            .setColor( Color.red )
+                            .setTitle( "Error" )
+                            .setDescription( "An error occurred while resetting your triggers. Please try again later." );
+
+                    event.getHook().editOriginalEmbeds( error.build() ).queue();
+                    return;
                 }
 
                 event.getHook().editOriginalEmbeds( builder.build() ).setActionRow(
