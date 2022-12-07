@@ -106,7 +106,7 @@ public class Trigger extends ListenerAdapter
             case ( Commands.TRIGGER_NEW ) ->
             {
                 // Takes string result of option ID matching "word"
-                String trigger_phrase = event.getOption( "word" ).getAsString().toLowerCase();
+                String triggerPhrase = event.getOption( "word" ).getAsString().toLowerCase();
 
                 if ( triggerMap.containsKey( event.getMember().getId() ) )
                 {
@@ -257,21 +257,16 @@ public class Trigger extends ListenerAdapter
                         }
                     }
 
-                    EmbedBuilder builder;
+                    EmbedBuilder builder = new EmbedBuilder()
+                            .setColor( Color.red )
+                            .setTitle( "Error" )
+                            .setDescription( "Trigger not found!" );
+
                     if ( similarPhrase != null )
                     {
-                        builder = new EmbedBuilder()
-                                .setColor( Color.red )
-                                .setTitle( "Error" )
-                                .setDescription( "Trigger not found! Did you mean \"" + similarPhrase + "\"?" );
+                        builder.setDescription( "Trigger not found! Did you mean \"" + similarPhrase + "\"?" );
                     }
-                    else
-                    {
-                        builder = new EmbedBuilder()
-                                .setColor( Color.red )
-                                .setTitle( "Error" )
-                                .setDescription( "Trigger not found!" );
-                    }
+
                     event.replyEmbeds( builder.build() ).setEphemeral( true ).queue();
                 }
             }
@@ -368,14 +363,14 @@ public class Trigger extends ListenerAdapter
             return;
         }
 
-        String message_content = event.getMessage().getContentRaw().toLowerCase();
+        String messageContent = event.getMessage().getContentRaw().toLowerCase();
 
         // Loop through HashMap keySet
         for ( String id : triggerMap.keySet() )
         {
 
-            // If members value contains message_content
-            if ( inSet( message_content, triggerMap.get( id ) ) )
+            // If members value contains messageContent
+            if ( inSet( messageContent, triggerMap.get( id ) ) )
             {
 
                 // Retrieve triggered member
@@ -418,18 +413,18 @@ public class Trigger extends ListenerAdapter
                 // Add messages to list and reverse messages in order of least -> most recent
                 for ( Message message : history.getRetrievedHistory() )
                 {
-                    String member_name = message.getAuthor().getName() + "#" + message.getAuthor().getDiscriminator();
+                    String memberName = message.getAuthor().getName() + "#" + message.getAuthor().getDiscriminator();
                     messages.add(
                             "**[" + TimeFormat.TIME_LONG.atTimestamp( message.getTimeCreated().toEpochSecond() * 1000 )
-                                    + "] " + member_name + ":** " + message.getContentRaw() + "\n" );
+                                    + "] " + memberName + ":** " + message.getContentRaw() + "\n" );
                 }
                 Collections.reverse( messages );
 
                 // Add trigger message
-                String trigger_member = event.getMessage().getAuthor().getName() + "#" + event.getMessage().getAuthor()
+                String triggerMember = event.getMessage().getAuthor().getName() + "#" + event.getMessage().getAuthor()
                         .getDiscriminator();
                 builder.addField( "",
-                        "**[" + TimeFormat.TIME_LONG.now() + "] " + trigger_member + ":** " + event.getMessage()
+                        "**[" + TimeFormat.TIME_LONG.now() + "] " + triggerMember + ":** " + event.getMessage()
                                 .getContentRaw(), false );
 
                 // Finish embed
@@ -606,7 +601,11 @@ public class Trigger extends ListenerAdapter
         }
         else if ( event instanceof MessageReceivedEvent messageReceivedEvent )
         {
-            return messageReceivedEvent.getMember() != null && messageReceivedEvent.isFromGuild()
+            String guild_id = System.getProperty( "GUILD_ID" );
+
+            return messageReceivedEvent.getGuild().getId().equals( guild_id )
+                    && messageReceivedEvent.getMember() != null
+                    && messageReceivedEvent.isFromGuild()
                     && !messageReceivedEvent.getMember().getUser().isBot();
         }
         else if ( event instanceof ButtonInteractionEvent buttonInteractionEvent )
