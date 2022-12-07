@@ -110,7 +110,7 @@ public class Trigger extends ListenerAdapter
 
                 if ( triggerMap.containsKey( event.getMember().getId() ) )
                 {
-                    if ( inSet( trigger_phrase, triggerMap.get( event.getMember().getId() ) ) )
+                    if ( inSet( triggerPhrase, triggerMap.get( event.getMember().getId() ) ) )
                     {
                         EmbedBuilder builder = new EmbedBuilder()
                                 .setColor( Color.red )
@@ -134,7 +134,7 @@ public class Trigger extends ListenerAdapter
 
                 try
                 {
-                    Database.initializeIfNotExistsAndAppend( event.getMember(), trigger_phrase, triggerMap,
+                    Database.initializeIfNotExistsAndAppend( event.getMember(), triggerPhrase, triggerMap,
                             triggerToggle );
                 }
                 catch ( SQLException e )
@@ -151,7 +151,7 @@ public class Trigger extends ListenerAdapter
 
                 EmbedBuilder builder = new EmbedBuilder()
                         .setColor( Color.green )
-                        .setDescription( "Trigger added: \"" + trigger_phrase + "\"" );
+                        .setDescription( "Trigger added: \"" + triggerPhrase + "\"" );
 
                 event.replyEmbeds( builder.build() ).setEphemeral( true ).queue();
             }
