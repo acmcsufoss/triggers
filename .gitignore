@@ -13,4 +13,4 @@ gradlew.bat
 gradle-wrapper.jar
 
 # Manifest MF
-/src/resources/
+*.MF
