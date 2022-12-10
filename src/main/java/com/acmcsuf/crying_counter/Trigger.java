@@ -71,7 +71,7 @@ public class Trigger extends ListenerAdapter
     public void onSlashCommandInteraction( @NotNull SlashCommandInteractionEvent event )
     {
 
-        if ( !event.getName().equals( Commands.TRIGGER ) || !isValidInteraction( event ) )
+        if (!isValidInteraction( event ) )
         {
             return;
         }
