@@ -1,11 +1,8 @@
 package com.acmcsuf.crying_counter;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Properties;
 
 import io.github.cdimascio.dotenv.Dotenv;
 import net.dv8tion.jda.api.JDA;
@@ -20,7 +17,7 @@ import org.slf4j.LoggerFactory;
 public class Bot
 {
 
-    public static void main( String[] args ) throws InterruptedException, SQLException
+    public static void main( String[] args ) throws InterruptedException
     {
 
         // Loads .env file and stores all values into system properties
@@ -67,14 +64,11 @@ public class Bot
 
         try
         {
-            Properties props = new Properties();
-            props.setProperty( "user", System.getProperty( "DATABASE_USER" ) );
-            props.setProperty( "password", System.getProperty( "DATABASE_PASSWORD" ) );
-
-            Connection db = DriverManager.getConnection( System.getProperty( "DATABASE_URL" ), props );
+            Database.initializeDatabase();
         }
         catch ( SQLException e )
         {
+            log.error( "Failed to initialize database" );
             e.printStackTrace();
         }
     }

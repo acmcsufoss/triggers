@@ -1,6 +1,6 @@
 # Crying Counter
 
-> A JDA bot to reply to specific phrases (e.g. "im crying")
+> A JDA bot to reply to user-defined phrases (e.g. "im crying")
 
 ## Table of Contents
 
