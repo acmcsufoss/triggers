@@ -54,7 +54,7 @@ public class Trigger extends ListenerAdapter
     @Override
     public void onGuildReady( GuildReadyEvent event )
     {
-        if ( event.getGuild().getId().equals( System.getProperty( "GUILD_ID" ) ) )
+        if ( event.getGuild().getId().equals( System.getenv( "GUILD_ID" ) ) )
         {
             // Loads triggers from database
             try
@@ -636,7 +636,7 @@ public class Trigger extends ListenerAdapter
         }
         else if ( event instanceof MessageReceivedEvent messageReceivedEvent )
         {
-            String guild_id = System.getProperty( "GUILD_ID" );
+            String guild_id = System.getenv( "GUILD_ID" );
 
             return messageReceivedEvent.getGuild().getId().equals( guild_id )
                     && messageReceivedEvent.getMember() != null

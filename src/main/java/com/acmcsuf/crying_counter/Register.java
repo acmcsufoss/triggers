@@ -52,7 +52,7 @@ public class Register extends ListenerAdapter
         }
 
         // Registers guild from env file
-        if ( guild.getId().equals( System.getProperty( "GUILD_ID" ) ) )
+        if ( guild.getId().equals( System.getenv( "GUILD_ID" ) ) )
         {
             guild.updateCommands().addCommands( guildCommands() ).queue( ( null ),
                     ( ( error ) -> LoggerFactory.getLogger( Bot.class )
