@@ -1,5 +1,7 @@
 # Crying Counter
 
+[![docker](https://img.shields.io/badge/docker-%232496ED.svg?&style=for-the-badge&logo=docker&logoColor=white)](https://hub.docker.com/repository/docker/jjoeldaniel/acm_trigger/general)
+
 > A JDA bot to reply to user-defined phrases (e.g. "im crying")
 
 ## Table of Contents
