@@ -1,9 +1,17 @@
 plugins {
     id 'java'
+    id 'com.github.johnrengelman.shadow' version '7.1.1'
+    id 'application'
 }
 
 group 'com.acmcsuf'
 version '1.0-SNAPSHOT'
+
+mainClassName = 'com.acmcsuf.crying_counter.Bot'
+
+shadowJar {
+    destinationDirectory.set(file("."))
+}
 
 repositories {
     mavenCentral()
