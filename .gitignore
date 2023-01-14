@@ -3,6 +3,12 @@
 out/
 *.env
 
+# Java
+*.jar
+
+# Visual Studio Code
+.vscode
+
 ### Gradle ###
 .gradle
 build/
