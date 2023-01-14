@@ -7,7 +7,7 @@
 - [Commands](#commands)
 - [Bot Setup](#bot-setup)
   - [IDE Setup](#ide-setup)
-  - [Building](#building)
+  - [Running](#running)
 - [Contributing](#contributing)
 - [FAQ](#faq)
 - [References](#references)
@@ -38,7 +38,7 @@
 4. Download [Maven Code Style](https://maven.apache.org/developers/conventions/code.html#intellij-idea)
 5. Restart IDE
 
-### Building
+### Running
 
 1. Build the project
 
