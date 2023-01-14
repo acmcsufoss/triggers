@@ -367,6 +367,7 @@ public class Trigger extends ListenerAdapter
         String messageContent = event.getMessage().getContentRaw().toLowerCase();
 
         // Loop through HashMap keySet
+        userLoop:
         for ( String id : triggerMap.keySet() )
         {
 
@@ -427,7 +428,7 @@ public class Trigger extends ListenerAdapter
 
                             if ( difference < MINIMUM_SECONDS_BETWEEN_MESSAGES )
                             {
-                                return;
+                                continue userLoop;
                             }
                         }
                     }
