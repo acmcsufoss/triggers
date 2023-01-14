@@ -18,9 +18,9 @@ public class Database
 {
 
     // Constants
-    private static final String URL = System.getProperty( "DATABASE_URL" );
-    private static final String USER = System.getProperty( "DATABASE_USER" );
-    private static final String PASSWORD = System.getProperty( "DATABASE_PASSWORD" );
+    private static final String URL = System.getenv( "DATABASE_URL" );
+    private static final String USER = System.getenv( "DATABASE_USER" );
+    private static final String PASSWORD = System.getenv( "DATABASE_PASSWORD" );
 
     // SLF4J Logger
     private static final Logger log = LoggerFactory.getLogger( Database.class );

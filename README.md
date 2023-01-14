@@ -6,8 +6,8 @@
 
 - [Commands](#commands)
 - [Bot Setup](#bot-setup)
-   - [IDE Setup](#ide-setup)
-   - [Running](#running)
+  - [IDE Setup](#ide-setup)
+  - [Running](#running)
 - [Contributing](#contributing)
 - [FAQ](#faq)
 - [References](#references)
@@ -40,18 +40,25 @@
 
 ### Running
 
-1. Create a `resources` directory in `src/main`
-2. Go to File → Project Structure → Artifacts
-3. Create a new JAR from modules with dependencies
-   - Select `Bot.java` as the main class
-   - Select the newly created `resources` as the directory for `META-INF/MANIFEST.MF`
-4. Build artifacts
-5. Copy your `.env` file into `out/artifacts/crying_counter_jar`
-6. Start your new bot
-   - Open terminal, change directories to `out/artifacts/crying_counter_jar`
-   - Run the .jar with `java -jar crying-counter.jar`
-7. To invite your bot,
-   use `https://discord.com/api/oauth2/authorize?client_id=$DISCORD_CLIENT_ID&permissions=66560&scope=bot%20applications.commands`
+1. Build the project
+
+   ```gradle
+   gradle build
+   ```
+
+2. Run the project
+
+   ```terminal
+   java -jar .\crying-counter-1.0-SNAPSHOT-all.jar
+   ```
+
+3. To invite your bot,
+   use the following link:
+
+   ```terminal
+   https://discord.com/api/oauth2/authorize?client_id=$DISCORD_CLIENT_ID&permissions=66560&scope=bot%20applications.commands
+   ```
+
    and replace `$DISCORD_CLIENT_ID` with the bot ID
 
 ## Contributing
