@@ -1,4 +1,4 @@
-package com.acmcsuf.crying_counter;
+package com.acmcsuf.triggers;
 
 import java.sql.Connection;
 import java.sql.DriverManager;

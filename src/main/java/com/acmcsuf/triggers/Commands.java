@@ -1,4 +1,4 @@
-package com.acmcsuf.crying_counter;
+package com.acmcsuf.triggers;
 
 public final class Commands
 {
