@@ -7,7 +7,7 @@ plugins {
 group 'com.acmcsuf'
 version '1.0-SNAPSHOT'
 
-mainClassName = 'com.acmcsuf.crying_counter.Bot'
+mainClassName = 'com.acmcsuf.triggers.Bot'
 
 shadowJar {
     destinationDirectory.set(file("."))

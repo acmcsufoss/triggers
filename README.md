@@ -1,4 +1,4 @@
-# Crying Counter
+# Triggers
 
 [![docker](https://img.shields.io/badge/docker-%232496ED.svg?&style=for-the-badge&logo=docker&logoColor=white)](https://hub.docker.com/repository/docker/jjoeldaniel/acm_trigger/general)
 
@@ -51,7 +51,7 @@
 2. Run the project
 
    ```terminal
-   java -jar .\crying-counter-1.0-SNAPSHOT-all.jar
+   java -jar .\triggers-1.0-SNAPSHOT-all.jar
    ```
 
 3. To invite your bot,
