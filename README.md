@@ -51,7 +51,7 @@
 2. Run the project
 
    ```terminal
-   java -jar .\triggers-1.0-SNAPSHOT-all.jar
+   java -jar triggers.jar
    ```
 
 3. To invite your bot,
