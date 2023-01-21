@@ -11,6 +11,7 @@ version '1.0-SNAPSHOT'
 mainClassName = 'com.acmcsuf.triggers.Bot'
 
 shadowJar {
+    archiveFileName.set("${project.name}.jar")
     destinationDirectory.set(file("."))
 }
 

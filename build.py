@@ -1,7 +1,7 @@
 import os
 
 try:
-    os.remove('triggers-1.0-SNAPSHOT-all.jar')
+    os.remove('triggers.jar')
 except OSError:
     pass
 
