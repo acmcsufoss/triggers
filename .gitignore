@@ -5,7 +5,6 @@ out/
 
 # Java
 *.jar
-!gradle-wrapper.jar
 
 # Visual Studio Code
 .vscode
@@ -13,6 +12,7 @@ out/
 ### Gradle ###
 .gradle
 build/
+!gradle-wrapper.jar
 
 # Manifest MF
 *.MF
