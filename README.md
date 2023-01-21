@@ -45,7 +45,7 @@
 1. Build the project
 
    ```gradle
-   gradle build
+   python3 build.py
    ```
 
 2. Run the project
