@@ -6,4 +6,4 @@ except OSError:
     pass
 
 os.system('gradle build')
-os.system('gradle docker')
+os.system('docker build -t triggers .')
