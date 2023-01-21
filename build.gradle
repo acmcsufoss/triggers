@@ -2,6 +2,7 @@ plugins {
     id 'java'
     id 'com.github.johnrengelman.shadow' version '7.1.1'
     id 'application'
+    id 'com.palantir.docker' version '0.34.0'
 }
 
 group 'com.acmcsuf'
@@ -11,6 +12,11 @@ mainClassName = 'com.acmcsuf.triggers.Bot'
 
 shadowJar {
     destinationDirectory.set(file("."))
+}
+
+docker {
+    name "${project.name}:${project.version}"
+    files 'triggers-1.0-SNAPSHOT-all.jar'
 }
 
 repositories {
