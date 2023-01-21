@@ -10,7 +10,7 @@ except OSError:
     pass
 
 # Build jar
-os.system('gradle build')
+os.system('./gradlew build')
 
 version = None
 
