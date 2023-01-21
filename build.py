@@ -1,11 +1,10 @@
 import os
 
-# Remove old jar
+# Cleans up old jar files
 try:
     for file in os.listdir("."):
         if file.startswith('triggers') and file.endswith('.jar'):
             os.remove(file)
-            break
 except OSError:
     pass
 
