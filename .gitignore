@@ -5,6 +5,7 @@ out/
 
 # Java
 *.jar
+!gradle-wrapper.jar
 
 # Visual Studio Code
 .vscode
@@ -12,11 +13,6 @@ out/
 ### Gradle ###
 .gradle
 build/
-gradlew
-gradlew.bat
-
-# Ignore Gradle wrapper jar file
-gradle-wrapper.jar
 
 # Manifest MF
 *.MF
