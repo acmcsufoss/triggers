@@ -1,4 +1,5 @@
 import os
+import platform
 import argparse
 
 # Parse arguments
@@ -17,8 +18,12 @@ parser.add_argument(
 args = parser.parse_args()
 
 # Clean and build project
-os.system('./gradlew clean')
-os.system('./gradlew build')
+if platform.system() == 'Windows':
+    os.system('.\gradlew clean')
+    os.system('.\gradlew build')
+else:
+    os.system('./gradlew clean')
+    os.system('./gradlew build')
 
 # Select version number from build.gradle
 with open('build.gradle', 'r') as f:
