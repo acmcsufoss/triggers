@@ -10,6 +10,9 @@ version '1.0-SNAPSHOT'
 mainClassName = 'com.acmcsuf.triggers.Bot'
 
 shadowJar {
+    archiveBaseName = 'triggers'
+    archiveVersion = ''
+    archiveClassifier = ''
     destinationDirectory.set(file("."))
 }
 
