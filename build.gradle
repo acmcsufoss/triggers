@@ -13,6 +13,11 @@ shadowJar {
     destinationDirectory.set(file("."))
 }
 
+tasks.withType(AbstractArchiveTask) {
+    preserveFileTimestamps = false
+    reproducibleFileOrder = true
+}
+
 repositories {
     mavenCentral()
 }
