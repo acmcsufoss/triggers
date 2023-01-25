@@ -42,10 +42,9 @@ if args.docker:
     
     # Copy jar file to root
     if platform.system() == 'Windows':
-        os.system(f'COPY triggers-{version}-all.jar triggers.jar')
+        os.system(f'ren triggers-{version}-all.jar triggers.jar')
     else:
-        os.system(f'cp triggers-{version}-all.jar ./triggers.jar')
+        os.system(f'mv triggers-{version}-all.jar ./triggers.jar')
     
     # Build docker image and remove temporary jar file
     os.system(f'docker build -t triggers:{version} .')
-    os.system('rm triggers.jar')
