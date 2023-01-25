@@ -9,6 +9,8 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedHashSet;
 
+import io.github.cdimascio.dotenv.Dotenv;
+
 import net.dv8tion.jda.api.entities.Member;
 import org.postgresql.util.PSQLException;
 import org.slf4j.Logger;
@@ -17,10 +19,14 @@ import org.slf4j.LoggerFactory;
 public class Database
 {
 
+    final static Dotenv dotenv = Dotenv.configure()
+            .ignoreIfMissing()
+            .load();
+
     // Constants
-    private static final String URL = System.getenv( "DATABASE_URL" );
-    private static final String USER = System.getenv( "DATABASE_USER" );
-    private static final String PASSWORD = System.getenv( "DATABASE_PASSWORD" );
+    private static final String URL = dotenv.get( "DATABASE_URL" );
+    private static final String USER = dotenv.get( "DATABASE_USER" );
+    private static final String PASSWORD = dotenv.get( "DATABASE_PASSWORD" );
 
     // SLF4J Logger
     private static final Logger log = LoggerFactory.getLogger( Database.class );

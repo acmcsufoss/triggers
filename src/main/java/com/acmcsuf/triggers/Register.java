@@ -14,11 +14,17 @@ import net.dv8tion.jda.api.interactions.commands.build.SubcommandData;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.LoggerFactory;
 
+import io.github.cdimascio.dotenv.Dotenv;
+
 import java.util.ArrayList;
 import java.util.List;
 
 public class Register extends ListenerAdapter
 {
+
+        final static Dotenv dotenv = Dotenv.configure()
+            .ignoreIfMissing()
+            .load();
 
     @Override
     public void onGenericEvent( @NotNull GenericEvent event )
@@ -52,7 +58,7 @@ public class Register extends ListenerAdapter
         }
 
         // Registers guild from env file
-        if ( guild.getId().equals( System.getenv( "GUILD_ID" ) ) )
+        if ( guild.getId().equals( dotenv.get( "GUILD_ID" ) ) )
         {
             guild.updateCommands().addCommands( guildCommands() ).queue( ( null ),
                     ( ( error ) -> LoggerFactory.getLogger( Bot.class )

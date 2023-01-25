@@ -19,6 +19,8 @@ import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import io.github.cdimascio.dotenv.Dotenv;
+
 import java.awt.*;
 import java.sql.SQLException;
 import java.util.*;
@@ -33,6 +35,10 @@ public class Trigger extends ListenerAdapter
     {
         this.authorizedRoleIDs = authorizedRoleIDs;
     }
+
+    final static Dotenv dotenv = Dotenv.configure()
+            .ignoreIfMissing()
+            .load();
 
     List<String> authorizedRoleIDs;
 
@@ -54,7 +60,7 @@ public class Trigger extends ListenerAdapter
     @Override
     public void onGuildReady( GuildReadyEvent event )
     {
-        if ( event.getGuild().getId().equals( System.getenv( "GUILD_ID" ) ) )
+        if ( event.getGuild().getId().equals( dotenv.get( "GUILD_ID" ) ) )
         {
             // Loads triggers from database
             try
@@ -636,7 +642,7 @@ public class Trigger extends ListenerAdapter
         }
         else if ( event instanceof MessageReceivedEvent messageReceivedEvent )
         {
-            String guild_id = System.getenv( "GUILD_ID" );
+            String guild_id = dotenv.get( "GUILD_ID" );
 
             return messageReceivedEvent.getGuild().getId().equals( guild_id )
                     && messageReceivedEvent.getMember() != null
