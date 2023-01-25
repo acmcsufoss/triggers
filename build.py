@@ -22,9 +22,11 @@ args = parser.parse_args()
 for file in os.listdir('.'):
     if file.endswith('.jar'):
         os.remove(file)
+        
+windows = platform.system() == 'Windows'
 
 # Clean and build jar
-if platform.system() == 'Windows':
+if windows:
     os.system('.\gradlew clean')
     os.system('.\gradlew build')
 else:
@@ -39,12 +41,4 @@ with open('build.gradle', 'r') as f:
 
 # Check if Docker should be built
 if args.docker:
-    
-    # Copy jar file to root
-    if platform.system() == 'Windows':
-        os.system(f'ren triggers-{version}-all.jar triggers.jar')
-    else:
-        os.system(f'mv triggers-{version}-all.jar ./triggers.jar')
-    
-    # Build docker image and remove temporary jar file
     os.system(f'docker build -t triggers:{version} .')
