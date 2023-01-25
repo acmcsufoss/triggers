@@ -9,6 +9,10 @@ version '1.0-SNAPSHOT'
 
 mainClassName = 'com.acmcsuf.triggers.Bot'
 
+shadowJar {
+    destinationDirectory.set(file("."))
+}
+
 tasks.withType(AbstractArchiveTask) {
     preserveFileTimestamps = false
     reproducibleFileOrder = true
