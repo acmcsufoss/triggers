@@ -17,12 +17,15 @@ parser.add_argument(
 
 args = parser.parse_args()
 
-# Clean and build project
+# Clean jars
+for file in os.listdir('.'):
+    if file.endswith('.jar'):
+        os.remove(file)
+
+# Build jar
 if platform.system() == 'Windows':
-    os.system('.\gradlew clean')
     os.system('.\gradlew build')
 else:
-    os.system('./gradlew clean')
     os.system('./gradlew build')
 
 # Select version number from build.gradle
@@ -33,4 +36,13 @@ with open('build.gradle', 'r') as f:
 
 # Check if Docker should be built
 if args.docker:
+    
+    # Copy jar file to root
+    if platform.system() == 'Windows':
+        os.system(f'COPY triggers-{version}-all.jar triggers.jar')
+    else:
+        os.system(f'cp triggers-{version}-all.jar ./triggers.jar')
+    
+    # Build docker image and remove temporary jar file
     os.system(f'docker build -t triggers:{version} .')
+    os.system('rm triggers.jar')
