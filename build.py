@@ -18,6 +18,7 @@ parser.add_argument(
 args = parser.parse_args()
 
 # Clean root jars
+# Reason: `gradle clean` does not remove the jar files in the root directory
 for file in os.listdir('.'):
     if file.endswith('.jar'):
         os.remove(file)
