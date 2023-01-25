@@ -17,15 +17,17 @@ parser.add_argument(
 
 args = parser.parse_args()
 
-# Clean jars
+# Clean root jars
 for file in os.listdir('.'):
     if file.endswith('.jar'):
         os.remove(file)
 
-# Build jar
+# Clean and build jar
 if platform.system() == 'Windows':
+    os.system('.\gradlew clean')
     os.system('.\gradlew build')
 else:
+    os.system('./gradlew clean')
     os.system('./gradlew build')
 
 # Select version number from build.gradle
