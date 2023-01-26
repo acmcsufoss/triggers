@@ -62,7 +62,7 @@ if args.docker:
         print('\n' + bcolors.WARNING + '=' * 50)
         print(bcolors.BOLD + '[WARNING]\n' + bcolors.ENDC + bcolors.WARNING)
         print('Could not find version number in build.gradle')
-        print('Defaulting to `{latest}`')
+        print(f'Defaulting to `{version}`')
         print('=' * 50 + bcolors.ENDC + '\n')
         
         decision = input('Continue? [y/n]: ').strip().lower()
