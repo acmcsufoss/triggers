@@ -76,4 +76,6 @@ if args.docker:
             else:
                 decision = input()
                 continue
+    else:
+        os.system(f'docker build -t triggers:{version} .')
     
