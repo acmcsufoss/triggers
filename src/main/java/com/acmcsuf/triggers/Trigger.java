@@ -392,7 +392,7 @@ public class Trigger extends ListenerAdapter
 
                 // Skip if message is self-triggered or member is missing view permissions
                 if ( event.getMember() == member || !member.hasPermission( event.getGuildChannel(),
-                        Permission.VIEW_CHANNEL ) )
+                        Permission.VIEW_CHANNEL ) || member == null )
                 {
                     continue;
                 }
