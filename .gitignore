@@ -12,11 +12,7 @@ out/
 ### Gradle ###
 .gradle
 build/
-gradlew
-gradlew.bat
-
-# Ignore Gradle wrapper jar file
-gradle-wrapper.jar
+!gradle-wrapper.jar
 
 # Manifest MF
 *.MF
