@@ -376,6 +376,57 @@ public class Database
     /**
      * Sync member's in-memory trigger with database
      *
+     * @param userID        Event member user ID
+     * @param triggerMap    In-memory trigger map
+     * @param triggerToggle In-memory trigger toggle map
+     * @throws SQLException On failure to interact with database
+     */
+    public static void syncUserData( String userID, HashMap<String, LinkedHashSet<String>> triggerMap,
+                                     HashMap<String, Boolean> triggerToggle ) throws SQLException
+    {
+        String sql = String.format( """
+                SELECT * FROM triggers
+                WHERE user_id = %s;""", userID );
+
+        try ( Connection conn = getConnect() )
+        {
+            ResultSet set = conn.createStatement().executeQuery( sql );
+
+            if ( set.next() )
+            {
+                insertData( triggerMap, triggerToggle, userID, set );
+            }
+        }
+    }
+
+    /**
+     * Sync member's in-memory trigger with database
+     *
+     * @param userID        Event member user ID
+     * @param member        Event member
+     * @param triggerMap    In-memory trigger map
+     * @param triggerToggle In-memory trigger toggle map
+     * @throws SQLException On failure to interact with database
+     */
+    public static void syncUserData( Connection connection, String userID,
+                                     HashMap<String, LinkedHashSet<String>> triggerMap,
+                                     HashMap<String, Boolean> triggerToggle ) throws SQLException
+    {
+        String sql = String.format( """
+                SELECT * FROM triggers
+                WHERE user_id = %s;""", userID );
+
+        ResultSet set = connection.createStatement().executeQuery( sql );
+
+        if ( set.next() )
+        {
+            insertData( triggerMap, triggerToggle, userID, set );
+        }
+    }
+
+    /**
+     * Sync member's in-memory trigger with database
+     *
      * @param connection    Connection object
      * @param member        Event member
      * @param triggerMap    In-memory trigger map
