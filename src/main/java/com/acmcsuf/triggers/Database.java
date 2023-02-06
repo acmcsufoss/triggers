@@ -159,6 +159,48 @@ public class Database
      * Deletes phrase from user's trigger list and syncs with database afterwards
      * </p>
      *
+     * @param userID Event member user ID
+     * @param phrase Phrase to delete
+     * @throws SQLException On failure to interact with database
+     */
+    public static void deletePhrase( String userID, String phrase,
+                                     HashMap<String, LinkedHashSet<String>> triggerMap,
+                                     HashMap<String, Boolean> triggerToggle ) throws SQLException
+    {
+
+        String sql = """
+                UPDATE triggers
+                SET phrase = array_remove(phrase, ?::text)
+                WHERE user_id =""" + userID;
+
+        try ( Connection conn = getConnect() )
+        {
+            PreparedStatement preparedStatement = conn.prepareStatement( sql );
+            preparedStatement.setString( 1, phrase );
+            preparedStatement.executeUpdate();
+
+            try
+            {
+                syncUserData( conn, userID, triggerMap, triggerToggle );
+            }
+            catch ( PSQLException e )
+            {
+                log.error( "Error syncing user data", e );
+            }
+        }
+        catch ( PSQLException e )
+        {
+            log.error( "Error deleting phrase from database", e );
+        }
+    }
+
+    /**
+     * Deletes trigger phrase
+     *
+     * <p>
+     * Deletes phrase from user's trigger list and syncs with database afterwards
+     * </p>
+     *
      * @param member Event member
      * @param phrase Phrase to delete
      * @throws SQLException On failure to interact with database
