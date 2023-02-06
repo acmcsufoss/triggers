@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 public class BotController {
+    
+    // TODO: Add authentication process (JWT?)
 
     @GetMapping("/api/ping")
     public String ping() {
@@ -18,10 +20,6 @@ public class BotController {
 
     @PostMapping("/api/sync")
     public ResponseEntity<String> sync(@RequestParam("user_id") String userId) {
-
-        // TODO: Add authentication process (JWT?)
-
-        // TODO: Add validation for user_id
 
         // Sync data from database
         try {
