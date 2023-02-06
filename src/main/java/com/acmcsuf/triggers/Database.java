@@ -109,6 +109,50 @@ public class Database
     }
 
     /**
+     * Appends trigger phrase
+     *
+     * <p>
+     * Appends new phrase to user's trigger list if it is not already in the list and syncs with database afterwards
+     * </p>
+     *
+     * @param userID        Event member user ID
+     * @param phrase        Phrase to add
+     * @param connection    Connection object
+     * @param triggerMap    Map of user IDs to trigger phrases
+     * @param triggerToggle Map of user IDs to trigger toggle
+     * @throws SQLException On failure to interact with database
+     */
+    public static void appendPhrase( String userID, String phrase, Connection connection,
+                                     HashMap<String, LinkedHashSet<String>> triggerMap,
+                                     HashMap<String, Boolean> triggerToggle ) throws SQLException
+    {
+
+        String sql = """
+                UPDATE triggers
+                SET phrase = array_append(phrase, ?::text)
+                WHERE user_id =""" + userID;
+
+        try
+        {
+            PreparedStatement preparedStatement = connection.prepareStatement( sql );
+            preparedStatement.setString( 1, phrase );
+            preparedStatement.executeUpdate();
+        }
+        catch ( PSQLException e )
+        {
+            log.error( "Error appending phrase to database", e );
+        }
+        try
+        {
+            syncUserData( connection, userID, triggerMap, triggerToggle );
+        }
+        catch ( PSQLException e )
+        {
+            log.error( "Error syncing user data", e );
+        }
+    }
+
+    /**
      * Deletes trigger phrase
      *
      * <p>
