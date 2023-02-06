@@ -4,7 +4,7 @@ public final class Commands
 {
 
     // Command List
-    public static final String TRIGGER = "trigger";
+    public static final String TRIGGER = "triggers";
     public static final String TRIGGER_DESCRIPTION = "Receive a DM when trigger word is mentioned in mutual servers";
 
     // Subcommands
