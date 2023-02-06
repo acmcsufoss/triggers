@@ -43,10 +43,10 @@ public class Trigger extends ListenerAdapter
     List<String> authorizedRoleIDs;
 
     // Discord member ID : Set of trigger phrases
-    HashMap<String, LinkedHashSet<String>> triggerMap = new HashMap<>();
+    public static HashMap<String, LinkedHashSet<String>> triggerMap = new HashMap<>();
 
     // Discord member ID : Trigger Activation (true = activated, false = deactivated)
-    HashMap<String, Boolean> triggerToggle = new HashMap<>();
+    public static HashMap<String, Boolean> triggerToggle = new HashMap<>();
 
     int min = 0;
     int max = 5;
