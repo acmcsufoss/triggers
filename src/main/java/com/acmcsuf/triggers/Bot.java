@@ -77,5 +77,7 @@ public class Bot
         }
 
         SpringApplication.run(BotController.class, args);
+        log.info("Spring Boot application started.");
+        
     }
 }
