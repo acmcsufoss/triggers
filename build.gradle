@@ -39,6 +39,8 @@ dependencies {
         exclude module: 'opus-java'
     }
 
+    implementation 'org.springframework.boot:spring-boot-starter-web:3.0.2'
+
     implementation 'me.xdrop:fuzzywuzzy:1.4.0'
 
     implementation 'org.postgresql:postgresql:42.5.1'
