@@ -15,6 +15,10 @@ import net.dv8tion.jda.api.utils.MemberCachePolicy;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+
+@SpringBootApplication
 public class Bot
 {
 
@@ -71,5 +75,7 @@ public class Bot
             log.error( "Failed to initialize database" );
             e.printStackTrace();
         }
+
+        SpringApplication.run(BotController.class, args);
     }
 }
