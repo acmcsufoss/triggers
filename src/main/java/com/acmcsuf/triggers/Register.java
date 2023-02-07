@@ -107,7 +107,7 @@ public class Register extends ListenerAdapter
                 com.acmcsuf.triggers.Commands.TRIGGER_DELETE_OPTION_DESCRIPTION, true, true );
 
         // View subcommands
-        SubcommandData view = new SubcommandData( com.acmcsuf.triggers.Commands.VIEW_OPTION_NAME,
+        SubcommandData triggers_admin_list = new SubcommandData( com.acmcsuf.triggers.Commands.VIEW_OPTION_NAME,
                 com.acmcsuf.triggers.Commands.VIEW_DESCRIPTION ).addOption( OptionType.USER,
                 com.acmcsuf.triggers.Commands.VIEW_OPTION_NAME,
                 com.acmcsuf.triggers.Commands.VIEW_OPTION_DESCRIPTION, true );
@@ -117,7 +117,7 @@ public class Register extends ListenerAdapter
                 .addSubcommands( help, reset, list, toggle, newTrigger, delete ) );
 
         guildCommandData.add( Commands.slash( com.acmcsuf.triggers.Commands.VIEW,
-                        com.acmcsuf.triggers.Commands.VIEW_DESCRIPTION ).addSubcommands( view )
+                        com.acmcsuf.triggers.Commands.VIEW_DESCRIPTION ).addSubcommands( triggers_admin_list )
                 .setDefaultPermissions( DefaultMemberPermissions.enabledFor( Permission.ADMINISTRATOR ) ) );
 
         return guildCommandData;
