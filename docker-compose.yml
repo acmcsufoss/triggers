@@ -1,0 +1,10 @@
+services:
+  triggers:
+    image: jjoeldaniel/acm_trigger
+    environment:
+      DISCORD_TOKEN: ""
+      GUILD_ID: ""
+      AUTHORIZED_ROLE_ID: ""
+      DATABASE_URL: "jdbc:postgresql://url:port/user"
+      DATABASE_USER: "user"
+      DATABASE_PASSWORD: ""
